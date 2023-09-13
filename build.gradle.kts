@@ -50,7 +50,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-validation")
-    implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
 
@@ -71,7 +70,6 @@ dependencies {
     testImplementation("io.mockk:mockk:$mockkVersion")
 
     testImplementation("no.nav.security:token-validation-spring-test:$tokenSupportVersion")
-    testImplementation("no.nav.tilleggsstonader-libs:test-util:$tilleggsstønaderLibsVersion")
 }
 
 kotlin {

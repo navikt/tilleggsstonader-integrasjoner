@@ -11,3 +11,12 @@ spring:
   main:
     allow-bean-definition-overriding: true
     banner-mode: "off"
+
+management:
+  endpoint.health.show-details: always
+  endpoints.web:
+    exposure.include: info, health, metrics, prometheus
+    base-path: "/internal"
+    path-mapping:
+      info: "status/isAlive"
+  prometheus.metrics.export.enabled: true
