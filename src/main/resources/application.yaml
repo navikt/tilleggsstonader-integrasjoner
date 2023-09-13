@@ -1,0 +1,13 @@
+application:
+  name: tilleggsstonader-integrasjoner
+
+server:
+  servlet:
+    context-path: /
+  port: 8080
+
+spring:
+  autoconfigure.exclude: org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration
+  main:
+    allow-bean-definition-overriding: true
+    banner-mode: "off"

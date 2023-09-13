@@ -1,0 +1,53 @@
+apiVersion: "nais.io/v1alpha1"
+kind: "Application"
+metadata:
+  name: tilleggsstonader-integrasjoner
+  namespace: tilleggsstonader
+  labels:
+    team: tilleggsstonader
+
+spec:
+  port: 8080
+  image: {{ image }}
+  ingresses:
+    - https://tilleggsstonader-integrasjoner.intern.nav.no
+  liveness:
+    path: /internal/status/isAlive
+    initialDelay: 30
+    failureThreshold: 10
+  readiness:
+    path: /internal/status/isAlive
+    initialDelay: 30
+    failureThreshold: 10
+  prometheus:
+    enabled: true
+    path: /internal/prometheus
+  replicas:
+    min: 2
+    max: 4
+  resources:
+    limits:
+      memory: 2048Mi
+    requests:
+      memory: 512Mi
+      cpu: 500m
+  secureLogs:
+    enabled: true
+  azure:
+    application:
+      enabled: true
+      claims:
+        extra:
+          - "NAVident"
+        groups:
+          - id: "0f841c83-0d64-407c-80d5-4eb51dfaee1e" # 0000-GA-Tilleggsstonader-Veileder
+          - id: "c1e9edec-0c10-4df2-8c74-324ab9922220" # 0000-GA-tilleggsstonader-integrasjonersbehandler
+          - id: "224b5097-d0af-462c-8d8e-49c0e8a42661" # 0000-GA-Tilleggsstonader-Beslutter
+          - id: "ad7b87a6-9180-467c-affc-20a566b0fec0" # 0000-GA-Strengt_Fortrolig_Adresse
+          - id: "9ec6487d-f37a-4aad-a027-cd221c1ac32b" # 0000-GA-Fortrolig_Adresse
+          - id: "e750ceb5-b70b-4d94-b4fa-9d22467b786b" # 0000-GA-Egne_ansatte
+  accessPolicy:
+    outbound:
+  env:
+    - name: SPRING_PROFILES_ACTIVE
+      value: prod
