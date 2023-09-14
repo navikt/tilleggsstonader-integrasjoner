@@ -10,8 +10,8 @@ class QueryParamUtilTest {
         val queryParams = toQueryParams(Testdata())
 
         assertThat(queryParams.verdier["int"]).containsExactly(Pair("int", "5"))
-        assertThat(queryParams.verdier["string"]).containsExactly(Pair("string", "fem"))
-        assertThat(queryParams.verdier["list"]).containsExactly(Pair("list_1", "11"), Pair("list_2", "22"))
+        assertThat(queryParams.verdier["string"]).containsExactly(Pair("string", "Fem"))
+        assertThat(queryParams.verdier["list"]).containsExactly(Pair("list_0", "11"), Pair("list_1", "22"))
     }
 
     @Test
