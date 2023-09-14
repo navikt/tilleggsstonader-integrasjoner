@@ -52,7 +52,7 @@ spec:
         - application: tilleggsstonader-sak
     outbound:
       external:
-        - host: https://oppgave-q1.dev-fss-pub.nais.io
+        - host: oppgave-q1.dev-fss-pub.nais.io
 
   env:
     - name: SPRING_PROFILES_ACTIVE
