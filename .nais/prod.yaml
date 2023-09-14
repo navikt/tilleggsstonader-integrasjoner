@@ -48,6 +48,8 @@ spec:
           - id: "e750ceb5-b70b-4d94-b4fa-9d22467b786b" # 0000-GA-Egne_ansatte
   accessPolicy:
     outbound:
+      external:
+        - host: https://oppgave.prod-fss-pub.nais.io
   env:
     - name: SPRING_PROFILES_ACTIVE
       value: prod

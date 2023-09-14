@@ -1,4 +1,4 @@
-
+CLIENT_ENV: dev
 
 clients:
   oppgave:

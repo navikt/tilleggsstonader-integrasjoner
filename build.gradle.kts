@@ -1,8 +1,10 @@
 val javaVersion = JavaLanguageVersion.of(17)
-val tilleggsstønaderLibsVersion = "2023.09.04-15.58.86e7da46c21d"
+val springdocVersion = "2.1.0"
+val tilleggsstønaderLibsVersion = "2023.09.14-10.25.400ea92abb53"
 val tilleggsstønaderKontrakterVersion = "2023.09.13-14.41.a46b4eef8133"
 val tokenSupportVersion = "3.1.5"
 val wiremockVersion = "2.35.0"
+val springCloudVersion = "4.0.4"
 val mockkVersion = "1.13.7"
 val testcontainerVersion = "1.19.0"
 
@@ -53,6 +55,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("org.springdoc:springdoc-openapi-starter-common:$springdocVersion")
 
     // Logging
     implementation("net.logstash.logback:logstash-logback-encoder:7.4")
@@ -69,10 +72,13 @@ dependencies {
 
     // Test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.springframework.cloud:spring-cloud-contract-wiremock:$springCloudVersion")
+
     testImplementation("com.github.tomakehurst:wiremock-jre8-standalone:$wiremockVersion")
     testImplementation("io.mockk:mockk:$mockkVersion")
 
     testImplementation("no.nav.security:token-validation-spring-test:$tokenSupportVersion")
+    testImplementation("no.nav.tilleggsstonader-libs:test-util:$tilleggsstønaderLibsVersion")
 }
 
 kotlin {

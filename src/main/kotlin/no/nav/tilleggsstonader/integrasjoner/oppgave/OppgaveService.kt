@@ -36,14 +36,10 @@ class OppgaveService(
     }
 
     fun oppdaterOppgave(request: Oppgave): Long {
-        if(request.id == null) {
-            error("Må ")
-        }
-        val oppgave: Oppgave = if (request.id == null) {
-            oppgaveClient.finnÅpenBehandleSakOppgave(request)
-        } else {
-            oppgaveClient.finnOppgaveMedId(request.id!!)
-        }
+        val oppgaveId = request.id
+        require(oppgaveId != null) { "Mangler id på oppgave" }
+        val oppgave: Oppgave = oppgaveClient.finnOppgaveMedId(oppgaveId)
+        // Vurdere om man burde logge warn/kaste feil her, finner inget i loggen at dette skulle ha skjedd
         if (oppgave.status === StatusEnum.FERDIGSTILT) {
             logger.info(
                 "Ignorerer oppdatering av oppgave som er ferdigstilt for aktørId={} journalpostId={} oppgaveId={}",

@@ -46,6 +46,8 @@ no.nav.security.jwt:
         client-secret: ${AZURE_APP_CLIENT_SECRET}
         client-auth-method: client_secret_basic
 
+CLIENT_ENV: prod
+
 clients:
   oppgave:
     uri: https://oppgave.prod-fss-pub.nais.io
