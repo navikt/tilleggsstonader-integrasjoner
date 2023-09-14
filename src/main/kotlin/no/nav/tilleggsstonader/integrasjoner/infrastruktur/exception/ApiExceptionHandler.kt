@@ -1,7 +1,7 @@
 package no.nav.tilleggsstonader.integrasjoner.infrastruktur.exception
 
 import no.nav.security.token.support.core.exceptions.JwtTokenMissingException
-import no.nav.tilleggsstonader.integrasjoner.infrastruktur.config.SecureLogger
+import no.nav.tilleggsstonader.libs.log.SecureLogger
 import org.slf4j.LoggerFactory
 import org.springframework.core.NestedExceptionUtils
 import org.springframework.http.HttpStatus
@@ -41,6 +41,33 @@ class ApiExceptionHandler {
         logger.error("Uventet feil: $metodeSomFeiler ${rootCause(throwable)} ")
 
         return ProblemDetail.forStatusAndDetail(responseStatus, "Ukjent feil")
+    }
+
+    @ExceptionHandler(OppslagException::class)
+    fun handleOppslagException(e: OppslagException): ProblemDetail {
+        var feilmelding = "[${e.kilde}][${e.message}]"
+        var sensitivFeilmelding = feilmelding
+        if (!e.sensitiveInfo.isNullOrEmpty()) {
+            sensitivFeilmelding += "[${e.sensitiveInfo}]"
+        }
+        if (e.error != null) {
+            feilmelding += "[${e.error.javaClass.name}]"
+            sensitivFeilmelding += "[${e.error.javaClass.name}]"
+        }
+        when (e.level) {
+            OppslagException.Level.KRITISK -> {
+                secureLogger.error("OppslagException : $sensitivFeilmelding", e.error)
+                logger.error("OppslagException : $feilmelding")
+            }
+
+            OppslagException.Level.MEDIUM -> {
+                secureLogger.warn("OppslagException : $sensitivFeilmelding", e.error)
+                logger.warn("OppslagException : $feilmelding")
+            }
+
+            else -> logger.info("OppslagException : $feilmelding")
+        }
+        return ProblemDetail.forStatusAndDetail(e.httpStatus, feilmelding)
     }
 
     @ExceptionHandler(JwtTokenMissingException::class)

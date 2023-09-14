@@ -1,0 +1,6 @@
+
+
+clients:
+  oppgave:
+    uri: https://oppgave-q1.dev-fss-pub.nais.io
+    scope: api://${CLIENT_ENV}-gcp.oppgavehandtering.oppgave-q1/.default
