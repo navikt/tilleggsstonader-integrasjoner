@@ -8,35 +8,26 @@ import no.nav.tilleggsstonader.integrasjoner.util.TokenUtil
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.server.LocalServerPort
-import org.springframework.boot.web.client.RestTemplateBuilder
-import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpHeaders
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.web.client.RestTemplate
 
-// Slett denne når RestTemplateConfiguration er tatt i bruk?
-@Configuration
-class DefaultRestTemplateConfiguration {
-
-    @Bean
-    fun restTemplate(restTemplateBuilder: RestTemplateBuilder) =
-        restTemplateBuilder.build()
-}
-
 @ExtendWith(SpringExtension::class)
 @SpringBootTest(classes = [App::class], webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles(
     "integrasjonstest",
+    "mock-oauth",
 )
 @EnableMockOAuth2Server
 abstract class IntegrationTest {
 
     @Suppress("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired
+    @Qualifier("utenAuth")
     protected lateinit var restTemplate: RestTemplate
     protected val headers = HttpHeaders()
 

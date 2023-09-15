@@ -41,12 +41,10 @@ import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.TestPropertySource
 import org.springframework.web.client.exchange
 import java.time.LocalDate
 
-@ActiveProfiles("integrasjonstest", "mock-oauth")
 @TestPropertySource(properties = ["clients.oppgave.uri=http://localhost:28085"])
 @AutoConfigureWireMock(port = 28085)
 class OppgaveControllerTest : IntegrationTest() {
