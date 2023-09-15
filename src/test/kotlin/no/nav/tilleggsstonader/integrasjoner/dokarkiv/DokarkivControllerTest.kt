@@ -2,7 +2,6 @@ package no.nav.tilleggsstonader.integrasjoner.dokarkiv
 
 import ch.qos.logback.classic.Logger
 import ch.qos.logback.classic.spi.ILoggingEvent
-import com.fasterxml.jackson.module.kotlin.readValue
 import com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import com.github.tomakehurst.wiremock.client.WireMock.anyUrl
 import com.github.tomakehurst.wiremock.client.WireMock.delete
@@ -19,7 +18,6 @@ import com.github.tomakehurst.wiremock.client.WireMock.stubFor
 import com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo
 import com.github.tomakehurst.wiremock.client.WireMock.verify
 import no.nav.tilleggsstonader.integrasjoner.IntegrationTest
-import no.nav.tilleggsstonader.integrasjoner.dokarkiv.client.domene.OpprettJournalpostResponse
 import no.nav.tilleggsstonader.integrasjoner.util.FileUtil
 import no.nav.tilleggsstonader.integrasjoner.util.ProblemDetailUtil.catchProblemDetailException
 import no.nav.tilleggsstonader.kontrakter.dokarkiv.ArkiverDokumentRequest
@@ -49,24 +47,6 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.test.context.TestPropertySource
 import org.springframework.web.client.exchange
-
-fun main() {
-    val a = objectMapper.readValue<OpprettJournalpostResponse>(
-        """{
-  "dokumenter": [
-    {
-      "brevkode": "NAV 34-00.08",
-      "dokumentInfoId": "123",
-      "tittel": "Søknad om kontanstøtte"
-    }
-  ],
-  "journalpostId": "12345678",
-  "journalpostferdigstilt": false,
-  "journalstatus": "MIDLERTIDIG"
-}""",
-    )
-    println("")
-}
 
 @TestPropertySource(properties = ["clients.dokarkiv.uri=http://localhost:28085"])
 @AutoConfigureWireMock(port = 28085)
