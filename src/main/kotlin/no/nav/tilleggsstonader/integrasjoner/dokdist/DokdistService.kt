@@ -1,15 +1,14 @@
 package no.nav.tilleggsstonader.integrasjoner.dokdist
 
-import no.nav.familie.integrasjoner.client.rest.DokdistRestClient
 import no.nav.tilleggsstonader.integrasjoner.dokdist.domene.AdresseTo
 import no.nav.tilleggsstonader.integrasjoner.dokdist.domene.DistribuerJournalpostRequestTo
 import no.nav.tilleggsstonader.integrasjoner.dokdist.domene.DistribuerJournalpostResponseTo
-import no.nav.familie.kontrakter.felles.dokdist.DistribuerJournalpostRequest
+import no.nav.tilleggsstonader.kontrakter.dokdist.DistribuerJournalpostRequest
 import org.springframework.stereotype.Service
 
 @Service
 class DokdistService(val dokdistRestClient: DokdistRestClient) {
-    fun distribuerDokumentForJournalpost(request: DistribuerJournalpostRequest): DistribuerJournalpostResponseTo? {
+    fun distribuerDokumentForJournalpost(request: DistribuerJournalpostRequest): DistribuerJournalpostResponseTo {
         return dokdistRestClient.distribuerJournalpost(mapTilDistribuerJournalpostRequestTo(request))
     }
 

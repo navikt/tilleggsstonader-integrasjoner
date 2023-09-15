@@ -1,13 +1,12 @@
 package no.nav.tilleggsstonader.integrasjoner.dokdist
 
 import jakarta.validation.Valid
-import no.nav.familie.kontrakter.felles.Ressurs
-import no.nav.familie.kontrakter.felles.Ressurs.Companion.success
-import no.nav.familie.kontrakter.felles.dokdist.DistribuerJournalpostRequest
 import no.nav.security.token.support.core.api.ProtectedWithClaims
+import no.nav.tilleggsstonader.kontrakter.dokdist.DistribuerJournalpostRequest
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
+import org.springframework.http.ProblemDetail
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -19,25 +18,22 @@ import org.springframework.web.client.HttpClientErrorException
 @RestController
 @ProtectedWithClaims(issuer = "azuread")
 @RequestMapping("/api/dist")
+@Validated
 class DokdistController(private val dokdistService: DokdistService) {
 
     @ExceptionHandler(HttpClientErrorException::class)
-    fun handleHttpClientException(e: HttpClientErrorException): ResponseEntity<Ressurs<Any>> {
+    fun handleHttpClientException(e: HttpClientErrorException): ProblemDetail {
         secureLogger.warn("Feil ved distribusjon: ${e.message}")
-        val ressurs: Ressurs<Any> = Ressurs(
-            data = e.responseBodyAsString,
-            status = Ressurs.Status.FEILET,
-            melding = e.message ?: "Uventet feil status=${e.rawStatusCode}",
-            stacktrace = e.stackTraceToString(),
-        )
-        return ResponseEntity.status(e.rawStatusCode).body(ressurs)
+        return ProblemDetail.forStatusAndDetail(e.statusCode, e.responseBodyAsString)
     }
 
     @PostMapping("v1")
     @ResponseStatus(HttpStatus.OK)
-    fun distribuerJournalpost(@RequestBody request: @Valid DistribuerJournalpostRequest): ResponseEntity<Ressurs<String>> {
-        val response = dokdistService.distribuerDokumentForJournalpost(request)
-        return ResponseEntity.ok(success(response?.bestillingsId ?: throw NullResponseException()))
+    fun distribuerJournalpost(
+        @RequestBody @Valid
+        request: DistribuerJournalpostRequest,
+    ): String {
+        return dokdistService.distribuerDokumentForJournalpost(request).bestillingsId
     }
 
     companion object {

@@ -61,7 +61,7 @@ class OppgaveClient(
         val oppgaveRequest = finnOppgaveRequest.toDto()
         var offset = oppgaveRequest.offset
 
-        val queryParams = toQueryParams(oppgaveRequest)
+        var queryParams = toQueryParams(oppgaveRequest)
         val oppgaverOgAntall = finnOppgave(queryParams)
         val oppgaver: MutableList<Oppgave> = oppgaverOgAntall.oppgaver.toMutableList()
         val grense =
@@ -73,7 +73,7 @@ class OppgaveClient(
         offset += limitMotOppgave
 
         while (offset < grense) {
-            val queryParams =
+            queryParams =
                 toQueryParams(oppgaveRequest.copy(offset = offset, limit = min((grense - offset), limitMotOppgave)))
             val nyeOppgaver = finnOppgave(queryParams)
             oppgaver.addAll(nyeOppgaver.oppgaver)

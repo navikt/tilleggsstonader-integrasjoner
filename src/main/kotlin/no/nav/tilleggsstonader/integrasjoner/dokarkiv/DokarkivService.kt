@@ -26,7 +26,7 @@ import org.springframework.stereotype.Service
 @Service
 class DokarkivService(
     private val dokarkivRestClient: DokarkivRestClient,
-    // private val personopplysningerService: PersonopplysningerService, TODO Vurder om vi burde ha PDL i denne tjenesten, brukes når avsenderMottaker ikke er satt men vi kan vel alltid sette den i stedet?
+    // private val personopplysningerService: PersonopplysningerService,
     private val dokarkivLogiskVedleggRestClient: DokarkivLogiskVedleggRestClient,
 ) {
 
@@ -85,6 +85,7 @@ class DokarkivService(
     }
 
     private fun hentNavnForFnr(fnr: String, behandlingstema: Tema): String {
+        // TODO Vurder om vi burde ha PDL i denne tjenesten, brukes når avsenderMottaker ikke er satt men vi kan vel alltid sette den i stedet?
         error("TODO vurder om vi burde ha pdl i denne tjenesten")
         // return personopplysningerService.hentPersoninfo(fnr, behandlingstema).navn
     }

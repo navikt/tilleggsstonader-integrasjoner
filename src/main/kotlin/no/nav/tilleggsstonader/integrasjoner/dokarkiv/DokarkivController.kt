@@ -16,6 +16,7 @@ import org.springframework.http.ProblemDetail
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.FieldError
 import org.springframework.validation.ObjectError
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.ExceptionHandler
@@ -33,6 +34,7 @@ import java.util.function.Consumer
 @RestController
 @ProtectedWithClaims(issuer = "azuread")
 @RequestMapping("/api/arkiv")
+@Validated
 class DokarkivController(private val journalføringService: DokarkivService) {
 
     @ExceptionHandler(MethodArgumentNotValidException::class)
