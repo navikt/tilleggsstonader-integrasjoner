@@ -1,6 +1,8 @@
 application:
   name: tilleggsstonader-integrasjoner
 
+CLIENT_ENV: prod
+
 server:
   servlet:
     context-path: /
@@ -45,10 +47,29 @@ no.nav.security.jwt:
         client-id: ${AZURE_APP_CLIENT_ID}
         client-secret: ${AZURE_APP_CLIENT_SECRET}
         client-auth-method: client_secret_basic
-
-CLIENT_ENV: prod
+    dokarkiv:
+      resource-url: ${clients.dokarkiv.uri}
+      token-endpoint-url: ${AZURE_OPENID_CONFIG_TOKEN_ENDPOINT}
+      grant-type: urn:ietf:params:oauth:grant-type:jwt-bearer
+      scope: ${clients.dokarkiv.scope}
+      authentication:
+        client-id: ${AZURE_APP_CLIENT_ID}
+        client-secret: ${AZURE_APP_CLIENT_SECRET}
+        client-auth-method: client_secret_basic
+    dokarkiv-client_credentials:
+      resource-url: ${clients.dokarkiv.uri}
+      token-endpoint-url: ${AZURE_OPENID_CONFIG_TOKEN_ENDPOINT}
+      grant-type: client_credentials
+      scope: ${clients.dokarkiv.scope}
+      authentication:
+        client-id: ${AZURE_APP_CLIENT_ID}
+        client-secret: ${AZURE_APP_CLIENT_SECRET}
+        client-auth-method: client_secret_basic
 
 clients:
   oppgave:
     uri: https://oppgave.prod-fss-pub.nais.io
-    scope: api://${CLIENT_ENV}-gcp.oppgavehandtering.oppgave/.default
+    scope: api://${CLIENT_ENV}-fss.teamdokumenthandtering.oppgave/.default
+  dokarkiv:
+    uri: https://dokarkiv.prod-fss-pub.nais.io
+    scope: api://${CLIENT_ENV}-fss.teamdokumenthandtering.dokarkiv/.default

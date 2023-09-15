@@ -220,7 +220,8 @@ class OppgaveClient(
 
     private val oppgaveIdUrl =
         UriComponentsBuilder.fromUri(oppgaveBaseUrl)
-            .path(PATH_OPPGAVE).pathSegment("{id}")
+            .path(PATH_OPPGAVE)
+            .pathSegment("{id}")
             .encode().toUriString()
 
     private fun httpHeaders(): HttpHeaders = HttpHeaders().apply {
