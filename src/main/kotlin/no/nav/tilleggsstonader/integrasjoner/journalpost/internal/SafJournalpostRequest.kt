@@ -1,6 +1,6 @@
 package no.nav.tilleggsstonader.integrasjoner.journalpost.internal
 
-import no.nav.familie.kontrakter.felles.Arkivtema
+import no.nav.tilleggsstonader.kontrakter.felles.Arkivtema
 import no.nav.tilleggsstonader.kontrakter.journalpost.Bruker
 
 data class SafRequestVariabler(val journalpostId: String)

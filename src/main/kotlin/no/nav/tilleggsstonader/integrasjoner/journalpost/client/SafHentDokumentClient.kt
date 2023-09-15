@@ -20,7 +20,7 @@ import java.net.URI
  * men vil stange i saf sin implementasjon mot abac.
  */
 @Service
-class SafHentDokumentRestClient(
+class SafHentDokumentClient(
     @Value("\${clients.saf.uri}") safBaseUrl: URI,
     @Qualifier("azureOnBehalfOf") restTemplate: RestTemplate,
 ) : AbstractRestClient(restTemplate) {
@@ -41,7 +41,7 @@ class SafHentDokumentRestClient(
             val uriVariables = mapOf(
                 "journalpostId" to journalpostId,
                 "dokumentInfoId" to dokumentInfoId,
-                "variantFormat" to variantFormat
+                "variantFormat" to variantFormat,
             )
             return getForEntity(safHentdokumentUri, httpHeaders(), uriVariables = uriVariables)
         } catch (e: HttpClientErrorException.Forbidden) {

@@ -3,29 +3,29 @@ package no.nav.tilleggsstonader.integrasjoner.journalpost
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
-import no.nav.familie.integrasjoner.client.rest.SafRestClient
-import no.nav.familie.kontrakter.felles.BrukerIdType
-import no.nav.familie.kontrakter.felles.journalpost.Bruker
-import no.nav.familie.kontrakter.felles.journalpost.DokumentInfo
-import no.nav.familie.kontrakter.felles.journalpost.Dokumentstatus
-import no.nav.familie.kontrakter.felles.journalpost.Journalpost
-import no.nav.familie.kontrakter.felles.journalpost.Journalposttype
-import no.nav.familie.kontrakter.felles.journalpost.Journalstatus
-import no.nav.familie.kontrakter.felles.journalpost.LogiskVedlegg
-import no.nav.familie.kontrakter.felles.journalpost.Sak
+import no.nav.tilleggsstonader.integrasjoner.journalpost.client.SafClient
+import no.nav.tilleggsstonader.kontrakter.felles.BrukerIdType
+import no.nav.tilleggsstonader.kontrakter.journalpost.Bruker
+import no.nav.tilleggsstonader.kontrakter.journalpost.DokumentInfo
+import no.nav.tilleggsstonader.kontrakter.journalpost.Dokumentstatus
+import no.nav.tilleggsstonader.kontrakter.journalpost.Journalpost
+import no.nav.tilleggsstonader.kontrakter.journalpost.Journalposttype
+import no.nav.tilleggsstonader.kontrakter.journalpost.Journalstatus
+import no.nav.tilleggsstonader.kontrakter.journalpost.LogiskVedlegg
+import no.nav.tilleggsstonader.kontrakter.journalpost.Sak
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary
 import org.springframework.context.annotation.Profile
 
 @Configuration
+@Profile("mock-saf")
 class HentJournalpostTestConfig {
 
     @Bean
-    @Profile("mock-saf")
     @Primary
-    fun safRestClientMock(): SafRestClient {
-        val klient: SafRestClient = mockk(relaxed = true)
+    fun safRestClientMock(): SafClient {
+        val klient: SafClient = mockk(relaxed = true)
         val slot = slot<String>()
 
         every { klient.hentJournalpost(capture(slot)) } answers {

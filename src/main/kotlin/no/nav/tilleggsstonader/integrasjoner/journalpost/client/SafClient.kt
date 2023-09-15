@@ -1,8 +1,5 @@
 package no.nav.tilleggsstonader.integrasjoner.journalpost.client
 
-import no.nav.familie.http.util.UriUtil
-import no.nav.familie.integrasjoner.felles.MDCOperations
-import no.nav.familie.integrasjoner.felles.graphqlQuery
 import no.nav.tilleggsstonader.integrasjoner.journalpost.JournalpostForbiddenException
 import no.nav.tilleggsstonader.integrasjoner.journalpost.JournalpostRequestException
 import no.nav.tilleggsstonader.integrasjoner.journalpost.JournalpostRestClientException
@@ -13,6 +10,7 @@ import no.nav.tilleggsstonader.integrasjoner.journalpost.internal.SafJournalpost
 import no.nav.tilleggsstonader.integrasjoner.journalpost.internal.SafJournalpostRequest
 import no.nav.tilleggsstonader.integrasjoner.journalpost.internal.SafJournalpostResponse
 import no.nav.tilleggsstonader.integrasjoner.journalpost.internal.SafRequestVariabler
+import no.nav.tilleggsstonader.integrasjoner.util.MDCOperations
 import no.nav.tilleggsstonader.integrasjoner.util.graphqlQuery
 import no.nav.tilleggsstonader.kontrakter.journalpost.Journalpost
 import no.nav.tilleggsstonader.kontrakter.journalpost.JournalposterForBrukerRequest
@@ -27,7 +25,7 @@ import org.springframework.web.util.UriComponentsBuilder
 import java.net.URI
 
 @Service
-class SafRestClient(
+class SafClient(
     @Value("\${clients.saf.uri}") safBaseUrl: URI,
     @Qualifier("azureOnBehalfOf") restTemplate: RestTemplate,
 ) : AbstractRestClient(restTemplate) {
@@ -56,7 +54,6 @@ class SafRestClient(
             if (tilgangFeil != null) {
                 throw JournalpostForbiddenException(tilgangFeil.message)
             } else {
-                responsFailure.increment()
                 throw JournalpostRestClientException(
                     "Kan ikke hente journalpost " + response.errors?.toString(),
                     null,
@@ -104,7 +101,6 @@ class SafRestClient(
             if (tilgangFeil != null) {
                 throw JournalpostForbiddenException(tilgangFeil.message)
             } else {
-                responsFailure.increment()
                 throw JournalpostRequestException(
                     "Kan ikke hente journalposter " + response.errors?.toString(),
                     null,

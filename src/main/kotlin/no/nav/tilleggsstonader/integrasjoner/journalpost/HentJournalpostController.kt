@@ -1,19 +1,12 @@
 package no.nav.tilleggsstonader.integrasjoner.journalpost
 
-import no.nav.tilleggsstonader.integrasjoner.journalpost.JournalpostForbiddenException
-import no.nav.tilleggsstonader.integrasjoner.journalpost.JournalpostRequestException
-import no.nav.tilleggsstonader.integrasjoner.journalpost.JournalpostRestClientException
-import no.nav.tilleggsstonader.integrasjoner.journalpost.JournalpostService
+import no.nav.security.token.support.core.api.ProtectedWithClaims
 import no.nav.tilleggsstonader.integrasjoner.journalpost.internal.JournalposterForVedleggRequest
-import no.nav.familie.kontrakter.felles.Ressurs
-import no.nav.familie.kontrakter.felles.Ressurs.Companion.failure
-import no.nav.familie.kontrakter.felles.Ressurs.Companion.success
 import no.nav.tilleggsstonader.kontrakter.journalpost.Journalpost
 import no.nav.tilleggsstonader.kontrakter.journalpost.JournalposterForBrukerRequest
-import no.nav.security.token.support.core.api.ProtectedWithClaims
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
+import org.springframework.http.ProblemDetail
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -30,30 +23,36 @@ import org.springframework.web.client.HttpStatusCodeException
 class HentJournalpostController(private val journalpostService: JournalpostService) {
 
     @ExceptionHandler(JournalpostRestClientException::class)
-    fun handleRestClientException(ex: JournalpostRestClientException): ResponseEntity<Ressurs<Any>> {
+    fun handleRestClientException(ex: JournalpostRestClientException): ProblemDetail {
         val errorBaseMessage = "Feil ved henting av journalpost=${ex.journalpostId}"
         val errorExtMessage = byggFeilmelding(ex)
         LOG.warn(errorBaseMessage, ex)
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .body(failure(errorBaseMessage + errorExtMessage, error = ex))
+        return ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, errorBaseMessage + errorExtMessage)
     }
 
     @ExceptionHandler(JournalpostRequestException::class)
-    fun handleJournalpostForBrukerException(ex: JournalpostRequestException): ResponseEntity<Ressurs<Any>> {
+    fun handleJournalpostForBrukerException(ex: JournalpostRequestException): ProblemDetail {
         val errorBaseMessage = "Feil ved henting av journalpost for ${ex.safJournalpostRequest}"
         val errorExtMessage = byggFeilmelding(ex)
         secureLogger.warn(errorBaseMessage, ex)
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .body(failure(errorBaseMessage + errorExtMessage, error = ex))
+        return ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, errorBaseMessage + errorExtMessage)
     }
 
     @ExceptionHandler(JournalpostForbiddenException::class)
-    fun handleJournalpostForbiddenException(e: JournalpostForbiddenException): ResponseEntity<Ressurs<Any>> {
+    fun handleJournalpostForbiddenException(e: JournalpostForbiddenException): ProblemDetail {
         LOG.warn("Bruker eller system ikke tilgang til saf ressurs: ${e.message}")
 
-        return ResponseEntity
-            .status(HttpStatus.FORBIDDEN)
-            .body(Ressurs.ikkeTilgang(e.message ?: "Bruker eller system har ikke tilgang til saf ressurs"))
+        return ProblemDetail.forStatusAndDetail(
+            HttpStatus.FORBIDDEN,
+            e.message ?: "Bruker eller system har ikke tilgang til saf ressurs",
+        )
+    }
+
+    @ExceptionHandler(JournalpostIkkeFunnetException::class)
+    fun handleJournalpostForbiddenException(e: JournalpostIkkeFunnetException): ProblemDetail {
+        LOG.warn("Journalpost=${e.id} ikke funnet")
+
+        return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, "Sak mangler for journalpostId=${e.id}")
     }
 
     private fun byggFeilmelding(ex: RuntimeException): String {
@@ -66,35 +65,33 @@ class HentJournalpostController(private val journalpostService: JournalpostServi
     }
 
     @ExceptionHandler(RuntimeException::class)
-    fun handleRequestParserException(ex: RuntimeException): ResponseEntity<Ressurs<Any>> {
+    fun handleRequestParserException(ex: RuntimeException): ProblemDetail {
         val errorMessage = "Feil ved henting av journalpost. ${ex.message}"
         LOG.warn(errorMessage, ex)
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .body(failure(errorMessage, error = ex))
+        return ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, errorMessage)
     }
 
     @GetMapping("sak")
-    fun hentSaksnummer(@RequestParam(name = "journalpostId") journalpostId: String): ResponseEntity<Ressurs<Map<String, String>>> {
+    fun hentSaksnummer(@RequestParam(name = "journalpostId") journalpostId: String): Map<String, String> {
         val saksnummer = journalpostService.hentSaksnummer(journalpostId)
-            ?: return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(failure("Sak mangler for journalpostId=$journalpostId", null))
+            ?: throw JournalpostIkkeFunnetException(journalpostId)
 
-        return ResponseEntity.ok(success(mapOf("saksnummer" to saksnummer), "OK"))
+        return mapOf("saksnummer" to saksnummer)
     }
 
     @GetMapping
-    fun hentJournalpost(@RequestParam(name = "journalpostId") journalpostId: String): ResponseEntity<Ressurs<Journalpost>> {
-        return ResponseEntity.ok(success(journalpostService.hentJournalpost(journalpostId), "OK"))
+    fun hentJournalpost(@RequestParam(name = "journalpostId") journalpostId: String): Journalpost {
+        return journalpostService.hentJournalpost(journalpostId)
     }
 
     @PostMapping
-    fun hentJournalpostForBruker(@RequestBody journalposterForBrukerRequest: JournalposterForBrukerRequest): ResponseEntity<Ressurs<List<Journalpost>>> {
-        return ResponseEntity.ok(success(journalpostService.finnJournalposter(journalposterForBrukerRequest), "OK"))
+    fun hentJournalpostForBruker(@RequestBody journalposterForBrukerRequest: JournalposterForBrukerRequest): List<Journalpost> {
+        return journalpostService.finnJournalposter(journalposterForBrukerRequest)
     }
 
     @PostMapping("temaer")
-    fun hentJournalpostForBrukerOgTema(@RequestBody journalposterForVedleggRequest: JournalposterForVedleggRequest): ResponseEntity<Ressurs<List<Journalpost>>> {
-        return ResponseEntity.ok(success(journalpostService.finnJournalposter(journalposterForVedleggRequest), "OK"))
+    fun hentJournalpostForBrukerOgTema(@RequestBody journalposterForVedleggRequest: JournalposterForVedleggRequest): List<Journalpost> {
+        return journalpostService.finnJournalposter(journalposterForVedleggRequest)
     }
 
     @GetMapping("hentdokument/{journalpostId}/{dokumentInfoId}")
@@ -102,13 +99,8 @@ class HentJournalpostController(private val journalpostService: JournalpostServi
         @PathVariable journalpostId: String,
         @PathVariable dokumentInfoId: String,
         @RequestParam("variantFormat", required = false) variantFormat: String?,
-    ): ResponseEntity<Ressurs<ByteArray>> {
-        return ResponseEntity.ok(
-            success(
-                journalpostService.hentDokument(journalpostId, dokumentInfoId, variantFormat ?: "ARKIV"),
-                "OK",
-            ),
-        )
+    ): ByteArray {
+        return journalpostService.hentDokument(journalpostId, dokumentInfoId, variantFormat ?: "ARKIV")
     }
 
     companion object {

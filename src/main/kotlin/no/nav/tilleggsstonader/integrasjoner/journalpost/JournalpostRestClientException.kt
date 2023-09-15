@@ -13,3 +13,5 @@ class JournalpostRequestException(
     RuntimeException(message, cause)
 
 class JournalpostForbiddenException(message: String?, cause: Throwable? = null) : RuntimeException(message, cause)
+
+class JournalpostIkkeFunnetException(val id: String) : RuntimeException()

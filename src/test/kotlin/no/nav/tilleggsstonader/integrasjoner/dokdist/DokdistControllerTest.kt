@@ -19,13 +19,11 @@ import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.TestPropertySource
 import org.springframework.web.client.exchange
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 
-@ActiveProfiles(profiles = ["integrasjonstest", "mock-sts"])
 @TestPropertySource(properties = ["clients.dokdist.uri=http://localhost:28085"])
 @AutoConfigureWireMock(port = 28085)
 class DokdistControllerTest : IntegrationTest() {
