@@ -5,7 +5,7 @@ val tilleggsstønaderKontrakterVersion = "2023.09.15-13.07.de42a84e620b"
 val tokenSupportVersion = "3.1.5"
 val wiremockVersion = "2.35.0"
 val springCloudVersion = "4.0.4"
-val mockkVersion = "1.13.7"
+val mockkVersion = "1.13.8"
 val testcontainerVersion = "1.19.0"
 
 group = "no.nav.tilleggsstonader.integrasjoner"
