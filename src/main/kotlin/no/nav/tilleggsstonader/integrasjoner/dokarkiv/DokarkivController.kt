@@ -2,6 +2,7 @@ package no.nav.tilleggsstonader.integrasjoner.dokarkiv
 
 import jakarta.validation.Valid
 import no.nav.security.token.support.core.api.ProtectedWithClaims
+import no.nav.tilleggsstonader.integrasjoner.dokarkiv.client.DokarkivConflictException
 import no.nav.tilleggsstonader.integrasjoner.dokarkiv.client.KanIkkeFerdigstilleJournalpostException
 import no.nav.tilleggsstonader.kontrakter.dokarkiv.ArkiverDokumentRequest
 import no.nav.tilleggsstonader.kontrakter.dokarkiv.ArkiverDokumentResponse
@@ -58,6 +59,11 @@ class DokarkivController(private val journalføringService: DokarkivService) {
     fun handleKanIkkeFerdigstilleException(ex: KanIkkeFerdigstilleJournalpostException): ProblemDetail {
         LOG.warn("Feil ved ferdigstilling {}", ex.message)
         return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.message ?: "Uventer feil")
+    }
+
+    @ExceptionHandler(DokarkivConflictException::class)
+    fun handleDokarkivConflictException(ex: DokarkivConflictException): ResponseEntity<ArkiverDokumentResponse> {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.response)
     }
 
     @PostMapping

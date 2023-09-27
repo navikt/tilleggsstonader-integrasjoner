@@ -35,6 +35,7 @@ import no.nav.tilleggsstonader.kontrakter.dokarkiv.Sak
 import no.nav.tilleggsstonader.kontrakter.felles.BrukerIdType
 import no.nav.tilleggsstonader.kontrakter.felles.ObjectMapperProvider.objectMapper
 import no.nav.tilleggsstonader.kontrakter.felles.Tema
+import no.nav.tilleggsstonader.libs.test.assertions.catchThrowableOfType
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -46,6 +47,7 @@ import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.test.context.TestPropertySource
+import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.client.exchange
 
 @TestPropertySource(properties = ["clients.dokarkiv.uri=http://localhost:28085"])
@@ -113,7 +115,40 @@ class DokarkivControllerTest : IntegrationTest() {
     }
 
     @Test
-    fun `skal returnere 409 ved 409 response fra dokarkiv`() {
+    fun `skal returnere 409 med bodyved 409 response fra dokarkiv`() {
+        val responseBody =
+            """{"journalpostId":"467010363","ferdigstilt":false,"dokumenter":[{"dokumentInfoId":"123","tittel":null,"brevkode":null}]}"""
+        stubFor(
+            post("/rest/journalpostapi/v1/journalpost?forsoekFerdigstill=false")
+                .willReturn(
+                    aResponse()
+                        .withHeader("Content-Type", "application/json;charset=UTF-8")
+                        .withStatus(409)
+                        .withBody(responseBody),
+                ),
+        )
+        val body = ArkiverDokumentRequest(
+            "FNR",
+            false,
+            listOf(HOVEDDOKUMENT),
+            eksternReferanseId = "id",
+            avsenderMottaker = AvsenderMottaker("fnr", BrukerIdType.FNR, "navn"),
+        )
+
+        val response = catchThrowableOfType<HttpClientErrorException> {
+            restTemplate.exchange<ArkiverDokumentResponse>(
+                localhost(DOKARKIV_URL),
+                HttpMethod.POST,
+                HttpEntity(body, headersWithNavUserId()),
+            )
+        }
+
+        assertThat(response.statusCode).isEqualTo(HttpStatus.CONFLICT)
+        assertThat(response.responseBodyAsString).isEqualTo(responseBody)
+    }
+
+    @Test
+    fun `skal returnere 500 ved 409 response uten forventet body fra dokarkiv`() {
         stubFor(
             post("/rest/journalpostapi/v1/journalpost?forsoekFerdigstill=false")
                 .willReturn(
@@ -139,8 +174,8 @@ class DokarkivControllerTest : IntegrationTest() {
             )
         }
 
-        assertThat(response.httpStatus).isEqualTo(HttpStatus.CONFLICT)
-        assertThat(response.detail.detail).isEqualTo("[Dokarkiv][Feil ved opprettelse av journalpost ][org.springframework.web.client.HttpClientErrorException\$Conflict]")
+        assertThat(response.httpStatus).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR)
+        assertThat(response.detail.detail).isEqualTo("[Dokarkiv][Klarer ikke å parsea response fra dokarkiv ved 409][org.springframework.web.client.HttpClientErrorException\$Conflict]")
     }
 
     @Test

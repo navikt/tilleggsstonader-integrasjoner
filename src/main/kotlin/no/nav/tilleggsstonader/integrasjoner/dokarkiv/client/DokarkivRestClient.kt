@@ -1,12 +1,15 @@
 package no.nav.tilleggsstonader.integrasjoner.dokarkiv.client
 
+import com.fasterxml.jackson.module.kotlin.readValue
 import no.nav.tilleggsstonader.integrasjoner.dokarkiv.client.domene.FerdigstillJournalPost
 import no.nav.tilleggsstonader.integrasjoner.dokarkiv.client.domene.OpprettJournalpostRequest
 import no.nav.tilleggsstonader.integrasjoner.dokarkiv.client.domene.OpprettJournalpostResponse
 import no.nav.tilleggsstonader.integrasjoner.infrastruktur.exception.OppslagException
 import no.nav.tilleggsstonader.integrasjoner.util.MDCOperations
+import no.nav.tilleggsstonader.kontrakter.dokarkiv.ArkiverDokumentResponse
 import no.nav.tilleggsstonader.kontrakter.dokarkiv.OppdaterJournalpostRequest
 import no.nav.tilleggsstonader.kontrakter.dokarkiv.OppdaterJournalpostResponse
+import no.nav.tilleggsstonader.kontrakter.felles.ObjectMapperProvider.objectMapper
 import no.nav.tilleggsstonader.libs.http.client.AbstractRestClient
 import no.nav.tilleggsstonader.libs.log.NavHttpHeaders
 import org.slf4j.LoggerFactory
@@ -15,6 +18,7 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Component
+import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.client.HttpStatusCodeException
 import org.springframework.web.client.RestClientResponseException
 import org.springframework.web.client.RestTemplate
@@ -40,8 +44,28 @@ class DokarkivRestClient(
         try {
             return postForEntity(uri, request, headers(navIdent), mapOf("ferdigstill" to ferdigstill))
         } catch (e: RuntimeException) {
+            if (e is HttpClientErrorException && e.statusCode == HttpStatus.CONFLICT) {
+                håndterConflict(e)
+            }
             throw oppslagExceptionVed("opprettelse", e, request.bruker?.id)
         }
+    }
+
+    private fun håndterConflict(e: HttpClientErrorException) {
+        var response: ArkiverDokumentResponse? = null
+        try {
+            response = objectMapper.readValue<ArkiverDokumentResponse>(e.responseBodyAsString)
+        } catch (ex: Exception) {
+            throw OppslagException(
+                "Klarer ikke å parsea response fra dokarkiv ved 409",
+                "Dokarkiv",
+                OppslagException.Level.KRITISK,
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                e,
+                sensitiveInfo = "Body=${e.responseBodyAsString}"
+            )
+        }
+        throw DokarkivConflictException(response)
     }
 
     fun oppdaterJournalpost(
@@ -91,7 +115,7 @@ class DokarkivRestClient(
             if (e.statusCode == HttpStatus.BAD_REQUEST) {
                 throw KanIkkeFerdigstilleJournalpostException(
                     "Kan ikke ferdigstille journalpost " +
-                        "$journalpostId body ${e.responseBodyAsString}",
+                            "$journalpostId body ${e.responseBodyAsString}",
                 )
             }
             throw e
