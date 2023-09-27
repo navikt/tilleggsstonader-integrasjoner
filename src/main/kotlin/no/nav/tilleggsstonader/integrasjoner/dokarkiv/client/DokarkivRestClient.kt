@@ -44,14 +44,14 @@ class DokarkivRestClient(
         try {
             return postForEntity(uri, request, headers(navIdent), mapOf("ferdigstill" to ferdigstill))
         } catch (e: RuntimeException) {
-            if (e is HttpClientErrorException && e.statusCode == HttpStatus.CONFLICT) {
+            if (e is HttpClientErrorException.Conflict) {
                 håndterConflict(e)
             }
             throw oppslagExceptionVed("opprettelse", e, request.bruker?.id)
         }
     }
 
-    private fun håndterConflict(e: HttpClientErrorException) {
+    private fun håndterConflict(e: HttpClientErrorException.Conflict) {
         var response: ArkiverDokumentResponse? = null
         try {
             response = objectMapper.readValue<ArkiverDokumentResponse>(e.responseBodyAsString)
@@ -62,7 +62,7 @@ class DokarkivRestClient(
                 OppslagException.Level.KRITISK,
                 HttpStatus.INTERNAL_SERVER_ERROR,
                 e,
-                sensitiveInfo = "Body=${e.responseBodyAsString}"
+                sensitiveInfo = "Body=${e.responseBodyAsString}",
             )
         }
         throw DokarkivConflictException(response)
@@ -115,7 +115,7 @@ class DokarkivRestClient(
             if (e.statusCode == HttpStatus.BAD_REQUEST) {
                 throw KanIkkeFerdigstilleJournalpostException(
                     "Kan ikke ferdigstille journalpost " +
-                            "$journalpostId body ${e.responseBodyAsString}",
+                        "$journalpostId body ${e.responseBodyAsString}",
                 )
             }
             throw e
