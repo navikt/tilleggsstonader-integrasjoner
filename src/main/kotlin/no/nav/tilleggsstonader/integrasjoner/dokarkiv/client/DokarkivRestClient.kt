@@ -57,7 +57,7 @@ class DokarkivRestClient(
             response = objectMapper.readValue<ArkiverDokumentResponse>(e.responseBodyAsString)
         } catch (ex: Exception) {
             throw OppslagException(
-                "Klarer ikke å parsea response fra dokarkiv ved 409",
+                "Klarer ikke å parse response fra dokarkiv ved 409",
                 "Dokarkiv",
                 OppslagException.Level.KRITISK,
                 HttpStatus.INTERNAL_SERVER_ERROR,

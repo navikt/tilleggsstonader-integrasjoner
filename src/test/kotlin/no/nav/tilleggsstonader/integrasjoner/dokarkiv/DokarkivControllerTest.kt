@@ -175,7 +175,7 @@ class DokarkivControllerTest : IntegrationTest() {
         }
 
         assertThat(response.httpStatus).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR)
-        assertThat(response.detail.detail).isEqualTo("[Dokarkiv][Klarer ikke å parsea response fra dokarkiv ved 409][org.springframework.web.client.HttpClientErrorException\$Conflict]")
+        assertThat(response.detail.detail).isEqualTo("[Dokarkiv][Klarer ikke å parse response fra dokarkiv ved 409][org.springframework.web.client.HttpClientErrorException\$Conflict]")
     }
 
     @Test
