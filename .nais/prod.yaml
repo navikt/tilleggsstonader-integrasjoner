@@ -53,6 +53,7 @@ spec:
     inbound:
       rules:
         - application: tilleggsstonader-sak
+        - application: tilleggsstonader-soknad-api
     outbound:
       external:
         - host: oppgave.prod-fss-pub.nais.io
