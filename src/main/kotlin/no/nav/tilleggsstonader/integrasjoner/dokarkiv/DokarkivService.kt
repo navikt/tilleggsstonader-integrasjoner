@@ -9,7 +9,6 @@ import no.nav.tilleggsstonader.integrasjoner.dokarkiv.client.domene.OpprettJourn
 import no.nav.tilleggsstonader.integrasjoner.dokarkiv.metadata.tilMetadata
 import no.nav.tilleggsstonader.kontrakter.dokarkiv.ArkiverDokumentRequest
 import no.nav.tilleggsstonader.kontrakter.dokarkiv.ArkiverDokumentResponse
-import no.nav.tilleggsstonader.kontrakter.dokarkiv.AvsenderMottaker
 import no.nav.tilleggsstonader.kontrakter.dokarkiv.DokarkivBruker
 import no.nav.tilleggsstonader.kontrakter.dokarkiv.Dokument
 import no.nav.tilleggsstonader.kontrakter.dokarkiv.Filtype
@@ -19,14 +18,12 @@ import no.nav.tilleggsstonader.kontrakter.dokarkiv.OppdaterJournalpostRequest
 import no.nav.tilleggsstonader.kontrakter.dokarkiv.OppdaterJournalpostResponse
 import no.nav.tilleggsstonader.kontrakter.dokarkiv.Sak
 import no.nav.tilleggsstonader.kontrakter.felles.BrukerIdType
-import no.nav.tilleggsstonader.kontrakter.felles.Tema
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
 @Service
 class DokarkivService(
     private val dokarkivRestClient: DokarkivRestClient,
-    // private val personopplysningerService: PersonopplysningerService,
     private val dokarkivLogiskVedleggRestClient: DokarkivLogiskVedleggRestClient,
 ) {
 
@@ -49,10 +46,6 @@ class DokarkivService(
         val dokarkivBruker = DokarkivBruker(BrukerIdType.FNR, arkiverDokumentRequest.fnr)
         val hoveddokument = arkiverDokumentRequest.hoveddokumentvarianter[0]
         val metadata = hoveddokument.dokumenttype.tilMetadata()
-        val avsenderMottaker = arkiverDokumentRequest.avsenderMottaker ?: arkiverDokumentRequest.fnr.let {
-            val navn = hentNavnForFnr(fnr = arkiverDokumentRequest.fnr, behandlingstema = metadata.tema)
-            AvsenderMottaker(it, BrukerIdType.FNR, navn)
-        }
 
         val dokumenter = mutableListOf(mapHoveddokument(arkiverDokumentRequest.hoveddokumentvarianter))
         dokumenter.addAll(arkiverDokumentRequest.vedleggsdokumenter.map(this::mapTilArkivdokument))
@@ -67,7 +60,7 @@ class DokarkivService(
             kanal = metadata.kanal,
             tittel = hoveddokument.tittel ?: metadata.tittel,
             tema = metadata.tema.name,
-            avsenderMottaker = avsenderMottaker,
+            avsenderMottaker = arkiverDokumentRequest.avsenderMottaker,
             bruker = dokarkivBruker,
             dokumenter = dokumenter.toList(),
             eksternReferanseId = arkiverDokumentRequest.eksternReferanseId,
@@ -82,12 +75,6 @@ class DokarkivService(
         navIdent: String? = null,
     ): OppdaterJournalpostResponse {
         return dokarkivRestClient.oppdaterJournalpost(supplerDefaultVerdier(request), journalpostId, navIdent)
-    }
-
-    private fun hentNavnForFnr(fnr: String, behandlingstema: Tema): String {
-        // TODO Vurder om vi burde ha PDL i denne tjenesten, brukes når avsenderMottaker ikke er satt men vi kan vel alltid sette den i stedet?
-        error("TODO vurder om vi burde ha pdl i denne tjenesten")
-        // return personopplysningerService.hentPersoninfo(fnr, behandlingstema).navn
     }
 
     private fun supplerDefaultVerdier(request: OppdaterJournalpostRequest): OppdaterJournalpostRequest {
