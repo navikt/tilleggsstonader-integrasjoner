@@ -5,6 +5,9 @@ metadata:
   namespace: tilleggsstonader
   labels:
     team: tilleggsstonader
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "250M"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
 
 spec:
   port: 8080
@@ -47,7 +50,14 @@ spec:
           - id: "9ec6487d-f37a-4aad-a027-cd221c1ac32b" # 0000-GA-Fortrolig_Adresse
           - id: "e750ceb5-b70b-4d94-b4fa-9d22467b786b" # 0000-GA-Egne_ansatte
   accessPolicy:
+    inbound:
+      rules:
+        - application: tilleggsstonader-sak
+        - application: tilleggsstonader-soknad-api
     outbound:
+      external:
+        - host: oppgave.prod-fss-pub.nais.io
+
   env:
     - name: SPRING_PROFILES_ACTIVE
       value: prod
