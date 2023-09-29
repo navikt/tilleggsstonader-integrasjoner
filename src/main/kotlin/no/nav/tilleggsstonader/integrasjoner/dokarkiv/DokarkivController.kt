@@ -67,7 +67,7 @@ class DokarkivController(private val journalføringService: DokarkivService) {
     }
 
     @PostMapping
-    fun arkiverDokumentV4(
+    fun arkiverDokument(
         @RequestBody @Valid
         arkiverDokumentRequest: ArkiverDokumentRequest,
         @RequestHeader(name = NAV_USER_ID) navIdent: String? = null,
