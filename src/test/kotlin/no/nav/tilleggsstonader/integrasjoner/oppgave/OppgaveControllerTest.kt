@@ -475,6 +475,7 @@ class OppgaveControllerTest : IntegrationTest() {
         )
 
         val oppgave = Oppgave(
+            id = OPPGAVE_ID,
             aktoerId = "1234567891011",
             journalpostId = "1",
             beskrivelse = EKSTRA_BESKRIVELSE,
@@ -509,6 +510,7 @@ class OppgaveControllerTest : IntegrationTest() {
         )
 
         val oppgave = Oppgave(
+            id = OPPGAVE_ID,
             aktoerId = "1234567891011",
             journalpostId = "1",
             beskrivelse = EKSTRA_BESKRIVELSE,
@@ -610,6 +612,7 @@ class OppgaveControllerTest : IntegrationTest() {
         )
 
         val oppgave = Oppgave(
+            id = OPPGAVE_ID,
             aktoerId = "1234567891011",
             journalpostId = "1",
             beskrivelse = EKSTRA_BESKRIVELSE,
@@ -644,6 +647,7 @@ class OppgaveControllerTest : IntegrationTest() {
         )
 
         val oppgave = Oppgave(
+            id = OPPGAVE_ID,
             aktoerId = "1234567891011",
             journalpostId = "1",
             beskrivelse = EKSTRA_BESKRIVELSE,

@@ -69,8 +69,12 @@ class OppgaveController(private val oppgaveService: OppgaveService) {
     }
 
     @PatchMapping("/{oppgaveId}/oppdater")
-    fun patchOppgave(@RequestBody oppgave: Oppgave): OppgaveResponse {
-        val oppgaveId = oppgaveService.patchOppgave(oppgave)
+    fun patchOppgave(
+        @PathVariable(name = "oppgaveId") oppgaveId: Long,
+        @RequestBody oppgave: Oppgave,
+    ): OppgaveResponse {
+        require(oppgaveId == oppgave.id) { "OppgaveId i path($oppgaveId) er ikke lik body(${oppgave.id})" }
+        oppgaveService.patchOppgave(oppgave)
         return OppgaveResponse(oppgaveId = oppgaveId)
     }
 
