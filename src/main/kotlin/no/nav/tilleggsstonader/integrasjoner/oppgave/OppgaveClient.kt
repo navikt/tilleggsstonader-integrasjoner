@@ -95,7 +95,7 @@ class OppgaveClient(
         return getForEntity(buildMappeRequestUri(queryParams), httpHeaders(), queryParams.tilUriVariables())
     }
 
-    fun oppdaterOppgave(patchDto: Oppgave): Oppgave? {
+    fun oppdaterOppgave(patchDto: Oppgave): Oppgave {
         return Result.runCatching {
             patchForEntity<Oppgave>(
                 oppgaveIdUrl,

@@ -59,16 +59,16 @@ class OppgaveService(
     }
 
     fun patchOppgave(patchOppgave: Oppgave): Long {
-        return oppgaveClient.oppdaterOppgave(patchOppgave)?.id!!
+        return oppgaveClient.oppdaterOppgave(patchOppgave).id!!
     }
 
-    fun fordelOppgave(oppgaveId: Long, saksbehandler: String, versjon: Int?): Long {
+    fun fordelOppgave(oppgaveId: Long, saksbehandler: String?, versjon: Int?): Oppgave {
         val oppgave = oppgaveClient.finnOppgaveMedId(oppgaveId)
 
         if (oppgave.status === StatusEnum.FERDIGSTILT) {
             throw OppslagException(
-                "Kan ikke fordele oppgave med id $oppgaveId som allerede er ferdigstilt",
-                "Oppgave.fordel",
+                "Kan ikke fordele oppgave=$oppgaveId som allerede er ferdigstilt",
+                "Oppgave.fordelOppgave",
                 Level.LAV,
                 HttpStatus.BAD_REQUEST,
             )
@@ -76,40 +76,8 @@ class OppgaveService(
 
         if (versjon != null && versjon != oppgave.versjon) {
             throw OppslagException(
-                "Kan ikke fordele oppgave med id $oppgaveId fordi det finnes en nyere versjon av oppgaven.",
-                "Oppgave.fordel",
-                Level.LAV,
-                HttpStatus.CONFLICT,
-            )
-        }
-
-        val oppdatertOppgaveDto = oppgave.copy(
-            id = oppgave.id,
-            versjon = versjon ?: oppgave.versjon,
-            tilordnetRessurs = saksbehandler,
-            beskrivelse = lagOppgaveBeskrivelseFordeling(oppgave = oppgave, nySaksbehandlerIdent = saksbehandler),
-        )
-        oppgaveClient.oppdaterOppgave(oppdatertOppgaveDto)
-
-        return oppgaveId
-    }
-
-    fun tilbakestillFordelingPåOppgave(oppgaveId: Long, versjon: Int?): Long {
-        val oppgave = oppgaveClient.finnOppgaveMedId(oppgaveId)
-
-        if (oppgave.status === StatusEnum.FERDIGSTILT) {
-            throw OppslagException(
-                "Kan ikke tilbakestille fordeling på oppgave med id $oppgaveId som allerede er ferdigstilt",
-                "Oppgave.tilbakestill",
-                Level.LAV,
-                HttpStatus.BAD_REQUEST,
-            )
-        }
-
-        if (versjon != null && versjon != oppgave.versjon) {
-            throw OppslagException(
-                "Kan ikke fordele oppgave med id $oppgaveId fordi det finnes en nyere versjon av oppgaven.",
-                "Oppgave.fordel",
+                "Kan ikke fordele oppgave=$oppgaveId fordi det finnes en nyere versjon av oppgaven.",
+                "Oppgave.fordelOppgave",
                 Level.LAV,
                 HttpStatus.CONFLICT,
             )
@@ -119,11 +87,9 @@ class OppgaveService(
             id = oppgave.id,
             versjon = versjon ?: oppgave.versjon,
             tilordnetRessurs = "",
-            beskrivelse = lagOppgaveBeskrivelseFordeling(oppgave = oppgave),
+            beskrivelse = lagOppgaveBeskrivelseFordeling(oppgave = oppgave, nySaksbehandlerIdent = saksbehandler),
         )
-        oppgaveClient.oppdaterOppgave(oppdatertOppgaveDto)
-
-        return oppgaveId
+        return oppgaveClient.oppdaterOppgave(oppdatertOppgaveDto)
     }
 
     private fun lagOppgaveBeskrivelseFordeling(oppgave: Oppgave, nySaksbehandlerIdent: String? = null): String {

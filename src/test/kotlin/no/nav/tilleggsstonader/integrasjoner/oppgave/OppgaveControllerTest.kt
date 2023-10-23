@@ -379,7 +379,7 @@ class OppgaveControllerTest : IntegrationTest() {
                 ),
         )
 
-        val response: ResponseEntity<OppgaveResponse> = restTemplate.exchange(
+        val response: ResponseEntity<Oppgave> = restTemplate.exchange(
             localhost("/api/oppgave/$OPPGAVE_ID/fordel?saksbehandler=$saksbehandlerId"),
             HttpMethod.POST,
             HttpEntity(null, headers),
@@ -387,7 +387,7 @@ class OppgaveControllerTest : IntegrationTest() {
 
         assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         // assertThat(response.body?.melding).isEqualTo("Oppgaven ble tildelt saksbehandler $saksbehandlerId")
-        assertThat(response.body).isEqualTo(OppgaveResponse(oppgaveId = OPPGAVE_ID))
+        assertThat(response.body!!.id).isEqualTo(OPPGAVE_ID)
     }
 
     @Test
@@ -403,14 +403,14 @@ class OppgaveControllerTest : IntegrationTest() {
                 ),
         )
 
-        val response: ResponseEntity<OppgaveResponse> = restTemplate.exchange(
+        val response: ResponseEntity<Oppgave> = restTemplate.exchange(
             localhost("/api/oppgave/$OPPGAVE_ID/fordel"),
             HttpMethod.POST,
             HttpEntity(null, headers),
         )
 
         assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
-        assertThat(response.body).isEqualTo(OppgaveResponse(oppgaveId = OPPGAVE_ID))
+        assertThat(response.body!!.id).isEqualTo(OPPGAVE_ID)
     }
 
     @Test
@@ -432,7 +432,7 @@ class OppgaveControllerTest : IntegrationTest() {
         )
 
         val exception = catchProblemDetailException {
-            restTemplate.exchange<OppgaveResponse>(
+            restTemplate.exchange<Oppgave>(
                 localhost("/api/oppgave/$OPPGAVE_ID/fordel?saksbehandler=Z999999"),
                 HttpMethod.POST,
                 HttpEntity(null, headers),
@@ -441,7 +441,7 @@ class OppgaveControllerTest : IntegrationTest() {
 
         assertThat(exception.httpStatus).isEqualTo(HttpStatus.BAD_REQUEST)
         assertThat(exception.detail.detail)
-            .isEqualTo("[Oppgave.fordel][Kan ikke fordele oppgave med id $OPPGAVE_ID som allerede er ferdigstilt]")
+            .isEqualTo("[Oppgave.fordelOppgave][Kan ikke fordele oppgave=$OPPGAVE_ID som allerede er ferdigstilt]")
     }
 
     @Test
@@ -583,7 +583,7 @@ class OppgaveControllerTest : IntegrationTest() {
         )
 
         val exception = catchProblemDetailException {
-            restTemplate.exchange<OppgaveResponse>(
+            restTemplate.exchange<Oppgave>(
                 localhost("$OPPGAVE_URL/$OPPGAVE_ID/fordel?saksbehandler=test123&versjon=1"),
                 HttpMethod.POST,
                 HttpEntity(oppgave, headers),

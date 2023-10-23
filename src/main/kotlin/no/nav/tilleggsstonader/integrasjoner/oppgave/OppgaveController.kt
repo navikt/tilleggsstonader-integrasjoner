@@ -58,14 +58,8 @@ class OppgaveController(private val oppgaveService: OppgaveService) {
         @PathVariable(name = "oppgaveId") oppgaveId: Long,
         @RequestParam("saksbehandler") saksbehandler: String?,
         @RequestParam("versjon") versjon: Int?,
-    ): OppgaveResponse {
-        if (saksbehandler == null) {
-            oppgaveService.tilbakestillFordelingPåOppgave(oppgaveId, versjon)
-        } else {
-            oppgaveService.fordelOppgave(oppgaveId, saksbehandler, versjon)
-        }
-
-        return OppgaveResponse(oppgaveId = oppgaveId)
+    ): Oppgave {
+        return oppgaveService.fordelOppgave(oppgaveId, saksbehandler, versjon)
     }
 
     @PostMapping("/oppdater")
