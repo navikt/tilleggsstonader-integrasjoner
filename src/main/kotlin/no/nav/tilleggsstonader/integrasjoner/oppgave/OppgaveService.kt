@@ -36,9 +36,7 @@ class OppgaveService(
     }
 
     fun oppdaterOppgave(request: Oppgave): Long {
-        val oppgaveId = request.id
-        require(oppgaveId != null) { "Mangler id på oppgave" }
-        val oppgave: Oppgave = oppgaveClient.finnOppgaveMedId(oppgaveId)
+        val oppgave: Oppgave = oppgaveClient.finnOppgaveMedId(request.id)
         // Vurdere om man burde logge warn/kaste feil her, finner inget i loggen at dette skulle ha skjedd
         if (oppgave.status === StatusEnum.FERDIGSTILT) {
             logger.info(
@@ -55,11 +53,11 @@ class OppgaveService(
             )
             oppgaveClient.oppdaterOppgave(patchOppgaveDto)
         }
-        return oppgave.id!!
+        return oppgave.id
     }
 
     fun patchOppgave(patchOppgave: Oppgave): Long {
-        return oppgaveClient.oppdaterOppgave(patchOppgave).id!!
+        return oppgaveClient.oppdaterOppgave(patchOppgave).id
     }
 
     fun fordelOppgave(oppgaveId: Long, saksbehandler: String?, versjon: Int?): Oppgave {
@@ -112,7 +110,7 @@ class OppgaveService(
     }
 
     fun opprettOppgave(request: OpprettOppgaveRequest): Long {
-        val oppgave = Oppgave(
+        val oppgave = OpprettOppgaveRequestDto(
             personident = identHvisGruppe(request, IdentGruppe.FOLKEREGISTERIDENT),
             aktoerId = identHvisGruppe(request, IdentGruppe.AKTOERID),
             orgnr = identHvisGruppe(request, IdentGruppe.ORGNR),

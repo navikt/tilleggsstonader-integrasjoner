@@ -101,7 +101,7 @@ class OppgaveClient(
                 oppgaveIdUrl,
                 patchDto,
                 httpHeaders(),
-                oppgaveIdUriVariables(patchDto.id ?: error("Kan ikke finne oppgaveId på oppgaven")),
+                oppgaveIdUriVariables(patchDto.id),
             )
         }.fold(
             onSuccess = { it },
@@ -194,10 +194,10 @@ class OppgaveClient(
         )
     }
 
-    fun opprettOppgave(dto: Oppgave): Long {
+    fun opprettOppgave(dto: OpprettOppgaveRequestDto): Long {
         val uri = UriComponentsBuilder.fromUri(oppgaveBaseUrl).path(PATH_OPPGAVE).toUriString()
         return Result.runCatching { postForEntity<Oppgave>(uri, dto, httpHeaders()) }
-            .map { it.id ?: error("Kan ikke finne oppgaveId på oppgaven $it") }
+            .map { it.id }
             .onFailure {
                 var feilmelding = "Feil ved oppretting av oppgave for ${dto.aktoerId}."
                 if (it is HttpStatusCodeException) {
