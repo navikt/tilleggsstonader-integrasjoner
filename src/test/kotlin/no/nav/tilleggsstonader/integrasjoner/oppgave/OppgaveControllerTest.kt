@@ -207,7 +207,6 @@ class OppgaveControllerTest : IntegrationTest() {
             tema = Tema.TSO,
             oppgavetype = Oppgavetype.BehandleSak,
             mappeId = 1234L,
-            saksId = "saksid",
             beskrivelse = "Oppgavetekst",
         )
         val response: ResponseEntity<OppgaveResponse> =
@@ -232,7 +231,6 @@ class OppgaveControllerTest : IntegrationTest() {
             enhetsnummer = "enhetsnummer",
             tema = Tema.TSO,
             oppgavetype = Oppgavetype.BehandleSak,
-            saksId = "saksid",
             beskrivelse = "Oppgavetekst",
         )
         val response: ResponseEntity<OppgaveResponse> =
@@ -264,7 +262,6 @@ class OppgaveControllerTest : IntegrationTest() {
             enhetsnummer = "enhetsnummer",
             tema = Tema.TSO,
             oppgavetype = Oppgavetype.BehandleSak,
-            saksId = "saksid",
             beskrivelse = "Oppgavetekst",
         )
         val exception = catchProblemDetailException {
