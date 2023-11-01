@@ -115,7 +115,6 @@ class OppgaveService(
             aktoerId = identHvisGruppe(request, IdentGruppe.AKTOERID),
             orgnr = identHvisGruppe(request, IdentGruppe.ORGNR),
             samhandlernr = identHvisGruppe(request, IdentGruppe.SAMHANDLERNR),
-            saksreferanse = request.saksId,
             journalpostId = request.journalpostId,
             prioritet = request.prioritet,
             tema = request.tema,
