@@ -27,7 +27,7 @@ import java.net.URI
 @Service
 class SafClient(
     @Value("\${clients.saf.uri}") safBaseUrl: URI,
-    @Qualifier("azureOnBehalfOf") restTemplate: RestTemplate,
+    @Qualifier("azure") restTemplate: RestTemplate,
 ) : AbstractRestClient(restTemplate) {
 
     private val safUri = UriComponentsBuilder.fromUri(safBaseUrl).pathSegment(PATH_GRAPHQL).toUriString()
