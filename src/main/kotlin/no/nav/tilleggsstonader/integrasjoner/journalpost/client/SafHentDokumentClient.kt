@@ -22,7 +22,7 @@ import java.net.URI
 @Service
 class SafHentDokumentClient(
     @Value("\${clients.saf.uri}") safBaseUrl: URI,
-    @Qualifier("azureOnBehalfOf") restTemplate: RestTemplate,
+    @Qualifier("azure") restTemplate: RestTemplate,
 ) : AbstractRestClient(restTemplate) {
 
     private val safHentdokumentUri = UriComponentsBuilder.fromUri(safBaseUrl).path(PATH_HENT_DOKUMENT)
