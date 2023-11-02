@@ -18,6 +18,6 @@ object BarnetilsynSøknadMetadata : Dokumentmetadata {
     override val kanal: String = "NAV_NO"
     override val dokumenttype: Dokumenttype = Dokumenttype.BARNETILSYN_SØKNAD
     override val tittel: String = "Søknad om stønad til barnetilsyn - tilleggsstønader"
-    override val brevkode: String = "NAV .."
+    override val brevkode: String = "NAV 11-12.15"
     override val dokumentKategori: Dokumentkategori = Dokumentkategori.SOK
 }
