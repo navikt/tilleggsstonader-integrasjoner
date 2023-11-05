@@ -77,11 +77,7 @@ class DokarkivRestClient(
             .path(PATH_JOURNALPOST)
             .pathSegment("{journalpostId}")
             .encode().toUriString()
-        try {
             return putForEntity(uri, request, headers(navIdent), mapOf("journalpostId" to journalpostId))
-        } catch (e: RuntimeException) {
-            throw oppslagExceptionVed("oppdatering", e, request.bruker?.id)
-        }
     }
 
     private fun oppslagExceptionVed(requestType: String, e: RuntimeException, brukerId: String?): Throwable {
