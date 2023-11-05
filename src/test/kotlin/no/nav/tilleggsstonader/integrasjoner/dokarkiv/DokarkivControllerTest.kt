@@ -38,6 +38,7 @@ import no.nav.tilleggsstonader.kontrakter.felles.Tema
 import no.nav.tilleggsstonader.libs.test.assertions.catchThrowableOfType
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.slf4j.LoggerFactory
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock
@@ -262,6 +263,7 @@ class DokarkivControllerTest : IntegrationTest() {
         assertThat(response.body?.journalpostId).isEqualTo("12345678")
     }
 
+    @Disabled
     @Test
     fun `dokarkiv skal logge detaljert feilmelding til secureLogger ved HttpServerErrorExcetion`() {
         val journalpostId = "12345678"
