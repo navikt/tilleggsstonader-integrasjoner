@@ -12,6 +12,7 @@ import no.nav.tilleggsstonader.kontrakter.dokarkiv.OppdaterJournalpostResponse
 import no.nav.tilleggsstonader.kontrakter.felles.ObjectMapperProvider.objectMapper
 import no.nav.tilleggsstonader.libs.http.client.AbstractRestClient
 import no.nav.tilleggsstonader.libs.log.NavHttpHeaders
+import no.nav.tilleggsstonader.libs.log.SecureLogger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
@@ -77,6 +78,11 @@ class DokarkivRestClient(
             .path(PATH_JOURNALPOST)
             .pathSegment("{journalpostId}")
             .encode().toUriString()
+
+        secureLogger.info("request: $request")
+
+
+
             return putForEntity(uri, request, headers(navIdent), mapOf("journalpostId" to journalpostId))
     }
 
@@ -121,6 +127,7 @@ class DokarkivRestClient(
     companion object {
 
         private val logger = LoggerFactory.getLogger(DokarkivRestClient::class.java)
+        private val secureLogger = SecureLogger.secureLogger
 
         private const val PATH_JOURNALPOST = "rest/journalpostapi/v1/journalpost"
         private const val QUERY_FERDIGSTILL = "forsoekFerdigstill={ferdigstill}"
