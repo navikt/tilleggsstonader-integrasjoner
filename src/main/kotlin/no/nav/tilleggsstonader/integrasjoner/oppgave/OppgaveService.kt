@@ -125,7 +125,7 @@ class OppgaveService(
             oppgavetype = request.oppgavetype.value,
             beskrivelse = request.beskrivelse,
             behandlingstype = request.behandlingstype,
-            tilordnetRessurs = request.tilordnetRessurs?.let { hentNavIdent(it) },
+            tilordnetRessurs = request.tilordnetRessurs?.let { validerNavIdent(it) },
             behandlesAvApplikasjon = request.behandlesAvApplikasjon,
             mappeId = request.mappeId,
         )
@@ -133,10 +133,13 @@ class OppgaveService(
         return oppgaveClient.opprettOppgave(oppgave)
     }
 
-    private fun hentNavIdent(id: String): String {
-        if (id.length != 7 && id != SikkerhetsContext.SYSTEM_FORKORTELSE) {
+    private fun validerNavIdent(id: String): String {
+        val lengdeNavIdent = 7
+
+        if (id.length == lengdeNavIdent) {
             return id
         }
+
         error("Ident=$id er ugyldig")
     }
 
