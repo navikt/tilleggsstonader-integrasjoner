@@ -130,7 +130,7 @@ class DokdistControllerTest : IntegrationTest() {
 
     companion object {
 
-        private const val DOKDIST_URL = "/api/dist/v1"
+        private const val DOKDIST_URL = "/api/dist"
         private const val JOURNALPOST_ID = "453492547"
     }
 }
