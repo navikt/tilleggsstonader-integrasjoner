@@ -27,7 +27,7 @@ class DokdistController(private val dokdistService: DokdistService) {
         return ProblemDetail.forStatusAndDetail(e.statusCode, e.responseBodyAsString)
     }
 
-    @PostMapping("v1")
+    @PostMapping
     @ResponseStatus(HttpStatus.OK)
     fun distribuerJournalpost(
         @RequestBody @Valid
