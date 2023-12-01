@@ -9,7 +9,7 @@ clients:
     scope: api://${CLIENT_ENV}-fss.teamdokumenthandtering.dokarkiv-q1/.default
   dokdist:
     uri: https://dokdistfordeling-q1.dev-fss-pub.nais.io
-    scope: api://${CLIENT_ENV}-fss.teamdokumenthandtering.dokdistfordeling-q1/.default
+    scope: api://${CLIENT_ENV}-fss.teamdokumenthandtering.saf-q1/.default
   saf:
     # saf-q1.dev er på saf.dev
     uri: https://saf.dev-fss-pub.nais.io
