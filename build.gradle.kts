@@ -1,8 +1,8 @@
-val javaVersion = JavaLanguageVersion.of(17)
-val springdocVersion = "2.2.0"
-val tilleggsstønaderLibsVersion = "2023.09.14-10.25.400ea92abb53"
-val tilleggsstønaderKontrakterVersion = "2023.11.01-09.50.369fe3c02e7f"
-val tokenSupportVersion = "3.1.5"
+val javaVersion = JavaLanguageVersion.of(21)
+val springdocVersion = "2.3.0"
+val tilleggsstønaderLibsVersion = "2023.12.04-12.14.a6ecafd594a1"
+val tilleggsstønaderKontrakterVersion = "2023.12.04-12.03.40d61264fa02"
+val tokenSupportVersion = "3.2.0"
 val wiremockVersion = "2.35.0"
 val springCloudVersion = "4.0.4"
 val mockkVersion = "1.13.8"
@@ -14,16 +14,16 @@ version = "1.0.0"
 plugins {
     application
 
-    kotlin("jvm") version "1.9.10"
-    id("com.diffplug.spotless") version "6.21.0"
-    id("com.github.ben-manes.versions") version "0.48.0"
+    kotlin("jvm") version "1.9.21"
+    id("com.diffplug.spotless") version "6.23.3"
+    id("com.github.ben-manes.versions") version "0.50.0"
     id("se.patrikerdes.use-latest-versions") version "0.2.18"
 
-    id("org.springframework.boot") version "3.1.4"
-    id("io.spring.dependency-management") version "1.1.3"
-    kotlin("plugin.spring") version "1.9.10"
+    id("org.springframework.boot") version "3.2.0"
+    id("io.spring.dependency-management") version "1.1.4"
+    kotlin("plugin.spring") version "1.9.21"
 
-    id("org.cyclonedx.bom") version "1.7.4"
+    id("org.cyclonedx.bom") version "1.8.1"
 }
 
 repositories {
@@ -76,7 +76,6 @@ dependencies {
     testImplementation("org.springframework.cloud:spring-cloud-contract-wiremock:$springCloudVersion")
 
     testImplementation("com.github.tomakehurst:wiremock-jre8-standalone:$wiremockVersion")
-    testImplementation("io.mockk:mockk:$mockkVersion")
     testImplementation("io.mockk:mockk:$mockkVersion")
 
     testImplementation("no.nav.security:token-validation-spring-test:$tokenSupportVersion")
