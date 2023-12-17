@@ -1,10 +1,10 @@
 val javaVersion = JavaLanguageVersion.of(21)
 val springdocVersion = "2.3.0"
-val tilleggsstønaderLibsVersion = "2023.12.04-12.14.a6ecafd594a1"
-val tilleggsstønaderKontrakterVersion = "2023.12.04-12.03.40d61264fa02"
+val tilleggsstønaderLibsVersion = "2023.12.15-09.40.7c554b900322"
+val tilleggsstønaderKontrakterVersion = "2023.12.15-09.39.8f8218c4f23c"
 val tokenSupportVersion = "3.2.0"
-val wiremockVersion = "2.35.0"
-val springCloudVersion = "4.0.4"
+val wiremockVersion = "3.0.1"
+val springCloudVersion = "4.1.0"
 val mockkVersion = "1.13.8"
 val testcontainerVersion = "1.19.0"
 
