@@ -14,6 +14,36 @@ spring:
     allow-bean-definition-overriding: true
     banner-mode: "off"
 
+  kafka:
+    bootstrap-servers: ${KAFKA_BROKERS}
+    properties:
+      schema.registry.url: ${KAFKA_SCHEMA_REGISTRY}
+      basic.auth.credentials.source: USER_INFO
+      basic.auth.user.info: ${KAFKA_SCHEMA_REGISTRY_USER}:${KAFKA_SCHEMA_REGISTRY_PASSWORD}
+      security:
+        protocol: SSL
+      ssl:
+        keystore:
+          type: PKCS12
+          location: ${KAFKA_KEYSTORE_PATH}
+          password: ${KAFKA_CREDSTORE_PASSWORD}
+        truststore:
+          type: PKCS12
+          location: ${KAFKA_TRUSTSTORE_PATH}
+          password: ${KAFKA_CREDSTORE_PASSWORD}
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+      group-id: srvfamilie-ef-mot
+      max-poll-records: 1
+      auto-offset-reset: latest
+      enable-auto-commit: false
+    producer:
+      acks: all
+      key-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+
+
 management:
   endpoint.health.show-details: always
   endpoints.web:
@@ -104,6 +134,8 @@ no.nav.security.jwt:
         client-id: ${AZURE_APP_CLIENT_ID}
         client-secret: ${AZURE_APP_CLIENT_SECRET}
         client-auth-method: client_secret_basic
+
+
 
 clients:
   oppgave:
