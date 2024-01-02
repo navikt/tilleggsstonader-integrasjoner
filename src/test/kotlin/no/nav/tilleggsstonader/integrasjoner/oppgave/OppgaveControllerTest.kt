@@ -7,11 +7,11 @@ import com.github.tomakehurst.wiremock.client.WireMock.equalToJson
 import com.github.tomakehurst.wiremock.client.WireMock.exactly
 import com.github.tomakehurst.wiremock.client.WireMock.get
 import com.github.tomakehurst.wiremock.client.WireMock.matchingJsonPath
-import com.github.tomakehurst.wiremock.client.WireMock.ok
 import com.github.tomakehurst.wiremock.client.WireMock.okJson
 import com.github.tomakehurst.wiremock.client.WireMock.patch
 import com.github.tomakehurst.wiremock.client.WireMock.patchRequestedFor
 import com.github.tomakehurst.wiremock.client.WireMock.post
+import com.github.tomakehurst.wiremock.client.WireMock.serverError
 import com.github.tomakehurst.wiremock.client.WireMock.status
 import com.github.tomakehurst.wiremock.client.WireMock.stubFor
 import com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo
@@ -83,7 +83,7 @@ class OppgaveControllerTest : IntegrationTest() {
 
     @Test
     fun `skal logge stack trace og returnere internal server error ved IllegalStateException`() {
-        stubFor(get(GET_OPPGAVE_URL).willReturn(ok()))
+        stubFor(get(GET_OPPGAVE_URL).willReturn(serverError()))
 
         val oppgave = Oppgave(
             id = OPPGAVE_ID,
