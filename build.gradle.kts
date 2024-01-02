@@ -3,7 +3,6 @@ val springdocVersion = "2.3.0"
 val tilleggsstønaderLibsVersion = "2024.01.02-12.46.9d660ad18bf7"
 val tilleggsstønaderKontrakterVersion = "2024.01.02-12.45.2136a0416ad5"
 val tokenSupportVersion = "3.2.0"
-val wiremockVersion = "3.0.1"
 val springCloudVersion = "4.1.0"
 val mockkVersion = "1.13.8"
 val testcontainerVersion = "1.19.0"
@@ -75,7 +74,6 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.cloud:spring-cloud-contract-wiremock:$springCloudVersion")
 
-    testImplementation("com.github.tomakehurst:wiremock-jre8-standalone:$wiremockVersion")
     testImplementation("io.mockk:mockk:$mockkVersion")
 
     testImplementation("no.nav.security:token-validation-spring-test:$tokenSupportVersion")
