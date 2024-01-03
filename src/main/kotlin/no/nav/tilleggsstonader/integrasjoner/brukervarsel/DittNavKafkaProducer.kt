@@ -1,6 +1,5 @@
 package no.nav.tilleggsstonader.integrasjoner.brukervarsel
 
-
 import no.nav.brukernotifikasjon.schemas.builders.BeskjedInputBuilder
 import no.nav.brukernotifikasjon.schemas.builders.NokkelInputBuilder
 import no.nav.brukernotifikasjon.schemas.builders.domain.PreferertKanal
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service
 import java.net.URL
 import java.time.LocalDateTime
 import java.time.ZoneOffset.UTC
-
 
 @Service
 class DittNavKafkaProducer(private val kafkaTemplate: KafkaTemplate<NokkelInput, BeskjedInput>) {
@@ -39,15 +37,14 @@ class DittNavKafkaProducer(private val kafkaTemplate: KafkaTemplate<NokkelInput,
             kafkaTemplate.send(producerRecord).get()
         }.onFailure {
             val errorMessage = "Could not send DittNav to Kafka. Check secure logs for more information."
-            //logger.error(errorMessage)
             secureLogger.error("Could not send DittNav to Kafka melding={}", beskjed, it)
             throw RuntimeException(errorMessage)
         }
     }
     private fun lagNøkkel(fnr: String, grupperingsId: String, eventId: String): NokkelInput =
         NokkelInputBuilder()
-            .withAppnavn("tilleggstønader-soknad-api")
-            .withNamespace("teamtilleggstønad")
+            .withAppnavn("tilleggsstonader-soknad-api")
+            .withNamespace("tilleggsstonader")
             .withFodselsnummer(fnr)
             .withGrupperingsId(grupperingsId)
             .withEventId(eventId)
@@ -65,13 +62,4 @@ class DittNavKafkaProducer(private val kafkaTemplate: KafkaTemplate<NokkelInput,
 
         return builder.build()
     }
-
-
-    companion object {
-
-       // private val logger = LoggerFactory.getLogger(this::class.java)
-       // private val secureLogger = LoggerFactory.getLogger("secureLogger")
-    }
-
-
 }
