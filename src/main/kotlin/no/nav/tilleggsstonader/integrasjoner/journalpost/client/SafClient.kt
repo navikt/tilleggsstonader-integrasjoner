@@ -9,7 +9,6 @@ import no.nav.tilleggsstonader.integrasjoner.journalpost.internal.SafJournalpost
 import no.nav.tilleggsstonader.integrasjoner.journalpost.internal.SafJournalpostRequest
 import no.nav.tilleggsstonader.integrasjoner.journalpost.internal.SafJournalpostResponse
 import no.nav.tilleggsstonader.integrasjoner.journalpost.internal.SafRequestVariabler
-import no.nav.tilleggsstonader.integrasjoner.journalpost.internal.tilSafRequest
 import no.nav.tilleggsstonader.integrasjoner.util.MDCOperations
 import no.nav.tilleggsstonader.integrasjoner.util.graphqlQuery
 import no.nav.tilleggsstonader.kontrakter.journalpost.Journalpost
@@ -65,7 +64,7 @@ class SafClient(
 
     fun finnJournalposter(journalposterForBrukerRequest: JournalposterForBrukerRequest): List<Journalpost> {
         val safJournalpostRequest = SafJournalpostRequest(
-            journalposterForBrukerRequest.tilSafRequest(),
+            journalposterForBrukerRequest,
             graphqlQuery("/saf/journalposterForBruker.graphql"),
         )
         return finnJournalposter(safJournalpostRequest)

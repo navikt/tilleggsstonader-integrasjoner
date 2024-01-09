@@ -89,7 +89,7 @@ class HentJournalpostControllerTest : IntegrationTest() {
         assertThat(response.body?.datoMottatt).isEqualTo(LocalDateTime.of(2020, 3, 26, 1, 0))
     }
 
-    //TODO: Fiks test før merge
+    // TODO: Fiks test før merge
     @Test
     fun `hent journalpostForBruker skal returnere journalposter og status ok`() {
         stubGraphqlEndpoint("saf/gyldigJournalposterResponse.json")
@@ -98,8 +98,8 @@ class HentJournalpostControllerTest : IntegrationTest() {
             brukerId = Bruker("12345678901", BrukerIdType.FNR),
             antall = 10,
             tema = listOf(Tema.TSO),
-            journalposttype = Journalposttype.I,
-            journalstatus = null
+            journalposttype = listOf( Journalposttype.I),
+            journalstatus = emptyList(),
         )
         val response = restTemplate.exchange<List<Journalpost>>(
             uriHentJournalpost,
