@@ -2,7 +2,6 @@ package no.nav.tilleggsstonader.integrasjoner.journalpost
 
 import no.nav.tilleggsstonader.integrasjoner.journalpost.client.SafClient
 import no.nav.tilleggsstonader.integrasjoner.journalpost.client.SafHentDokumentClient
-import no.nav.tilleggsstonader.integrasjoner.journalpost.internal.JournalposterForVedleggRequest
 import no.nav.tilleggsstonader.kontrakter.journalpost.Journalpost
 import no.nav.tilleggsstonader.kontrakter.journalpost.JournalposterForBrukerRequest
 import org.springframework.beans.factory.annotation.Autowired
@@ -29,10 +28,6 @@ class JournalpostService @Autowired constructor(
 
     fun finnJournalposter(journalposterForBrukerRequest: JournalposterForBrukerRequest): List<Journalpost> {
         return safClient.finnJournalposter(journalposterForBrukerRequest)
-    }
-
-    fun finnJournalposter(journalposterForVedleggRequest: JournalposterForVedleggRequest): List<Journalpost> {
-        return safClient.finnJournalposter(journalposterForVedleggRequest)
     }
 
     fun hentDokument(journalpostId: String, dokumentInfoId: String, variantFormat: String): ByteArray {
