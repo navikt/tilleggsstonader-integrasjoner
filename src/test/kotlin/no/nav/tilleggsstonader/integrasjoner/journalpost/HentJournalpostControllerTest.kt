@@ -98,7 +98,7 @@ class HentJournalpostControllerTest : IntegrationTest() {
             brukerId = Bruker("12345678901", BrukerIdType.FNR),
             antall = 10,
             tema = listOf(Tema.TSO),
-            journalposttype = listOf( Journalposttype.I),
+            journalposttype = listOf(Journalposttype.I),
             journalstatus = emptyList(),
         )
         val response = restTemplate.exchange<List<Journalpost>>(
