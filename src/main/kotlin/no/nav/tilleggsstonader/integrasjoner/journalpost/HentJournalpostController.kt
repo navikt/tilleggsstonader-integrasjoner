@@ -1,7 +1,6 @@
 package no.nav.tilleggsstonader.integrasjoner.journalpost
 
 import no.nav.security.token.support.core.api.ProtectedWithClaims
-import no.nav.tilleggsstonader.integrasjoner.journalpost.internal.JournalposterForVedleggRequest
 import no.nav.tilleggsstonader.kontrakter.journalpost.Journalpost
 import no.nav.tilleggsstonader.kontrakter.journalpost.JournalposterForBrukerRequest
 import org.slf4j.LoggerFactory
@@ -87,11 +86,6 @@ class HentJournalpostController(private val journalpostService: JournalpostServi
     @PostMapping
     fun hentJournalpostForBruker(@RequestBody journalposterForBrukerRequest: JournalposterForBrukerRequest): List<Journalpost> {
         return journalpostService.finnJournalposter(journalposterForBrukerRequest)
-    }
-
-    @PostMapping("temaer")
-    fun hentJournalpostForBrukerOgTema(@RequestBody journalposterForVedleggRequest: JournalposterForVedleggRequest): List<Journalpost> {
-        return journalpostService.finnJournalposter(journalposterForVedleggRequest)
     }
 
     @GetMapping("hentdokument/{journalpostId}/{dokumentInfoId}")
