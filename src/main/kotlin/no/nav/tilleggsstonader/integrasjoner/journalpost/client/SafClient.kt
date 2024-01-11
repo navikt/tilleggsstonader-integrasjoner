@@ -3,7 +3,6 @@ package no.nav.tilleggsstonader.integrasjoner.journalpost.client
 import no.nav.tilleggsstonader.integrasjoner.journalpost.JournalpostForbiddenException
 import no.nav.tilleggsstonader.integrasjoner.journalpost.JournalpostRequestException
 import no.nav.tilleggsstonader.integrasjoner.journalpost.JournalpostRestClientException
-import no.nav.tilleggsstonader.integrasjoner.journalpost.internal.JournalposterForVedleggRequest
 import no.nav.tilleggsstonader.integrasjoner.journalpost.internal.SafErrorCode
 import no.nav.tilleggsstonader.integrasjoner.journalpost.internal.SafJournalpostBrukerData
 import no.nav.tilleggsstonader.integrasjoner.journalpost.internal.SafJournalpostData
@@ -61,14 +60,6 @@ class SafClient(
                 )
             }
         }
-    }
-
-    fun finnJournalposter(journalposterForVedleggRequest: JournalposterForVedleggRequest): List<Journalpost> {
-        val safJournalpostRequest = SafJournalpostRequest(
-            journalposterForVedleggRequest.tilSafRequest(),
-            graphqlQuery("/saf/journalposterForBruker.graphql"),
-        )
-        return finnJournalposter(safJournalpostRequest)
     }
 
     fun finnJournalposter(journalposterForBrukerRequest: JournalposterForBrukerRequest): List<Journalpost> {
