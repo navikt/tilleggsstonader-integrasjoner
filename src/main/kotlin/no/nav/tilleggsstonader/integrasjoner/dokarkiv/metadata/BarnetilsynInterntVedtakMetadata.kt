@@ -7,17 +7,16 @@ import no.nav.tilleggsstonader.kontrakter.felles.Fagsystem
 import no.nav.tilleggsstonader.kontrakter.felles.Tema
 import org.springframework.stereotype.Component
 
-// TODO legge inn riktige verdier
 @Component
-object BarnetilsynSøknadMetadata : Dokumentmetadata {
+object BarnetilsynInterntVedtakMetadata : Dokumentmetadata {
 
-    override val journalpostType: JournalpostType = JournalpostType.INNGAAENDE
+    override val journalpostType: JournalpostType = JournalpostType.NOTAT
     override val fagsakSystem: Fagsystem = Fagsystem.TILLEGGSSTONADER
     override val tema: Tema = Tema.TSO
     override val behandlingstema: Behandlingstema = Behandlingstema.TilsynBarn
-    override val kanal: String = "NAV_NO"
-    override val dokumenttype: Dokumenttype = Dokumenttype.BARNETILSYN_SØKNAD
-    override val tittel: String = "Søknad om stønad til barnetilsyn - tilleggsstønader"
-    override val brevkode: String = "NAV 11-12.15"
-    override val dokumentKategori: Dokumentkategori = Dokumentkategori.SOK
+    override val kanal: String? = null
+    override val dokumenttype: Dokumenttype = Dokumenttype.BARNETILSYN_INTERNT_VEDTAK
+    override val tittel: String? = "Internt vedtak tilsyn barn"
+    override val brevkode: String? = null
+    override val dokumentKategori: Dokumentkategori = Dokumentkategori.IS
 }
