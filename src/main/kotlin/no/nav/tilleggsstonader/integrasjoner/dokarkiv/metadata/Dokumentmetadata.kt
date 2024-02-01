@@ -42,5 +42,5 @@ fun Dokumenttype.tilMetadata(): Dokumentmetadata = when (this) {
     Dokumenttype.BARNETILSYN_SØKNAD_VEDLEGG -> BarnetilsynSøknadVedleggMetadata
     Dokumenttype.BARNETILSYN_VEDTAKSBREV -> BarnetilsynVedtaksbrevMetadata
     Dokumenttype.BARNETILSYN_FRITTSTÅENDE_BREV -> BarnetilsynFrittståendeBrevMetadata
-    Dokumenttype.BARNETILSYN_INTERNT_VEDTAK -> BarnetilsynFrittståendeBrevMetadata
+    Dokumenttype.BARNETILSYN_INTERNT_VEDTAK -> BarnetilsynInterntVedtakMetadata
 }

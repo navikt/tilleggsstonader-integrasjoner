@@ -15,7 +15,7 @@ object BarnetilsynInterntVedtakMetadata : Dokumentmetadata {
     override val tema: Tema = Tema.TSO
     override val behandlingstema: Behandlingstema = Behandlingstema.TilsynBarn
     override val kanal: String? = null
-    override val dokumenttype: Dokumenttype = Dokumenttype.BARNETILSYN_VEDTAKSBREV
+    override val dokumenttype: Dokumenttype = Dokumenttype.BARNETILSYN_INTERNT_VEDTAK
     override val tittel: String? = "Internt vedtak tilsyn barn"
     override val brevkode: String? = null
     override val dokumentKategori: Dokumentkategori = Dokumentkategori.IS
