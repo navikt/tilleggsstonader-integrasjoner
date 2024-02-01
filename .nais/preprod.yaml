@@ -53,6 +53,7 @@ spec:
     inbound:
       rules:
         - application: tilleggsstonader-sak
+        - application: tilleggsstonader-sak-lokal
         - application: tilleggsstonader-soknad-api
     outbound:
       external:
