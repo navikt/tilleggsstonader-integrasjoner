@@ -9,6 +9,7 @@ import no.nav.tilleggsstonader.integrasjoner.dokarkiv.client.domene.OpprettJourn
 import no.nav.tilleggsstonader.integrasjoner.dokarkiv.metadata.tilMetadata
 import no.nav.tilleggsstonader.kontrakter.dokarkiv.ArkiverDokumentRequest
 import no.nav.tilleggsstonader.kontrakter.dokarkiv.ArkiverDokumentResponse
+import no.nav.tilleggsstonader.kontrakter.dokarkiv.AvsenderMottaker
 import no.nav.tilleggsstonader.kontrakter.dokarkiv.DokarkivBruker
 import no.nav.tilleggsstonader.kontrakter.dokarkiv.Dokument
 import no.nav.tilleggsstonader.kontrakter.dokarkiv.Filtype
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Service
 @Service
 class DokarkivService(
     private val dokarkivRestClient: DokarkivRestClient,
+    // private val personopplysningerService: PersonopplysningerService,
     private val dokarkivLogiskVedleggRestClient: DokarkivLogiskVedleggRestClient,
 ) {
 
@@ -46,6 +48,8 @@ class DokarkivService(
         val dokarkivBruker = DokarkivBruker(BrukerIdType.FNR, arkiverDokumentRequest.fnr)
         val hoveddokument = arkiverDokumentRequest.hoveddokumentvarianter[0]
         val metadata = hoveddokument.dokumenttype.tilMetadata()
+        val avsenderMottaker = arkiverDokumentRequest.avsenderMottaker
+            ?: AvsenderMottaker(arkiverDokumentRequest.fnr, BrukerIdType.FNR, navn = null)
 
         val dokumenter = mutableListOf(mapHoveddokument(arkiverDokumentRequest.hoveddokumentvarianter))
         dokumenter.addAll(arkiverDokumentRequest.vedleggsdokumenter.map(this::mapTilArkivdokument))
@@ -60,7 +64,7 @@ class DokarkivService(
             kanal = metadata.kanal,
             tittel = hoveddokument.tittel ?: metadata.tittel,
             tema = metadata.tema.name,
-            avsenderMottaker = arkiverDokumentRequest.avsenderMottaker,
+            avsenderMottaker = avsenderMottaker,
             bruker = dokarkivBruker,
             dokumenter = dokumenter.toList(),
             eksternReferanseId = arkiverDokumentRequest.eksternReferanseId,
