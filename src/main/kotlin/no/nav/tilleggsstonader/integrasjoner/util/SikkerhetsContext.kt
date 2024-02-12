@@ -37,7 +37,6 @@ object SikkerhetsContext {
             )
     }
 
-
     private fun TokenValidationContext.getClaim(name: String) =
         this.getJwtToken("azuread")?.jwtTokenClaims?.get(name)
 }
