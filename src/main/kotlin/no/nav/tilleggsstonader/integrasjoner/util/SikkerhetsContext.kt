@@ -1,5 +1,6 @@
 package no.nav.tilleggsstonader.integrasjoner.util
 
+import no.nav.security.token.support.core.context.TokenValidationContext
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
 
 object SikkerhetsContext {
@@ -17,22 +18,26 @@ object SikkerhetsContext {
     }
 
     fun hentSaksbehandlerEllerSystembruker() =
-        Result.runCatching { SpringTokenValidationContextHolder().tokenValidationContext }
+        Result.runCatching { SpringTokenValidationContextHolder().getTokenValidationContext() }
             .fold(
                 onSuccess = {
-                    it.getClaims("azuread")?.get("NAVident")?.toString() ?: SYSTEM_FORKORTELSE
+                    it.getClaim("NAVident")?.toString() ?: SYSTEM_FORKORTELSE
                 },
                 onFailure = { SYSTEM_FORKORTELSE },
             )
 
     fun hentSaksbehandlerNavn(strict: Boolean = false): String {
-        return Result.runCatching { SpringTokenValidationContextHolder().tokenValidationContext }
+        return Result.runCatching { SpringTokenValidationContextHolder().getTokenValidationContext() }
             .fold(
                 onSuccess = {
-                    it.getClaims("azuread")?.get("name")?.toString()
+                    it.getClaim("name")?.toString()
                         ?: if (strict) error("Finner ikke navn i azuread token") else SYSTEM_NAVN
                 },
                 onFailure = { if (strict) error("Finner ikke navn på innlogget bruker") else SYSTEM_NAVN },
             )
     }
+
+
+    private fun TokenValidationContext.getClaim(name: String) =
+        this.getJwtToken("azuread")?.jwtTokenClaims?.get(name)
 }
