@@ -17,6 +17,6 @@ object BarnetilsynVedtaksbrevMetadata : Dokumentmetadata {
     override val kanal: String? = null
     override val dokumenttype: Dokumenttype = Dokumenttype.BARNETILSYN_VEDTAKSBREV
     override val tittel: String? = null
-    override val brevkode: String = "TSO_BREV_BARNETILSYN_VEDTAK" // TODO brevkode
+    override val brevkode: String = "TSO_BREV_TILSYN_BARN_VEDTAK"
     override val dokumentKategori: Dokumentkategori = Dokumentkategori.VB
 }
