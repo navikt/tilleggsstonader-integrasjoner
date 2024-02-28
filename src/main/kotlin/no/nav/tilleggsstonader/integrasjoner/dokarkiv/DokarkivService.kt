@@ -25,7 +25,6 @@ import org.springframework.stereotype.Service
 @Service
 class DokarkivService(
     private val dokarkivRestClient: DokarkivRestClient,
-    // private val personopplysningerService: PersonopplysningerService,
     private val dokarkivLogiskVedleggRestClient: DokarkivLogiskVedleggRestClient,
 ) {
 

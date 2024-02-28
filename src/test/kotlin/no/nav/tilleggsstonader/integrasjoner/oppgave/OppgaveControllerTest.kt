@@ -358,7 +358,7 @@ class OppgaveControllerTest : IntegrationTest() {
                 HttpEntity(null, headers),
             )
 
-        // assertThat(response.body?.melding).contains("ferdigstill OK")
+        assertThat(response.body?.oppgaveId).isEqualTo(OPPGAVE_ID)
         assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
     }
 
@@ -383,7 +383,6 @@ class OppgaveControllerTest : IntegrationTest() {
         )
 
         assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
-        // assertThat(response.body?.melding).isEqualTo("Oppgaven ble tildelt saksbehandler $saksbehandlerId")
         assertThat(response.body!!.id).isEqualTo(OPPGAVE_ID)
     }
 

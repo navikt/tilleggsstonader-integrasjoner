@@ -3,7 +3,6 @@ package no.nav.tilleggsstonader.integrasjoner.infrastruktur.exception
 import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatusCode
 
-// TODO vurdere denne?
 data class OppslagException(
     override val message: String?,
     val kilde: String,
