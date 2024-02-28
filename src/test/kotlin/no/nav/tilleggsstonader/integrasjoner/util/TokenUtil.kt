@@ -10,7 +10,6 @@ object TokenUtil {
      * oid = unik id på applikasjon A i Azure AD
      * sub = unik id på applikasjon A i Azure AD, alltid lik oid
      */
-    // client token har en oid som er den samme som sub
     fun clientToken(mockOAuth2Server: MockOAuth2Server, clientId: String, accessAsApplication: Boolean): String {
         val thisId = UUID.randomUUID().toString()
 

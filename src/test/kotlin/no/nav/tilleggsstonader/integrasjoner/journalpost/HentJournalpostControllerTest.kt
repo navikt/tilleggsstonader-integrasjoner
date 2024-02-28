@@ -25,7 +25,6 @@ import no.nav.tilleggsstonader.kontrakter.journalpost.Utsendingsmåte
 import no.nav.tilleggsstonader.kontrakter.journalpost.VarselType
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.slf4j.LoggerFactory
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock
@@ -59,7 +58,6 @@ class HentJournalpostControllerTest : IntegrationTest() {
     }
 
     @Test
-    @Disabled("Skrur av siden det er en test på kode som kun KS bruker og den feilet. TODO fiks eller få vekk fra ks-mottak")
     fun `hent saksnummer skal returnere saksnummer og status ok`() {
         stubGraphqlEndpoint("saf/gyldigsakresponse.json", expectedRequestBody = gyldigJournalPostIdRequest())
 
@@ -89,7 +87,6 @@ class HentJournalpostControllerTest : IntegrationTest() {
         assertThat(response.body?.datoMottatt).isEqualTo(LocalDateTime.of(2020, 3, 26, 1, 0))
     }
 
-    // TODO: Fiks test før merge
     @Test
     fun `hent journalpostForBruker skal returnere journalposter og status ok`() {
         stubGraphqlEndpoint("saf/gyldigJournalposterResponse.json")

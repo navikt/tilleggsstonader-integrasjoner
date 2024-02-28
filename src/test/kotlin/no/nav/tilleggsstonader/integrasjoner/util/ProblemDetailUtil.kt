@@ -30,7 +30,7 @@ object ProblemDetailUtil {
     }
 
     private fun readProblemDetail(e: RestClientResponseException): ProblemDetail? {
-        val responseBody = e.responseBodyAsString // "detail"
+        val responseBody = e.responseBodyAsString
         return if (responseBody.contains("\"detail\"")) {
             objectMapper.readValue<ProblemDetail>(responseBody)
         } else {
