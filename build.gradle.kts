@@ -1,10 +1,10 @@
 val javaVersion = JavaLanguageVersion.of(21)
 val springdocVersion = "2.3.0"
 val tilleggsstønaderLibsVersion = "2024.02.12-15.54.60684ccdf789"
-val tilleggsstønaderKontrakterVersion = "2024.02.10-11.13.224861e5b075"
+val tilleggsstønaderKontrakterVersion = "2024.02.29-06.23.4af2cb491470"
 val tokenSupportVersion = "4.1.3"
 val springCloudVersion = "4.1.1"
-val mockkVersion = "1.13.9"
+val mockkVersion = "1.13.10"
 val testcontainerVersion = "1.19.0"
 
 group = "no.nav.tilleggsstonader.integrasjoner"
@@ -18,7 +18,7 @@ plugins {
     id("com.github.ben-manes.versions") version "0.51.0"
     id("se.patrikerdes.use-latest-versions") version "0.2.18"
 
-    id("org.springframework.boot") version "3.2.2"
+    id("org.springframework.boot") version "3.2.3"
     id("io.spring.dependency-management") version "1.1.4"
     kotlin("plugin.spring") version "1.9.22"
 
