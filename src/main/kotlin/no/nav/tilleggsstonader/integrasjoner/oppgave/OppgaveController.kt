@@ -63,12 +63,6 @@ class OppgaveController(private val oppgaveService: OppgaveService) {
         return oppgaveService.fordelOppgave(oppgaveId, saksbehandler, versjon)
     }
 
-    @PostMapping("/oppdater")
-    fun oppdaterOppgave(@RequestBody oppgave: Oppgave): OppgaveResponse {
-        val oppgaveId = oppgaveService.oppdaterOppgave(oppgave)
-        return OppgaveResponse(oppgaveId = oppgaveId)
-    }
-
     @PatchMapping("/{oppgaveId}/oppdater")
     fun patchOppgave(
         @PathVariable(name = "oppgaveId") oppgaveId: Long,
