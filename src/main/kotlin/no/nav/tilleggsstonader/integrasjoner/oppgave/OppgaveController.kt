@@ -8,6 +8,7 @@ import no.nav.tilleggsstonader.kontrakter.oppgave.FinnMappeResponseDto
 import no.nav.tilleggsstonader.kontrakter.oppgave.FinnOppgaveRequest
 import no.nav.tilleggsstonader.kontrakter.oppgave.FinnOppgaveResponseDto
 import no.nav.tilleggsstonader.kontrakter.oppgave.MappeDto
+import no.nav.tilleggsstonader.kontrakter.oppgave.OppdatertOppgaveResponse
 import no.nav.tilleggsstonader.kontrakter.oppgave.Oppgave
 import no.nav.tilleggsstonader.kontrakter.oppgave.OppgaveResponse
 import no.nav.tilleggsstonader.kontrakter.oppgave.OpprettOppgaveRequest
@@ -72,10 +73,10 @@ class OppgaveController(private val oppgaveService: OppgaveService) {
     fun patchOppgave(
         @PathVariable(name = "oppgaveId") oppgaveId: Long,
         @RequestBody oppgave: Oppgave,
-    ): OppgaveResponse {
+    ): OppdatertOppgaveResponse {
         require(oppgaveId == oppgave.id) { "OppgaveId i path($oppgaveId) er ikke lik body(${oppgave.id})" }
-        oppgaveService.patchOppgave(oppgave)
-        return OppgaveResponse(oppgaveId = oppgaveId)
+        val oppgave = oppgaveService.patchOppgave(oppgave)
+        return OppdatertOppgaveResponse(oppgaveId = oppgaveId, versjon = oppgave.versjonEllerFeil())
     }
 
     @PostMapping("/opprett")

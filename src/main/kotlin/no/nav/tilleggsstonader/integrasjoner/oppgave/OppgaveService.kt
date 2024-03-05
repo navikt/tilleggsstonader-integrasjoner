@@ -56,8 +56,8 @@ class OppgaveService(
         return oppgave.id
     }
 
-    fun patchOppgave(patchOppgave: Oppgave): Long {
-        return oppgaveClient.oppdaterOppgave(patchOppgave).id
+    fun patchOppgave(patchOppgave: Oppgave): Oppgave {
+        return oppgaveClient.oppdaterOppgave(patchOppgave)
     }
 
     fun fordelOppgave(oppgaveId: Long, saksbehandler: String?, versjon: Int?): Oppgave {

@@ -25,6 +25,7 @@ import no.nav.tilleggsstonader.kontrakter.felles.Tema
 import no.nav.tilleggsstonader.kontrakter.oppgave.FinnMappeResponseDto
 import no.nav.tilleggsstonader.kontrakter.oppgave.IdentGruppe
 import no.nav.tilleggsstonader.kontrakter.oppgave.MappeDto
+import no.nav.tilleggsstonader.kontrakter.oppgave.OppdatertOppgaveResponse
 import no.nav.tilleggsstonader.kontrakter.oppgave.Oppgave
 import no.nav.tilleggsstonader.kontrakter.oppgave.OppgaveIdentV2
 import no.nav.tilleggsstonader.kontrakter.oppgave.OppgaveResponse
@@ -192,6 +193,39 @@ class OppgaveControllerTest : IntegrationTest() {
                 HttpEntity(oppgave, headers),
             )
         assertThat(response.body?.oppgaveId).isEqualTo(OPPGAVE_ID)
+        assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+    }
+
+    @Test
+    fun `skal patche oppgave med ekstra beskrivelse, returnere oppgaveid og 200 OK`() {
+        stubFor(get(GET_OPPGAVE_URL).willReturn(okJson(readFile("oppgave/oppgave.json"))))
+
+        stubFor(
+            patch(urlEqualTo("/api/v1/oppgaver/$OPPGAVE_ID"))
+                .willReturn(
+                    aResponse()
+                        .withStatus(201)
+                        .withHeader("Content-Type", "application/json")
+                        .withBody(readFile("oppgave/ferdigstilt_oppgave.json")),
+                ),
+        )
+
+        val oppgave = Oppgave(
+            id = OPPGAVE_ID,
+            aktoerId = "1234567891011",
+            journalpostId = "1",
+            beskrivelse = EKSTRA_BESKRIVELSE,
+            tema = null,
+        )
+
+        val response: ResponseEntity<OppdatertOppgaveResponse> =
+            restTemplate.exchange(
+                localhost(PATCH_OPPGAVE_URL),
+                HttpMethod.PATCH,
+                HttpEntity(oppgave, headers),
+            )
+        assertThat(response.body?.oppgaveId).isEqualTo(OPPGAVE_ID)
+        assertThat(response.body?.versjon).isEqualTo(1)
         assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
     }
 
@@ -666,6 +700,7 @@ class OppgaveControllerTest : IntegrationTest() {
         private const val OPPRETT_OPPGAVE_URL_V2 = "/api/oppgave/opprett"
         private const val OPPDATER_OPPGAVE_URL = "$OPPGAVE_URL/oppdater"
         private const val OPPGAVE_ID = 315488374L
+        private const val PATCH_OPPGAVE_URL = "$OPPGAVE_URL/$OPPGAVE_ID/oppdater"
         private const val GET_OPPGAVER_URL =
             "/api/v1/oppgaver?aktoerId=1234567891011&tema=KON&oppgavetype=BEH_SAK&journalpostId=1&statuskategori=AAPEN"
         private const val GET_MAPPER_URL =
