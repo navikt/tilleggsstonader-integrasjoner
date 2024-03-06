@@ -35,29 +35,8 @@ class OppgaveService(
         return oppgaveClient.finnOppgaveMedId(oppgaveId)
     }
 
-    fun oppdaterOppgave(request: Oppgave): Long {
-        val oppgave: Oppgave = oppgaveClient.finnOppgaveMedId(request.id)
-        // Vurdere om man burde logge warn/kaste feil her, finner inget i loggen at dette skulle ha skjedd
-        if (oppgave.status === StatusEnum.FERDIGSTILT) {
-            logger.info(
-                "Ignorerer oppdatering av oppgave som er ferdigstilt for aktørId={} journalpostId={} oppgaveId={}",
-                oppgave.aktoerId,
-                oppgave.journalpostId,
-                oppgave.id,
-            )
-        } else {
-            val patchOppgaveDto = oppgave.copy(
-                id = oppgave.id,
-                versjon = request.versjon ?: oppgave.versjon,
-                beskrivelse = oppgave.beskrivelse + request.beskrivelse,
-            )
-            oppgaveClient.oppdaterOppgave(patchOppgaveDto)
-        }
-        return oppgave.id
-    }
-
-    fun patchOppgave(patchOppgave: Oppgave): Long {
-        return oppgaveClient.oppdaterOppgave(patchOppgave).id
+    fun patchOppgave(patchOppgave: Oppgave): Oppgave {
+        return oppgaveClient.oppdaterOppgave(patchOppgave)
     }
 
     fun fordelOppgave(oppgaveId: Long, saksbehandler: String?, versjon: Int?): Oppgave {

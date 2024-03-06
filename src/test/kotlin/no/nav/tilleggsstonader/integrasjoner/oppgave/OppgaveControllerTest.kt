@@ -1,7 +1,6 @@
 package no.nav.tilleggsstonader.integrasjoner.oppgave
 
 import ch.qos.logback.classic.Logger
-import ch.qos.logback.classic.spi.ILoggingEvent
 import com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import com.github.tomakehurst.wiremock.client.WireMock.equalToJson
 import com.github.tomakehurst.wiremock.client.WireMock.exactly
@@ -11,7 +10,6 @@ import com.github.tomakehurst.wiremock.client.WireMock.okJson
 import com.github.tomakehurst.wiremock.client.WireMock.patch
 import com.github.tomakehurst.wiremock.client.WireMock.patchRequestedFor
 import com.github.tomakehurst.wiremock.client.WireMock.post
-import com.github.tomakehurst.wiremock.client.WireMock.serverError
 import com.github.tomakehurst.wiremock.client.WireMock.status
 import com.github.tomakehurst.wiremock.client.WireMock.stubFor
 import com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo
@@ -25,6 +23,7 @@ import no.nav.tilleggsstonader.kontrakter.felles.Tema
 import no.nav.tilleggsstonader.kontrakter.oppgave.FinnMappeResponseDto
 import no.nav.tilleggsstonader.kontrakter.oppgave.IdentGruppe
 import no.nav.tilleggsstonader.kontrakter.oppgave.MappeDto
+import no.nav.tilleggsstonader.kontrakter.oppgave.OppdatertOppgaveResponse
 import no.nav.tilleggsstonader.kontrakter.oppgave.Oppgave
 import no.nav.tilleggsstonader.kontrakter.oppgave.OppgaveIdentV2
 import no.nav.tilleggsstonader.kontrakter.oppgave.OppgaveResponse
@@ -82,93 +81,11 @@ class OppgaveControllerTest : IntegrationTest() {
     }
 
     @Test
-    fun `skal logge stack trace og returnere internal server error ved IllegalStateException`() {
-        stubFor(get(GET_OPPGAVE_URL).willReturn(serverError()))
-
-        val oppgave = Oppgave(
-            id = OPPGAVE_ID,
-            aktoerId = "1234567891011",
-            journalpostId = "1",
-            beskrivelse = "test NPE",
-            tema = Tema.TSO,
-        )
-
-        val response = catchProblemDetailException {
-            restTemplate.exchange<Map<String, Long>>(
-                localhost(OPPDATER_OPPGAVE_URL),
-                HttpMethod.POST,
-                HttpEntity(oppgave, headers),
-            )
-        }
-
-        assertThat(response.httpStatus).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR)
-        assertThat(loggingEvents)
-            .extracting<String, RuntimeException> { obj: ILoggingEvent -> obj.formattedMessage }
-            .anyMatch { s -> s.contains("Feil ved kall method=GET mot url=http://localhost:28085/api/v1/oppgaver/315488374") }
-    }
-
-    @Test
-    fun `skal logge og returnere internal server error ved restClientException`() {
-        stubFor(get(GET_OPPGAVE_URL).willReturn(status(404)))
-
-        val oppgave = Oppgave(
-            id = OPPGAVE_ID,
-            aktoerId = "1234567891011",
-            journalpostId = "1",
-            beskrivelse = "test RestClientException",
-            tema = Tema.TSO,
-        )
-
-        val response = catchProblemDetailException {
-            restTemplate.exchange<Map<String, Long>>(
-                localhost(OPPDATER_OPPGAVE_URL),
-                HttpMethod.POST,
-                HttpEntity(oppgave, headers),
-            )
-        }
-
-        assertThat(loggingEvents)
-            .extracting<String, RuntimeException> { obj: ILoggingEvent -> obj.formattedMessage }
-            .anyMatch { it.contains("Finner ikke oppgave med id") }
-        assertThat(response.httpStatus).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR)
-        assertThat(response.detail.detail).contains("Finner ikke oppgave med id")
-    }
-
-    @Test
-    fun `skal ignorere oppdatering hvis oppgave er ferdigstilt`() {
-        stubFor(get(GET_OPPGAVE_URL).willReturn(okJson(readFile("oppgave/ferdigstilt_oppgave.json"))))
-
-        val oppgave = Oppgave(
-            id = OPPGAVE_ID,
-            aktoerId = "1234567891011",
-            journalpostId = "1",
-            beskrivelse = "test oppgave ikke funnet",
-            tema = null,
-        )
-
-        val response: ResponseEntity<Map<String, Long>> = restTemplate.exchange(
-            localhost(OPPDATER_OPPGAVE_URL),
-            HttpMethod.POST,
-            HttpEntity(oppgave, headers),
-        )
-
-        assertThat(loggingEvents).extracting<String, RuntimeException> { obj: ILoggingEvent -> obj.formattedMessage }
-            .anyMatch {
-                it.contains(
-                    "Ignorerer oppdatering av oppgave som er ferdigstilt for aktørId=1234567891011 " +
-                        "journalpostId=123456789 oppgaveId=$OPPGAVE_ID",
-                )
-            }
-        assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
-    }
-
-    @Test
-    fun `skal oppdatere oppgave med ekstra beskrivelse, returnere oppgaveid og 200 OK`() {
+    fun `skal patche oppgave med ekstra beskrivelse, returnere oppgaveid og 200 OK`() {
         stubFor(get(GET_OPPGAVE_URL).willReturn(okJson(readFile("oppgave/oppgave.json"))))
 
         stubFor(
             patch(urlEqualTo("/api/v1/oppgaver/$OPPGAVE_ID"))
-                .withRequestBody(matchingJsonPath("$.[?(@.beskrivelse == 'Behandle sak$EKSTRA_BESKRIVELSE')]"))
                 .willReturn(
                     aResponse()
                         .withStatus(201)
@@ -185,13 +102,14 @@ class OppgaveControllerTest : IntegrationTest() {
             tema = null,
         )
 
-        val response: ResponseEntity<OppgaveResponse> =
+        val response: ResponseEntity<OppdatertOppgaveResponse> =
             restTemplate.exchange(
-                localhost(OPPDATER_OPPGAVE_URL),
-                HttpMethod.POST,
+                localhost(PATCH_OPPGAVE_URL),
+                HttpMethod.PATCH,
                 HttpEntity(oppgave, headers),
             )
         assertThat(response.body?.oppgaveId).isEqualTo(OPPGAVE_ID)
+        assertThat(response.body?.versjon).isEqualTo(1)
         assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
     }
 
@@ -664,8 +582,8 @@ class OppgaveControllerTest : IntegrationTest() {
 
         private const val OPPGAVE_URL = "/api/oppgave"
         private const val OPPRETT_OPPGAVE_URL_V2 = "/api/oppgave/opprett"
-        private const val OPPDATER_OPPGAVE_URL = "$OPPGAVE_URL/oppdater"
         private const val OPPGAVE_ID = 315488374L
+        private const val PATCH_OPPGAVE_URL = "$OPPGAVE_URL/$OPPGAVE_ID/oppdater"
         private const val GET_OPPGAVER_URL =
             "/api/v1/oppgaver?aktoerId=1234567891011&tema=KON&oppgavetype=BEH_SAK&journalpostId=1&statuskategori=AAPEN"
         private const val GET_MAPPER_URL =
