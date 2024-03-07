@@ -190,23 +190,10 @@ class OppgaveService(
         return finnMapper(finnMappeRequest).mapper
     }
 
-    fun tilordneEnhet(oppgaveId: Long, enhet: String, fjernMappeFraOppgave: Boolean, versjon: Int?) {
-        val oppgave = oppgaveClient.finnOppgaveMedId(oppgaveId)
-        val mappeId = if (fjernMappeFraOppgave) null else oppgave.mappeId
-        oppgaveClient.oppdaterEnhet(OppgaveByttEnhet(oppgaveId, enhet, versjon ?: oppgave.versjon!!, mappeId))
-    }
-
     fun fjernBehandlesAvApplikasjon(oppgaveId: Long, versjon: Int) {
         oppgaveClient.fjernBehandlesAvApplikasjon(OppgaveFjernBehandlesAvApplikasjon(oppgaveId, versjon))
     }
 }
-
-data class OppgaveByttEnhet(
-    val id: Long,
-    val tildeltEnhetsnr: String,
-    val versjon: Int,
-    @JsonInclude(JsonInclude.Include.ALWAYS) val mappeId: Long? = null,
-)
 
 data class OppgaveFjernBehandlesAvApplikasjon(
     val id: Long,

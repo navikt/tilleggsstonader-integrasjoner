@@ -132,33 +132,6 @@ class OppgaveClient(
         )
     }
 
-    fun oppdaterEnhet(byttEnhetPatch: OppgaveByttEnhet): Oppgave? {
-        return Result.runCatching {
-            patchForEntity<Oppgave>(
-                oppgaveIdUrl,
-                byttEnhetPatch,
-                httpHeaders(),
-                oppgaveIdUriVariables(byttEnhetPatch.id),
-            )
-        }.fold(
-            onSuccess = { it },
-            onFailure = {
-                var feilmelding = "Feil ved bytte av enhet for oppgave for ${byttEnhetPatch.id}."
-                if (it is HttpStatusCodeException) {
-                    feilmelding += " Response fra oppgave = ${it.responseBodyAsString}"
-                }
-
-                throw OppslagException(
-                    feilmelding,
-                    "Oppgave.byttEnhet",
-                    OppslagException.Level.MEDIUM,
-                    HttpStatus.INTERNAL_SERVER_ERROR,
-                    it,
-                )
-            },
-        )
-    }
-
     fun fjernBehandlesAvApplikasjon(fjernBehandlesAvApplikasjon: OppgaveFjernBehandlesAvApplikasjon): Oppgave? {
         return Result.runCatching {
             patchForEntity<Oppgave>(

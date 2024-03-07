@@ -1,7 +1,5 @@
 package no.nav.tilleggsstonader.integrasjoner.oppgave
 
-import io.swagger.v3.oas.annotations.Operation
-import io.swagger.v3.oas.annotations.Parameter
 import no.nav.security.token.support.core.api.ProtectedWithClaims
 import no.nav.tilleggsstonader.kontrakter.oppgave.FinnMappeRequest
 import no.nav.tilleggsstonader.kontrakter.oppgave.FinnMappeResponseDto
@@ -85,25 +83,6 @@ class OppgaveController(private val oppgaveService: OppgaveService) {
         @RequestParam(name = "versjon") versjon: Int?,
     ): OppgaveResponse {
         oppgaveService.ferdigstill(oppgaveId, versjon)
-        return OppgaveResponse(oppgaveId = oppgaveId)
-    }
-
-    @Operation(description = "Flytter oppgaven fra en enhet til en annen enhet.")
-    @PatchMapping("/{oppgaveId}/enhet/{enhet}")
-    fun tilordneOppgaveNyEnhet(
-        @PathVariable(name = "oppgaveId")
-        oppgaveId: Long,
-        @Parameter(description = "Enhet oppgaven skal flytte til")
-        @PathVariable(name = "enhet")
-        enhet: String,
-        @Parameter(description = "Settes til true hvis man ønsker å flytte en oppgave uten å ta med seg mappa opp på oppgaven. Noen mapper hører spesifikt til en enhet, og man får da ikke flyttet oppgaven uten at mappen fjernes ")
-        @RequestParam(name = "fjernMappeFraOppgave")
-        fjernMappeFraOppgave: Boolean,
-        @Parameter(description = "Vil feile med 409 Conflict dersom versjonen ikke stemmer overens med oppgavesystemets versjon")
-        @RequestParam(name = "versjon")
-        versjon: Int?,
-    ): OppgaveResponse {
-        oppgaveService.tilordneEnhet(oppgaveId, enhet, fjernMappeFraOppgave, versjon)
         return OppgaveResponse(oppgaveId = oppgaveId)
     }
 
