@@ -2,6 +2,7 @@ package no.nav.tilleggsstonader.integrasjoner.oppgave
 
 import ch.qos.logback.classic.Logger
 import com.github.tomakehurst.wiremock.client.WireMock.aResponse
+import com.github.tomakehurst.wiremock.client.WireMock.anyUrl
 import com.github.tomakehurst.wiremock.client.WireMock.equalToJson
 import com.github.tomakehurst.wiremock.client.WireMock.exactly
 import com.github.tomakehurst.wiremock.client.WireMock.get
@@ -32,6 +33,7 @@ import no.nav.tilleggsstonader.kontrakter.oppgave.StatusEnum
 import no.nav.tilleggsstonader.libs.log.SecureLogger.secureLogger
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.slf4j.LoggerFactory
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock
@@ -42,6 +44,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.test.context.TestPropertySource
 import org.springframework.web.client.exchange
 import java.time.LocalDate
+import java.util.Optional
 
 @TestPropertySource(properties = ["clients.oppgave.uri=http://localhost:28085"])
 @AutoConfigureWireMock(port = 28085)
@@ -247,6 +250,54 @@ class OppgaveControllerTest : IntegrationTest() {
 
         assertThat(response.body?.oppgaveId).isEqualTo(OPPGAVE_ID)
         assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+    }
+
+    @Nested
+    inner class OptionalHåndtering {
+
+        @BeforeEach
+        fun setUp() {
+            stubFor(patch(urlEqualTo("/api/v1/oppgaver/$OPPGAVE_ID")).willReturn(responseOk))
+        }
+
+        @Test
+        fun `skal sende mappeId med verdi hvis den har verdi`() {
+            val oppgave = oppgave.copy(mappeId = Optional.of(100))
+
+            val response = patchOppgave(oppgave)
+            assertThat(response.body?.oppgaveId).isEqualTo(OPPGAVE_ID)
+            assertThat(response.body?.versjon).isEqualTo(1)
+            assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+
+            val expectedJson = """{"id" : 315488374, "versjon": 0, "mappeId" : 100}"""
+            verify(patchRequestedFor(anyUrl()).withRequestBody(equalToJson(expectedJson)))
+        }
+
+        @Test
+        fun `skal ikke sende mappeId hvis den er null`() {
+            val oppgave = oppgave.copy(mappeId = null)
+
+            val response = patchOppgave(oppgave)
+            assertThat(response.body?.oppgaveId).isEqualTo(OPPGAVE_ID)
+            assertThat(response.body?.versjon).isEqualTo(1)
+            assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+
+            val expectedJson = """{"id" : 315488374, "versjon": 0}"""
+            verify(patchRequestedFor(anyUrl()).withRequestBody(equalToJson(expectedJson)))
+        }
+
+        @Test
+        fun `skal sende optional mappeId som null hvis den er empty`() {
+            val oppgave = oppgave.copy(mappeId = Optional.empty())
+
+            val response = patchOppgave(oppgave)
+            assertThat(response.body?.oppgaveId).isEqualTo(OPPGAVE_ID)
+            assertThat(response.body?.versjon).isEqualTo(1)
+            assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+
+            val expectedJson = """{"id" : 315488374, "versjon": 0, "mappeId" : null}"""
+            verify(patchRequestedFor(anyUrl()).withRequestBody(equalToJson(expectedJson)))
+        }
     }
 
     @Test
