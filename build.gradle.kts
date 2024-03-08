@@ -4,7 +4,7 @@ val tilleggsstønaderLibsVersion = "2024.02.12-15.54.60684ccdf789"
 val tilleggsstønaderKontrakterVersion = "2024.03.07-06.41.fdcc04fc373b"
 val tokenSupportVersion = "4.1.3"
 val springCloudVersion = "4.1.1"
-val mockkVersion = "1.13.9"
+val mockkVersion = "1.13.10"
 val testcontainerVersion = "1.19.0"
 
 group = "no.nav.tilleggsstonader.integrasjoner"
@@ -13,14 +13,14 @@ version = "1.0.0"
 plugins {
     application
 
-    kotlin("jvm") version "1.9.22"
+    kotlin("jvm") version "1.9.23"
     id("com.diffplug.spotless") version "6.25.0"
     id("com.github.ben-manes.versions") version "0.51.0"
     id("se.patrikerdes.use-latest-versions") version "0.2.18"
 
-    id("org.springframework.boot") version "3.2.2"
+    id("org.springframework.boot") version "3.2.3"
     id("io.spring.dependency-management") version "1.1.4"
-    kotlin("plugin.spring") version "1.9.22"
+    kotlin("plugin.spring") version "1.9.23"
 
     id("org.cyclonedx.bom") version "1.8.2"
 }
