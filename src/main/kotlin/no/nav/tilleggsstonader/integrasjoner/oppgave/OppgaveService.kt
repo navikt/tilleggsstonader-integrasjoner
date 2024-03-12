@@ -63,7 +63,7 @@ class OppgaveService(
         val oppdatertOppgaveDto = oppgave.copy(
             id = oppgave.id,
             versjon = versjon ?: oppgave.versjon,
-            tilordnetRessurs = "",
+            tilordnetRessurs = saksbehandler ?: "",
             beskrivelse = lagOppgaveBeskrivelseFordeling(oppgave = oppgave, nySaksbehandlerIdent = saksbehandler),
         )
         return oppgaveClient.oppdaterOppgave(oppdatertOppgaveDto)
