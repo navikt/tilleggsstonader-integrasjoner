@@ -2,7 +2,7 @@ package no.nav.tilleggsstonader.integrasjoner.aktiviteter
 
 import no.nav.security.token.support.core.api.ProtectedWithClaims
 import no.nav.tilleggsstonader.integrasjoner.arena.ArenaService
-import no.nav.tilleggsstonader.kontrakter.aktivitet.AktivitetDto
+import no.nav.tilleggsstonader.kontrakter.aktivitet.AktivitetArenaDto
 import no.nav.tilleggsstonader.kontrakter.felles.IdentRequest
 import no.nav.tilleggsstonader.libs.sikkerhet.EksternBrukerUtils
 import org.springframework.validation.annotation.Validated
@@ -27,7 +27,7 @@ class AktivitetController(
         @RequestBody identRequest: IdentRequest,
         @RequestParam fom: LocalDate,
         @RequestParam tom: LocalDate? = null,
-    ): List<AktivitetDto> {
+    ): List<AktivitetArenaDto> {
         return arenaService.hentAktiviteter(identRequest.ident, fom, tom)
     }
 
@@ -36,7 +36,7 @@ class AktivitetController(
     fun hentAktiviteterTokenX(
         @RequestParam fom: LocalDate,
         @RequestParam tom: LocalDate? = null,
-    ): List<AktivitetDto> {
+    ): List<AktivitetArenaDto> {
         return arenaService.hentAktiviteter(EksternBrukerUtils.hentFnrFraToken(), fom, tom)
     }
 }

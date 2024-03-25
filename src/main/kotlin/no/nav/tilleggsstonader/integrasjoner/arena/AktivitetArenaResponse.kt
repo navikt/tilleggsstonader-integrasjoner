@@ -1,5 +1,6 @@
 package no.nav.tilleggsstonader.integrasjoner.arena
 
+import java.math.BigDecimal
 import java.time.LocalDate
 
 data class AktivitetArenaResponse(
@@ -8,7 +9,7 @@ data class AktivitetArenaResponse(
     val aktivitetsnavn: String,
     val periode: PeriodeArena,
     val antallDagerPerUke: Int?,
-    val prosentAktivitetsdeltakelse: Float?,
+    val prosentAktivitetsdeltakelse: BigDecimal?,
     val aktivitetsstatus: String?,
     val aktivitetsstatusnavn: String?,
     val erStoenadsberettigetAktivitet: Boolean?,
@@ -18,6 +19,9 @@ data class AktivitetArenaResponse(
     val status: StatusAktivitetArena? get() = aktivitetsstatus?.let { StatusAktivitetArena.valueOf(it) }
 }
 
+/**
+ * @param [fom] og [tom] kan være snudd på i tilfeller de har opphørt aktiviteten. Uklart når dette skjer.
+ */
 data class PeriodeArena(
     val fom: LocalDate?,
     val tom: LocalDate?,

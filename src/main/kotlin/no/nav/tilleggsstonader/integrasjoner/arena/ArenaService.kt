@@ -1,6 +1,6 @@
 package no.nav.tilleggsstonader.integrasjoner.arena
 
-import no.nav.tilleggsstonader.kontrakter.aktivitet.AktivitetDto
+import no.nav.tilleggsstonader.kontrakter.aktivitet.AktivitetArenaDto
 import no.nav.tilleggsstonader.kontrakter.felles.ObjectMapperProvider.objectMapper
 import no.nav.tilleggsstonader.libs.log.SecureLogger.secureLogger
 import org.slf4j.LoggerFactory
@@ -14,7 +14,7 @@ class ArenaService(
 
     private val logger = LoggerFactory.getLogger(javaClass)
 
-    fun hentAktiviteter(ident: String, fom: LocalDate, tom: LocalDate?): List<AktivitetDto> {
+    fun hentAktiviteter(ident: String, fom: LocalDate, tom: LocalDate?): List<AktivitetArenaDto> {
         val aktiviteter = arenaClient.hentAktiviteter(ident, fom, tom)
 
         return aktiviteter
