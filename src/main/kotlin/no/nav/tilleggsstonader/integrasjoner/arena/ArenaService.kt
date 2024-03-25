@@ -17,16 +17,14 @@ class ArenaService(
     fun hentAktiviteter(ident: String, fom: LocalDate, tom: LocalDate?): List<AktivitetArenaDto> {
         val aktiviteter = arenaClient.hentAktiviteter(ident, fom, tom)
 
-        return aktiviteter
-            .filter { it.erStoenadsberettigetAktivitet == true }
-            .mapNotNull {
-                try {
-                    AktivitetDtoMapper.map(it)
-                } catch (e: Exception) {
-                    logger.error("Feilet mapping av aktivitet, se secure logs for mer info")
-                    secureLogger.error("Feilet mapping av aktivitet, ${objectMapper.writeValueAsString(it)}", e)
-                    null
-                }
+        return aktiviteter.mapNotNull {
+            try {
+                AktivitetDtoMapper.map(it)
+            } catch (e: Exception) {
+                logger.error("Feilet mapping av aktivitet, se secure logs for mer info")
+                secureLogger.error("Feilet mapping av aktivitet, ${objectMapper.writeValueAsString(it)}", e)
+                null
             }
+        }
     }
 }
