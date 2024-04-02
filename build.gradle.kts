@@ -4,6 +4,7 @@ val tilleggsstønaderLibsVersion = "2024.03.11-08.21.f30618621f1d"
 val tilleggsstønaderKontrakterVersion = "2024.03.25-13.16.c4f871d62dc4"
 val tokenSupportVersion = "4.1.4"
 val springCloudVersion = "4.1.2"
+
 val mockkVersion = "1.13.10"
 val testcontainerVersion = "1.19.0"
 
