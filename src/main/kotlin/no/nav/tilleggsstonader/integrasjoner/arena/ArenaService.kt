@@ -4,6 +4,7 @@ import no.nav.tilleggsstonader.kontrakter.aktivitet.AktivitetArenaDto
 import no.nav.tilleggsstonader.kontrakter.felles.ObjectMapperProvider.objectMapper
 import no.nav.tilleggsstonader.libs.log.SecureLogger.secureLogger
 import org.slf4j.LoggerFactory
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 
@@ -14,6 +15,7 @@ class ArenaService(
 
     private val logger = LoggerFactory.getLogger(javaClass)
 
+    @Cacheable("aktiviteter", cacheManager = "shortCache")
     fun hentAktiviteter(ident: String, fom: LocalDate, tom: LocalDate?): List<AktivitetArenaDto> {
         val aktiviteter = arenaClient.hentAktiviteter(ident, fom, tom)
 
