@@ -2,6 +2,7 @@ package no.nav.tilleggsstonader.integrasjoner.dokarkiv.client
 
 import no.nav.tilleggsstonader.integrasjoner.infrastruktur.exception.OppslagException
 import no.nav.tilleggsstonader.integrasjoner.util.MDCOperations
+import no.nav.tilleggsstonader.kontrakter.dokarkiv.BulkOppdaterLogiskVedleggRequest
 import no.nav.tilleggsstonader.kontrakter.dokarkiv.LogiskVedleggRequest
 import no.nav.tilleggsstonader.kontrakter.dokarkiv.LogiskVedleggResponse
 import no.nav.tilleggsstonader.libs.http.client.AbstractRestClient
@@ -58,6 +59,32 @@ class DokarkivLogiskVedleggRestClient(
             throw OppslagException(
                 message,
                 "Dokarkiv.logiskVedlegg.slett",
+                OppslagException.Level.MEDIUM,
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                e,
+            )
+        }
+    }
+
+    fun oppdaterLogiskeVedlegg(
+        dokumentinfoId: String,
+        request: BulkOppdaterLogiskVedleggRequest,
+    ) {
+        val uriVariables = mapOf("dokumentInfo" to dokumentinfoId)
+        val uri =
+            UriComponentsBuilder
+                .fromUri(dokarkivUrl)
+                .path(PATH_LOGISKVEDLEGG)
+                .buildAndExpand(dokumentinfoId)
+                .toUriString()
+        try {
+            putForEntityNullable<Unit>(uri, request, headers(), uriVariables)
+        } catch (e: RuntimeException) {
+            val responsebody = if (e is HttpStatusCodeException) e.responseBodyAsString else ""
+            val message = "Kan ikke bulk oppdatere logiske vedlegg for dokumentinfo $dokumentinfoId $responsebody"
+            throw OppslagException(
+                message,
+                "Dokarkiv.logiskVedlegg.oppdater",
                 OppslagException.Level.MEDIUM,
                 HttpStatus.INTERNAL_SERVER_ERROR,
                 e,

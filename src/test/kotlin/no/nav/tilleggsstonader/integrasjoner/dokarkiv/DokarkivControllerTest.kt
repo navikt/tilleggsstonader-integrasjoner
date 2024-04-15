@@ -6,6 +6,7 @@ import com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import com.github.tomakehurst.wiremock.client.WireMock.anyUrl
 import com.github.tomakehurst.wiremock.client.WireMock.delete
 import com.github.tomakehurst.wiremock.client.WireMock.equalTo
+import com.github.tomakehurst.wiremock.client.WireMock.noContent
 import com.github.tomakehurst.wiremock.client.WireMock.ok
 import com.github.tomakehurst.wiremock.client.WireMock.okJson
 import com.github.tomakehurst.wiremock.client.WireMock.patch
@@ -23,6 +24,7 @@ import no.nav.tilleggsstonader.integrasjoner.util.ProblemDetailUtil.catchProblem
 import no.nav.tilleggsstonader.kontrakter.dokarkiv.ArkiverDokumentRequest
 import no.nav.tilleggsstonader.kontrakter.dokarkiv.ArkiverDokumentResponse
 import no.nav.tilleggsstonader.kontrakter.dokarkiv.AvsenderMottaker
+import no.nav.tilleggsstonader.kontrakter.dokarkiv.BulkOppdaterLogiskVedleggRequest
 import no.nav.tilleggsstonader.kontrakter.dokarkiv.DokarkivBruker
 import no.nav.tilleggsstonader.kontrakter.dokarkiv.Dokument
 import no.nav.tilleggsstonader.kontrakter.dokarkiv.Dokumenttype
@@ -406,6 +408,27 @@ class DokarkivControllerTest : IntegrationTest() {
 
         assertThat(exception.httpStatus).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR)
         assertThat(exception.detail.detail).contains("sletting feilet")
+    }
+
+    @Test
+    fun `skal bulk oppdatere logiske vedlegg for et dokument`() {
+        stubFor(
+            put("/rest/journalpostapi/v1/dokumentInfo/321/logiskVedlegg/")
+                .willReturn(noContent()),
+        )
+
+        val response: ResponseEntity<String> =
+            restTemplate.exchange(
+                localhost("$DOKARKIV_URL/dokument/321/logiskVedlegg"),
+                HttpMethod.PUT,
+                HttpEntity(
+                    BulkOppdaterLogiskVedleggRequest(titler = listOf("Logisk vedlegg 1", "Logisk vedlegg 2")),
+                    headers,
+                ),
+            )
+
+        assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+        assertThat(response.body).isEqualTo("321")
     }
 
     private fun gyldigDokarkivResponse(statusKode: Int? = null): String {

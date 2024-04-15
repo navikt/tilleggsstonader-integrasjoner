@@ -10,6 +10,7 @@ import no.nav.tilleggsstonader.integrasjoner.dokarkiv.metadata.tilMetadata
 import no.nav.tilleggsstonader.kontrakter.dokarkiv.ArkiverDokumentRequest
 import no.nav.tilleggsstonader.kontrakter.dokarkiv.ArkiverDokumentResponse
 import no.nav.tilleggsstonader.kontrakter.dokarkiv.AvsenderMottaker
+import no.nav.tilleggsstonader.kontrakter.dokarkiv.BulkOppdaterLogiskVedleggRequest
 import no.nav.tilleggsstonader.kontrakter.dokarkiv.DokarkivBruker
 import no.nav.tilleggsstonader.kontrakter.dokarkiv.Dokument
 import no.nav.tilleggsstonader.kontrakter.dokarkiv.Filtype
@@ -143,5 +144,12 @@ class DokarkivService(
 
     fun slettLogiskVedlegg(dokumentInfoId: String, logiskVedleggId: String) {
         dokarkivLogiskVedleggRestClient.slettLogiskVedlegg(dokumentInfoId, logiskVedleggId)
+    }
+
+    fun oppdaterLogiskeVedleggForDokument(
+        dokumentinfoId: String,
+        request: BulkOppdaterLogiskVedleggRequest,
+    ) {
+        dokarkivLogiskVedleggRestClient.oppdaterLogiskeVedlegg(dokumentinfoId, request)
     }
 }
