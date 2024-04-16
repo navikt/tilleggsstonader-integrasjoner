@@ -6,6 +6,7 @@ import no.nav.tilleggsstonader.integrasjoner.dokarkiv.client.DokarkivConflictExc
 import no.nav.tilleggsstonader.integrasjoner.dokarkiv.client.KanIkkeFerdigstilleJournalpostException
 import no.nav.tilleggsstonader.kontrakter.dokarkiv.ArkiverDokumentRequest
 import no.nav.tilleggsstonader.kontrakter.dokarkiv.ArkiverDokumentResponse
+import no.nav.tilleggsstonader.kontrakter.dokarkiv.BulkOppdaterLogiskVedleggRequest
 import no.nav.tilleggsstonader.kontrakter.dokarkiv.LogiskVedleggRequest
 import no.nav.tilleggsstonader.kontrakter.dokarkiv.LogiskVedleggResponse
 import no.nav.tilleggsstonader.kontrakter.dokarkiv.OppdaterJournalpostRequest
@@ -114,6 +115,16 @@ class DokarkivController(private val journalføringService: DokarkivService) {
     ): LogiskVedleggResponse {
         journalføringService.slettLogiskVedlegg(dokumentinfoId, logiskVedleggId)
         return LogiskVedleggResponse(logiskVedleggId.toLong())
+    }
+
+    @PutMapping(path = ["/dokument/{dokumentinfoId}/logiskVedlegg"], produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun oppdaterAlleLogiskeVedleggForDokument(
+        @PathVariable(name = "dokumentinfoId") dokumentinfoId: String,
+        @RequestBody @Valid
+        request: BulkOppdaterLogiskVedleggRequest,
+    ): ResponseEntity<String> {
+        journalføringService.oppdaterLogiskeVedleggForDokument(dokumentinfoId, request)
+        return ResponseEntity.status(HttpStatus.OK).body(dokumentinfoId)
     }
 
     companion object {
