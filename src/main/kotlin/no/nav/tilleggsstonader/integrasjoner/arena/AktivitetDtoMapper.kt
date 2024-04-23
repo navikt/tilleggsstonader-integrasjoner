@@ -20,7 +20,7 @@ object AktivitetDtoMapper {
             prosentDeltakelse = response.prosentAktivitetsdeltakelse,
             erStønadsberettiget = response.erStoenadsberettigetAktivitet,
             erUtdanning = response.erUtdanningsaktivitet,
-            arrangør = response.arrangoer,
+            arrangør = response.arrangoer?.takeIf { it.isNotBlank() },
             kilde = Kilde.ARENA,
         )
     }

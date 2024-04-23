@@ -16,7 +16,10 @@ data class AktivitetArenaResponse(
     val erUtdanningsaktivitet: Boolean?,
     val arrangoer: String?,
 ) {
-    val status: StatusAktivitetArena? get() = aktivitetsstatus?.let { StatusAktivitetArena.valueOf(it) }
+    val status: StatusAktivitetArena? get() =
+        aktivitetsstatus
+            ?.takeIf { it.isNotBlank() }
+            ?.let { StatusAktivitetArena.valueOf(it) }
 }
 
 /**
