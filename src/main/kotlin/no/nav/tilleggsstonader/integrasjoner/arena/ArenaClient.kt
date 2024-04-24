@@ -1,10 +1,12 @@
 package no.nav.tilleggsstonader.integrasjoner.arena
 
 import no.nav.tilleggsstonader.libs.http.client.AbstractRestClient
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpHeaders
 import org.springframework.stereotype.Component
+import org.springframework.web.client.HttpClientErrorException.BadRequest
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.util.UriComponentsBuilder
 import java.net.URI
@@ -18,6 +20,8 @@ class ArenaClient(
     @Value("\${clients.arena.uri}") private val baseUrl: URI,
     @Qualifier("azure") restTemplate: RestTemplate,
 ) : AbstractRestClient(restTemplate) {
+
+    private val logger = LoggerFactory.getLogger(javaClass)
 
     /**
      * @param tom Default: 60 dager frem i tid.
@@ -36,7 +40,15 @@ class ArenaClient(
 
         val headers = hentAktivitetHeaders(ident)
 
-        return getForEntity<List<AktivitetArenaResponse>>(uriBuilder.encode().toUriString(), headers, uriVariables)
+        try {
+            return getForEntity<List<AktivitetArenaResponse>>(uriBuilder.encode().toUriString(), headers, uriVariables)
+        } catch (e: BadRequest) {
+            if (e.responseBodyAsString.contains("Person med fødselsnummer")) {
+                logger.warn("Person finnes ikke i Arena")
+                return emptyList()
+            }
+            throw e
+        }
     }
 
     private fun hentAktivitetHeaders(ident: String): HttpHeaders =
