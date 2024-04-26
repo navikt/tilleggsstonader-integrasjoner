@@ -120,7 +120,7 @@ clients:
     scope: api://${CLIENT_ENV}-fss.teamarenanais.arena-api/.default
   oppgave:
     uri: https://oppgave.prod-fss-pub.nais.io
-    scope: api://${CLIENT_ENV}-fss.teamdokumenthandtering.oppgave/.default
+    scope: api://${CLIENT_ENV}-fss.oppgavehandtering.oppgave/.default
   dokarkiv:
     uri: https://dokarkiv.prod-fss-pub.nais.io
     scope: api://${CLIENT_ENV}-fss.teamdokumenthandtering.dokarkiv/.default
