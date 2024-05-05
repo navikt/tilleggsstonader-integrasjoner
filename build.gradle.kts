@@ -1,7 +1,7 @@
 val javaVersion = JavaLanguageVersion.of(21)
-val springdocVersion = "2.4.0"
+val springdocVersion = "2.5.0"
 val tilleggsstønaderLibsVersion = "2024.04.15-16.05.512a4905d78d"
-val tilleggsstønaderKontrakterVersion = "2024.04.15-14.00.c37cd4f5e87d"
+val tilleggsstønaderKontrakterVersion = "2024.05.02-13.03.df76df8e28ad"
 val tokenSupportVersion = "4.1.4"
 val springCloudVersion = "4.1.2"
 
@@ -19,8 +19,8 @@ plugins {
     id("com.github.ben-manes.versions") version "0.51.0"
     id("se.patrikerdes.use-latest-versions") version "0.2.18"
 
-    id("org.springframework.boot") version "3.2.4"
-    id("io.spring.dependency-management") version "1.1.4"
+    id("org.springframework.boot") version "3.2.5"
+    id("io.spring.dependency-management") version "1.1.5"
     kotlin("plugin.spring") version "1.9.23"
 
     id("org.cyclonedx.bom") version "1.8.2"
