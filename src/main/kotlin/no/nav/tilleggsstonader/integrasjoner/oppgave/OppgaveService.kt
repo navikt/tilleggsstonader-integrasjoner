@@ -14,6 +14,7 @@ import no.nav.tilleggsstonader.kontrakter.oppgave.MappeDto
 import no.nav.tilleggsstonader.kontrakter.oppgave.Oppgave
 import no.nav.tilleggsstonader.kontrakter.oppgave.OpprettOppgaveRequest
 import no.nav.tilleggsstonader.kontrakter.oppgave.StatusEnum
+import no.nav.tilleggsstonader.libs.utils.osloNow
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
@@ -73,7 +74,7 @@ class OppgaveService(
         val innloggetSaksbehandlerIdent = SikkerhetsContext.hentSaksbehandlerEllerSystembruker()
         val saksbehandlerNavn = SikkerhetsContext.hentSaksbehandlerNavn(strict = false)
 
-        val formatertDato = LocalDateTime.now().format(DatoFormat.GOSYS_DATE_TIME)
+        val formatertDato = osloNow().format(DatoFormat.GOSYS_DATE_TIME)
 
         val prefix = "--- $formatertDato $saksbehandlerNavn ($innloggetSaksbehandlerIdent) ---\n"
         val endring =
