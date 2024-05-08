@@ -4,6 +4,7 @@ import no.nav.tilleggsstonader.integrasjoner.util.DatoUtil.min
 import no.nav.tilleggsstonader.kontrakter.aktivitet.AktivitetArenaDto
 import no.nav.tilleggsstonader.kontrakter.aktivitet.Kilde
 import no.nav.tilleggsstonader.kontrakter.aktivitet.StatusAktivitet
+import no.nav.tilleggsstonader.libs.utils.osloDateNow
 import java.time.LocalDate
 
 object AktivitetDtoMapper {
@@ -33,7 +34,7 @@ object AktivitetDtoMapper {
      */
     private fun mapStatus(response: AktivitetArenaResponse): StatusAktivitet? {
         val fom = min(response.periode.fom, response.periode.tom) ?: LocalDate.MAX
-        val startDatoErFremITid = fom.isAfter(LocalDate.now())
+        val startDatoErFremITid = fom.isAfter(osloDateNow())
 
         return when (response.status) {
             StatusAktivitetArena.AKTUL -> StatusAktivitet.AKTUELL

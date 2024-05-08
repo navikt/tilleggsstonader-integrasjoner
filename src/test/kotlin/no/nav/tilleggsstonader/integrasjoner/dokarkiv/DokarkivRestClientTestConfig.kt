@@ -8,11 +8,11 @@ import no.nav.tilleggsstonader.integrasjoner.dokarkiv.client.DokarkivLogiskVedle
 import no.nav.tilleggsstonader.integrasjoner.dokarkiv.client.DokarkivRestClient
 import no.nav.tilleggsstonader.integrasjoner.dokarkiv.client.domene.OpprettJournalpostResponse
 import no.nav.tilleggsstonader.kontrakter.dokarkiv.LogiskVedleggResponse
+import no.nav.tilleggsstonader.libs.utils.osloNow
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary
 import org.springframework.context.annotation.Profile
-import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 @Configuration
@@ -25,7 +25,7 @@ class DokarkivRestClientTestConfig {
         val klient = mockk<DokarkivRestClient>(relaxed = true)
         val pattern = DateTimeFormatter.ofPattern("yyyyMMddHHmmss")
         val response = OpprettJournalpostResponse(
-            journalpostId = LocalDateTime.now().format(pattern),
+            journalpostId = osloNow().format(pattern),
             journalpostferdigstilt = false,
         )
         every {
