@@ -6,13 +6,13 @@ import com.github.tomakehurst.wiremock.client.WireMock.stubFor
 import com.github.tomakehurst.wiremock.client.WireMock.urlMatching
 import no.nav.security.mock.oauth2.http.objectMapper
 import no.nav.tilleggsstonader.integrasjoner.IntegrationTest
+import no.nav.tilleggsstonader.libs.utils.osloDateNow
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock
 import org.springframework.test.context.TestPropertySource
 import org.springframework.web.client.HttpClientErrorException.BadRequest
-import java.time.LocalDate
 
 @TestPropertySource(properties = ["clients.arena.uri=http://localhost:28085"])
 @AutoConfigureWireMock(port = 28085)
@@ -34,7 +34,7 @@ class ArenaClientTest : IntegrationTest() {
         """.trimIndent()
         stubAktiviteter(response)
 
-        arenaClient.hentAktiviteter("1", LocalDate.now(), LocalDate.now())
+        arenaClient.hentAktiviteter("1", osloDateNow(), osloDateNow())
     }
 
     @Test
@@ -51,7 +51,7 @@ class ArenaClientTest : IntegrationTest() {
         stubAktiviteter(response)
 
         assertThatThrownBy {
-            arenaClient.hentAktiviteter("1", LocalDate.now(), LocalDate.now())
+            arenaClient.hentAktiviteter("1", osloDateNow(), osloDateNow())
         }.isInstanceOf(BadRequest::class.java)
     }
 
