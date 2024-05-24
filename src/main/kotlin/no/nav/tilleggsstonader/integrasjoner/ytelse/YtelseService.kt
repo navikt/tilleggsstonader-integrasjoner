@@ -56,7 +56,7 @@ class YtelseService(
             }
             PerioderEnsligForsørger(
                 suksess = true,
-                perioder = perioder.perioder
+                perioder = perioder.data.perioder
                     .sortedByDescending { it.fomDato }
                     .map { PeriodeEnsligForsørger(fom = it.fomDato, tom = it.tomDato) },
             )
