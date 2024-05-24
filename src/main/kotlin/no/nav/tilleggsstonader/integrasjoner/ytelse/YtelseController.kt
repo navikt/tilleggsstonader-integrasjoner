@@ -27,7 +27,7 @@ class YtelseController(
         @RequestParam fom: LocalDate,
         @RequestParam tom: LocalDate,
     ): YtelsePerioderDto {
-        return ytelseService.hentYtelser(identRequest.ident, fom, tom)
+        return ytelseService.hentYtelser(HentYtelserData(identRequest.ident, fom = fom, tom = tom))
     }
 
     @GetMapping("tokenx")
@@ -36,6 +36,6 @@ class YtelseController(
         @RequestParam fom: LocalDate,
         @RequestParam tom: LocalDate,
     ): YtelsePerioderDto {
-        return ytelseService.hentYtelser(EksternBrukerUtils.hentFnrFraToken(), fom, tom)
+        return ytelseService.hentYtelser(HentYtelserData(EksternBrukerUtils.hentFnrFraToken(), fom = fom, tom = tom))
     }
 }
