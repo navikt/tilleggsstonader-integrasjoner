@@ -16,7 +16,7 @@ class ArenaService(
     private val logger = LoggerFactory.getLogger(javaClass)
 
     @Cacheable("aktiviteter", cacheManager = "shortCache")
-    fun hentAktiviteter(ident: String, fom: LocalDate, tom: LocalDate?): List<AktivitetArenaDto> {
+    fun hentAktiviteter(ident: String, fom: LocalDate, tom: LocalDate): List<AktivitetArenaDto> {
         val aktiviteter = arenaClient.hentAktiviteter(ident, fom, tom)
 
         return aktiviteter.mapNotNull {

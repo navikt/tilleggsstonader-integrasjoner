@@ -23,25 +23,22 @@ class ArenaClient(
 
     private val logger = LoggerFactory.getLogger(javaClass)
 
+    val uriAktiviteter = UriComponentsBuilder.fromUri(baseUrl)
+        .pathSegment("api", "v1", "tilleggsstoenad", "aktiviteter")
+        .queryParam("fom", "{fom}")
+        .queryParam("tom", "{tom}")
+        .encode().toUriString()
+
     /**
      * @param tom Default: 60 dager frem i tid.
      */
-    fun hentAktiviteter(ident: String, fom: LocalDate, tom: LocalDate?): List<AktivitetArenaResponse> {
-        val uriVariables = mutableMapOf<String, Any>("fom" to fom)
-
-        val uriBuilder = UriComponentsBuilder.fromUri(baseUrl)
-            .pathSegment("api", "v1", "tilleggsstoenad", "aktiviteter")
-            .queryParam("fom", "{fom}")
-
-        if (tom != null) {
-            uriBuilder.queryParam("tom", "{tom}")
-            uriVariables["tom"] = tom
-        }
+    fun hentAktiviteter(ident: String, fom: LocalDate, tom: LocalDate): List<AktivitetArenaResponse> {
+        val uriVariables = mutableMapOf<String, Any>("fom" to fom, "tom" to tom)
 
         val headers = hentAktivitetHeaders(ident)
 
         try {
-            return getForEntity<List<AktivitetArenaResponse>>(uriBuilder.encode().toUriString(), headers, uriVariables)
+            return getForEntity<List<AktivitetArenaResponse>>(uriAktiviteter, headers, uriVariables)
         } catch (e: BadRequest) {
             if (e.responseBodyAsString.contains("Person med fødselsnummer")) {
                 logger.warn("Person finnes ikke i Arena")
