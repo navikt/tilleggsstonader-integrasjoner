@@ -57,6 +57,11 @@ spec:
         - application: tilleggsstonader-sak
         - application: tilleggsstonader-soknad-api
     outbound:
+      rules:
+        - application: aap-intern
+          namespace: gcp
+        - application: familie-ef-sak
+          namespace: teamfamilie
       external:
         - host: oppgave.prod-fss-pub.nais.io
         - host: arena-api.prod-fss-pub.nais.io
