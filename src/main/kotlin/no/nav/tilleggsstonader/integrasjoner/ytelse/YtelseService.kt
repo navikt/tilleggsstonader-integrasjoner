@@ -25,9 +25,8 @@ class YtelseService(
     private val logger = LoggerFactory.getLogger(javaClass)
 
     fun hentYtelser(data: HentYtelserData): YtelsePerioderDto {
-        val arbeidsavklaringspenger = PerioderArbeidsavklaringspenger(suksess = false, perioder = emptyList())
         return YtelsePerioderDto(
-            arbeidsavklaringspenger = arbeidsavklaringspenger, // hentAap(ident, fom, tom),
+            arbeidsavklaringspenger = hentAap(data),
             ensligForsørger = hentEnslig(data),
         )
     }
