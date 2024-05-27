@@ -34,7 +34,7 @@ class YtelseServiceTest : IntegrationTest() {
         ytelseService.hentYtelser(HentYtelserData("ident", LocalDate.now(), LocalDate.now()))
         ytelseService.hentYtelser(HentYtelserData("ident", LocalDate.now(), LocalDate.now()))
 
-        verify(exactly = 0) { aapClient.hentPerioder(any(), any(), any()) }
+        verify(exactly = 1) { aapClient.hentPerioder(any(), any(), any()) }
         verify(exactly = 1) { ensligForsørgerClient.hentPerioder(any(), any(), any()) }
     }
 
@@ -45,7 +45,7 @@ class YtelseServiceTest : IntegrationTest() {
         ytelseService.hentYtelser(HentYtelserData("ident", LocalDate.now().plusDays(1), LocalDate.now()))
         ytelseService.hentYtelser(HentYtelserData("ident", LocalDate.now(), LocalDate.now().plusDays(1)))
 
-        verify(exactly = 0) { aapClient.hentPerioder(any(), any(), any()) }
+        verify(exactly = 4) { aapClient.hentPerioder(any(), any(), any()) }
         verify(exactly = 4) { ensligForsørgerClient.hentPerioder(any(), any(), any()) }
     }
 }
