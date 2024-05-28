@@ -2,6 +2,7 @@ package no.nav.tilleggsstonader.integrasjoner.ytelse
 
 import no.nav.tilleggsstonader.integrasjoner.aap.AAPClient
 import no.nav.tilleggsstonader.integrasjoner.ensligforsørger.EnsligForsørgerClient
+import no.nav.tilleggsstonader.integrasjoner.etterlatte.EtterlatteClient
 import no.nav.tilleggsstonader.integrasjoner.infrastruktur.config.getValue
 import no.nav.tilleggsstonader.kontrakter.ytelse.HentetInformasjon
 import no.nav.tilleggsstonader.kontrakter.ytelse.StatusHentetInformasjon
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service
 class YtelseService(
     private val aapClient: AAPClient,
     private val ensligForsørgerClient: EnsligForsørgerClient,
+    private val etterlatteClient: EtterlatteClient,
     @Qualifier("shortCache")
     private val cacheManager: CacheManager,
 ) {
@@ -52,6 +54,7 @@ class YtelseService(
         return when (it) {
             TypeYtelsePeriode.AAP -> hentAap(data)
             TypeYtelsePeriode.ENSLIG_FORSØRGER -> hentEnslig(data)
+            TypeYtelsePeriode.OMSTILLINGSSTØNAD -> hentOmstillingsstønad(data)
         }
     }
 
@@ -77,6 +80,19 @@ class YtelseService(
                 type = TypeYtelsePeriode.ENSLIG_FORSØRGER,
                 fom = it.fomDato,
                 tom = it.tomDato,
+            )
+        }
+    }
+
+    private fun hentOmstillingsstønad(data: HentYtelserCacheData): List<YtelsePeriode> {
+        val perioder = cacheManager.getValue("ytelser-etterlatte", data) {
+            etterlatteClient.hentPerioder(data.ident, fom = data.fom)
+        }
+        return perioder.flatMap { it.perioder }.map {
+            YtelsePeriode(
+                type = TypeYtelsePeriode.OMSTILLINGSSTØNAD,
+                fom = it.fom,
+                tom = it.tom,
             )
         }
     }

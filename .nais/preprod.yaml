@@ -62,6 +62,8 @@ spec:
           namespace: aap
         - application: familie-ef-sak
           namespace: teamfamilie
+        - application: etterlatte-samordning-vedtak
+          namespace: etterlatte
       external:
         - host: oppgave-q1.dev-fss-pub.nais.io
         - host: arena-api-q1.dev-fss-pub.nais.io
