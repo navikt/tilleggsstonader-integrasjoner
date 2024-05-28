@@ -5,10 +5,12 @@ import io.mockk.every
 import io.mockk.mockk
 import no.nav.tilleggsstonader.integrasjoner.aap.AAPClient
 import no.nav.tilleggsstonader.integrasjoner.aap.AAPPerioderResponse
+import no.nav.tilleggsstonader.integrasjoner.aap.Periode
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary
 import org.springframework.context.annotation.Profile
+import java.time.LocalDate
 
 @Configuration
 @Profile("mock-aap")
@@ -25,7 +27,7 @@ class AAPClientTestConfig {
     companion object {
         fun resetMock(client: AAPClient) {
             clearMocks(client)
-            every { client.hentPerioder(any(), any(), any()) } returns AAPPerioderResponse(emptyList())
+            every { client.hentPerioder(any(), any(), any()) } returns AAPPerioderResponse(listOf(Periode(LocalDate.now(), LocalDate.now())))
         }
     }
 }

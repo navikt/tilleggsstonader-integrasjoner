@@ -5,7 +5,7 @@ import java.time.LocalDate
 /**
  * Brukes som nøkkel for cache.
  */
-data class HentYtelserData(
+data class HentYtelserCacheData(
     val ident: String,
     val fom: LocalDate,
     val tom: LocalDate,
