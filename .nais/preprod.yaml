@@ -58,7 +58,7 @@ spec:
         - application: tilleggsstonader-soknad-api
     outbound:
       rules:
-        - application: aap-intern
+        - application: api-intern
           namespace: aap
         - application: familie-ef-sak
           namespace: teamfamilie
