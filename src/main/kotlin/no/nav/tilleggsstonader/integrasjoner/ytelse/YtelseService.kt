@@ -27,12 +27,14 @@ class YtelseService(
 
     private val logger = LoggerFactory.getLogger(javaClass)
 
-    fun hentYtelser(request: YtelsePerioderRequest): YtelsePerioderDto {
+    // TODO fjern filter når AAP har lagt til mulighet for å hente perioder i prod
+    fun hentYtelser(request: YtelsePerioderRequest, utenAAP: Boolean = false): YtelsePerioderDto {
         val perioder = mutableListOf<YtelsePeriode>()
         val hentetInformasjon = mutableListOf<HentetInformasjon>()
 
         val data = HentYtelserCacheData(ident = request.ident, fom = request.fom, tom = request.tom)
-        request.typer.distinct().forEach {
+        val typer = request.typer.filterNot { utenAAP && it == TypeYtelsePeriode.AAP }
+        typer.distinct().forEach {
             try {
                 perioder.addAll(hentPerioder(it, data))
                 hentetInformasjon.add(HentetInformasjon(type = it, status = StatusHentetInformasjon.OK))
