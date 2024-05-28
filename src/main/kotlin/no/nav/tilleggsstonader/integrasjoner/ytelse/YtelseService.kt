@@ -4,10 +4,6 @@ import no.nav.tilleggsstonader.integrasjoner.aap.AAPClient
 import no.nav.tilleggsstonader.integrasjoner.ensligforsørger.EnsligForsørgerClient
 import no.nav.tilleggsstonader.integrasjoner.infrastruktur.config.getValue
 import no.nav.tilleggsstonader.kontrakter.ytelse.HentetInformasjon
-import no.nav.tilleggsstonader.kontrakter.ytelse.PeriodeArbeidsavklaringspenger
-import no.nav.tilleggsstonader.kontrakter.ytelse.PeriodeEnsligForsørger
-import no.nav.tilleggsstonader.kontrakter.ytelse.PerioderArbeidsavklaringspenger
-import no.nav.tilleggsstonader.kontrakter.ytelse.PerioderEnsligForsørger
 import no.nav.tilleggsstonader.kontrakter.ytelse.StatusHentetInformasjon
 import no.nav.tilleggsstonader.kontrakter.ytelse.TypeYtelsePeriode
 import no.nav.tilleggsstonader.kontrakter.ytelse.YtelsePeriode
@@ -44,14 +40,6 @@ class YtelseService(
             }
         }
         return YtelsePerioderDto(
-            arbeidsavklaringspenger = PerioderArbeidsavklaringspenger(
-                suksess = hentetInformasjon.firstOrNull { it.type == TypeYtelsePeriode.AAP }?.status == StatusHentetInformasjon.OK,
-                perioder = perioder.filter { it.type == TypeYtelsePeriode.AAP }.map { PeriodeArbeidsavklaringspenger(fom = it.fom, tom = it.tom) },
-            ),
-            ensligForsørger = PerioderEnsligForsørger(
-                suksess = hentetInformasjon.firstOrNull { it.type == TypeYtelsePeriode.ENSLIG_FORSØRGER }?.status == StatusHentetInformasjon.OK,
-                perioder = perioder.filter { it.type == TypeYtelsePeriode.ENSLIG_FORSØRGER }.map { PeriodeEnsligForsørger(fom = it.fom, tom = it.tom) },
-            ),
             perioder = perioder.sortedByDescending { it.tom },
             hentetInformasjon = hentetInformasjon,
         )
