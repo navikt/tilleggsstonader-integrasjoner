@@ -4,6 +4,7 @@ import no.nav.tilleggsstonader.integrasjoner.aap.AAPClient
 import no.nav.tilleggsstonader.integrasjoner.ensligforsørger.EnsligForsørgerClient
 import no.nav.tilleggsstonader.integrasjoner.etterlatte.EtterlatteClient
 import no.nav.tilleggsstonader.integrasjoner.infrastruktur.config.getValue
+import no.nav.tilleggsstonader.integrasjoner.util.VirtualThreadUtil.parallelt
 import no.nav.tilleggsstonader.kontrakter.ytelse.HentetInformasjon
 import no.nav.tilleggsstonader.kontrakter.ytelse.StatusHentetInformasjon
 import no.nav.tilleggsstonader.kontrakter.ytelse.TypeYtelsePeriode
@@ -33,20 +34,30 @@ class YtelseService(
         val hentetInformasjon = mutableListOf<HentetInformasjon>()
 
         val data = HentYtelserCacheData(ident = request.ident, fom = request.fom, tom = request.tom)
-        val typer = request.typer.filterNot { utenAAP && it == TypeYtelsePeriode.AAP }
-        typer.distinct().forEach {
-            try {
-                perioder.addAll(hentPerioder(it, data))
-                hentetInformasjon.add(HentetInformasjon(type = it, status = StatusHentetInformasjon.OK))
-            } catch (e: Exception) {
-                hentetInformasjon.add(HentetInformasjon(type = it, status = StatusHentetInformasjon.FEILET))
-                logError(it, data, e)
+        request.typer.filterNot { utenAAP && it == TypeYtelsePeriode.AAP }.distinct()
+            .map { hentPeriodeFn(it, data) }
+            .parallelt()
+            .forEach {
+                perioder.addAll(it.first)
+                hentetInformasjon.add(it.second)
             }
-        }
+
         return YtelsePerioderDto(
             perioder = perioder.sortedByDescending { it.tom },
             hentetInformasjon = hentetInformasjon,
         )
+    }
+
+    private fun hentPeriodeFn(
+        it: TypeYtelsePeriode,
+        data: HentYtelserCacheData,
+    ): () -> Pair<List<YtelsePeriode>, HentetInformasjon> = {
+        try {
+            Pair(hentPerioder(it, data), HentetInformasjon(type = it, status = StatusHentetInformasjon.OK))
+        } catch (e: Exception) {
+            logError(it, data, e)
+            Pair(emptyList(), HentetInformasjon(type = it, status = StatusHentetInformasjon.FEILET))
+        }
     }
 
     private fun hentPerioder(
