@@ -21,6 +21,6 @@ class YtelseController(
     fun hentYtelser(
         @RequestBody request: YtelsePerioderRequest,
     ): YtelsePerioderDto {
-        return ytelseService.hentYtelser(request, utenAAP = true)
+        return ytelseService.hentYtelser(request)
     }
 }

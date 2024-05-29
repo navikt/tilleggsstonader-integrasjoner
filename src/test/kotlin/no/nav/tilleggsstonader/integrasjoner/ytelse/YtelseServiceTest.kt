@@ -94,18 +94,6 @@ class YtelseServiceTest : IntegrationTest() {
         verify { ensligForsørgerClient wasNot called }
     }
 
-    @Test
-    fun `skal ikke hente perioder fra aap selv om de er med i listen`() {
-        val dto = ytelseService.hentYtelser(ytelsePerioderRequest(typer = listOf(TypeYtelsePeriode.AAP)), utenAAP = true)
-
-        assertThat(dto.perioder).isEmpty()
-        assertThat(dto.hentetInformasjon).isEmpty()
-
-        verify { aapClient wasNot called }
-        verify { etterlatteClient wasNot called }
-        verify { ensligForsørgerClient wasNot called }
-    }
-
     private fun ytelsePerioderRequest(
         ident: String = "ident",
         fom: LocalDate = LocalDate.now(),
