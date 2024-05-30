@@ -3,6 +3,7 @@ package no.nav.tilleggsstonader.integrasjoner.ytelse
 import no.nav.tilleggsstonader.integrasjoner.aap.AAPClient
 import no.nav.tilleggsstonader.integrasjoner.ensligforsørger.EnsligForsørgerClient
 import no.nav.tilleggsstonader.integrasjoner.etterlatte.EtterlatteClient
+import no.nav.tilleggsstonader.integrasjoner.infrastruktur.config.getCachedOrLoad
 import no.nav.tilleggsstonader.integrasjoner.infrastruktur.config.getValue
 import no.nav.tilleggsstonader.integrasjoner.util.VirtualThreadUtil.parallelt
 import no.nav.tilleggsstonader.integrasjoner.util.VirtualThreadUtil.parallelt2
@@ -37,7 +38,20 @@ class YtelseService(
         val data = HentYtelserCacheData(ident = request.ident, fom = request.fom, tom = request.tom)
 
         if (request.ident == "25518735813") {
-            hentPeriodeFn(TypeYtelsePeriode.ENSLIG_FORSØRGER, data).invoke()
+            try {
+                ensligForsørgerClient.kastFeil()
+            } catch (e: Exception) {
+                secureLogger.error("Feilet", e)
+            }
+
+            try {
+                cacheManager.getCachedOrLoad("min-verdi", listOf(1)) {
+                    ensligForsørgerClient.kastFeil()
+                    it.map { it to it }.toMap()
+                }
+            } catch (e: Exception) {
+                secureLogger.error("Feilet 2", e)
+            }
             logger.info("Del 2")
         }
 
@@ -48,17 +62,6 @@ class YtelseService(
                 perioder.addAll(it.first)
                 hentetInformasjon.add(it.second)
             }
-
-        if (request.ident == "25518735813") {
-            logger.info("Del 3")
-            request.typer.distinct()
-                .map { hentPeriodeFn(it, data) }
-                .parallelt2()
-                .forEach {
-                    perioder.addAll(it.first)
-                    hentetInformasjon.add(it.second)
-                }
-        }
 
         return YtelsePerioderDto(
             perioder = perioder.sortedByDescending { it.tom },

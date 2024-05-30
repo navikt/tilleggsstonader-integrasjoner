@@ -31,4 +31,8 @@ class EnsligForsørgerClient(
         )
         return postForEntity<EnsligForsørgerPerioderResponse>(uriPerioder, request)
     }
+
+    fun kastFeil() = {
+        error("Feil")
+    }
 }
