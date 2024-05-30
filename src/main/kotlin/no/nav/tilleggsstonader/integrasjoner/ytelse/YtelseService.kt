@@ -37,7 +37,7 @@ class YtelseService(
         val data = HentYtelserCacheData(ident = request.ident, fom = request.fom, tom = request.tom)
 
         if (request.ident == "25518735813") {
-            hentPeriodeFn(TypeYtelsePeriode.ENSLIG_FORSØRGER, data)
+            hentPeriodeFn(TypeYtelsePeriode.ENSLIG_FORSØRGER, data).invoke()
             logger.info("Del 2")
         }
 
