@@ -60,7 +60,7 @@ class YtelseService(
             }
             logger.info("del 4")
             try {
-                cacheManager.getCachedOrLoad("min-verdi", listOf(1)) {
+                cacheManager.getCachedOrLoad("min-verdi2", listOf(1)) {
                     ensligForsørgerClient.hentPerioder(data.ident, data.fom, data.tom)
                     it.map { it to it }.toMap()
                 }
