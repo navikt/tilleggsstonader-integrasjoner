@@ -1,20 +1,25 @@
 package no.nav.tilleggsstonader.integrasjoner.ytelse
 
 import io.mockk.called
+import io.mockk.every
 import io.mockk.verify
 import no.nav.tilleggsstonader.integrasjoner.IntegrationTest
 import no.nav.tilleggsstonader.integrasjoner.aap.AAPClient
+import no.nav.tilleggsstonader.integrasjoner.aap.AAPPerioderResponse
 import no.nav.tilleggsstonader.integrasjoner.ensligforsørger.EnsligForsørgerClient
+import no.nav.tilleggsstonader.integrasjoner.ensligforsørger.EnsligForsørgerPerioderResponse
 import no.nav.tilleggsstonader.integrasjoner.etterlatte.EtterlatteClient
 import no.nav.tilleggsstonader.integrasjoner.mocks.AAPClientTestConfig.Companion.resetMock
 import no.nav.tilleggsstonader.integrasjoner.mocks.EnsligForsørgerClientTestConfig.Companion.resetMock
 import no.nav.tilleggsstonader.integrasjoner.mocks.EtterlatteClientTestConfig.Companion.resetMock
+import no.nav.tilleggsstonader.kontrakter.ytelse.StatusHentetInformasjon
 import no.nav.tilleggsstonader.kontrakter.ytelse.TypeYtelsePeriode
 import no.nav.tilleggsstonader.kontrakter.ytelse.YtelsePerioderRequest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.web.client.postForEntity
 import java.time.LocalDate
 
 class YtelseServiceTest : IntegrationTest() {
@@ -92,6 +97,28 @@ class YtelseServiceTest : IntegrationTest() {
         verify(exactly = 1) { etterlatteClient.hentPerioder(any(), any()) }
         verify { aapClient wasNot called }
         verify { ensligForsørgerClient wasNot called }
+    }
+
+    @Test
+    fun `skal håndtere feil fra en klient`() {
+        every { aapClient.hentPerioder(any(), any(), any()) } answers {
+            restTemplate.postForEntity<AAPPerioderResponse>("http://localhost:1234", null)
+                .body!!
+        }
+
+        every { ensligForsørgerClient.hentPerioder(any(), any(), any()) } answers {
+            restTemplate.postForEntity<EnsligForsørgerPerioderResponse>("http://localhost:1234", null)
+                .body!!
+        }
+
+        val typer = listOf(TypeYtelsePeriode.AAP)
+        val dto = ytelseService.hentYtelser(ytelsePerioderRequest(typer = typer))
+
+        assertThat(dto.perioder.isEmpty())
+        with(dto.hentetInformasjon.single()) {
+            assertThat(type).isEqualTo(TypeYtelsePeriode.AAP)
+            assertThat(status).isEqualTo(StatusHentetInformasjon.FEILET)
+        }
     }
 
     private fun ytelsePerioderRequest(
