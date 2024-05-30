@@ -19,7 +19,7 @@ class AAPClient(
 ) : AbstractRestClient(restTemplate) {
 
     val uriPerioder = UriComponentsBuilder.fromUri(baseUrl)
-        .pathSegment("perioder")
+        .pathSegment("perioder-som-ikke-finnes")
         .encode()
         .toUriString()
 

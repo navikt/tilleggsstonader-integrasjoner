@@ -34,6 +34,12 @@ class YtelseService(
         val hentetInformasjon = mutableListOf<HentetInformasjon>()
 
         val data = HentYtelserCacheData(ident = request.ident, fom = request.fom, tom = request.tom)
+
+        if (request.ident == "25518735813") {
+            hentPeriodeFn(TypeYtelsePeriode.AAP, data)
+            Thread.sleep(2000)
+        }
+
         request.typer.distinct()
             .map { hentPeriodeFn(it, data) }
             .parallelt()
