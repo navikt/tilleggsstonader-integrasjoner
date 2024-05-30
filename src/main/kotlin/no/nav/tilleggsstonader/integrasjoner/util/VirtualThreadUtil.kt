@@ -20,4 +20,16 @@ object VirtualThreadUtil {
             }.let { vt.invokeAll(it) }
         }.map { it.get() }
     }
+
+    fun <T> Collection<() -> T>.parallelt2(): List<T> {
+        val mdc = MDC.getCopyOfContextMap()
+        return Executors.newVirtualThreadPerTaskExecutor().use { vt ->
+            map { fn ->
+                Callable {
+                    MDC.setContextMap(mdc)
+                    fn()
+                }
+            }.let { vt.invokeAll(it) }.map { it.get() }
+        }
+    }
 }
