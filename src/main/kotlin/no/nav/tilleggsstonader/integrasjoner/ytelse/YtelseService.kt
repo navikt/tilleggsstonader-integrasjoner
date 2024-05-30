@@ -43,7 +43,7 @@ class YtelseService(
             } catch (e: Exception) {
                 secureLogger.error("Feilet", e)
             }
-
+            logger.info("del 2")
             try {
                 cacheManager.getCachedOrLoad("min-verdi", listOf(1)) {
                     ensligForsørgerClient.kastFeil()
@@ -52,7 +52,22 @@ class YtelseService(
             } catch (e: Exception) {
                 secureLogger.error("Feilet 2", e)
             }
-            logger.info("Del 2")
+            logger.info("del 3")
+            try {
+                ensligForsørgerClient.hentPerioder(data.ident, data.fom, data.tom)
+            } catch (e: Exception) {
+                secureLogger.error("Feilet 3", e)
+            }
+            logger.info("del 4")
+            try {
+                cacheManager.getCachedOrLoad("min-verdi", listOf(1)) {
+                    ensligForsørgerClient.hentPerioder(data.ident, data.fom, data.tom)
+                    it.map { it to it }.toMap()
+                }
+            } catch (e: Exception) {
+                secureLogger.error("Feilet 4", e)
+            }
+            logger.info("annet")
         }
 
         request.typer.distinct()
