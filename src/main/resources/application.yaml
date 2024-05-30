@@ -164,8 +164,8 @@ clients:
     uri: http://api-intern.aap
     scope: api://${CLIENT_ENV}-gcp.aap.api-intern/.default
   enslig:
-    uri: http://familie-ef-sak.teamfamilie
-    scope: api://${CLIENT_ENV}-gcp.teamfamilie.familie-ef-sak/.default
+    uri: http://familie-klage.teamfamilie
+    scope: api://${CLIENT_ENV}-gcp.teamfamilie.familie-klage/.default
   etterlatte:
     uri: http://etterlatte-samordning-vedtak.etterlatte
     scope: api://${CLIENT_ENV}-gcp.etterlatte.etterlatte-samordning-vedtak/.default
