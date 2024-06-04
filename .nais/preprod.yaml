@@ -56,6 +56,7 @@ spec:
       rules:
         - application: tilleggsstonader-sak
         - application: tilleggsstonader-soknad-api
+        - application: tilleggsstonader-klage
     outbound:
       external:
         - host: oppgave-q1.dev-fss-pub.nais.io
