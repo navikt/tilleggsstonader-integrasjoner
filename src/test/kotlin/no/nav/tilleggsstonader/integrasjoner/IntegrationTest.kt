@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.server.LocalServerPort
+import org.springframework.cache.CacheManager
 import org.springframework.http.HttpHeaders
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.junit.jupiter.SpringExtension
@@ -21,6 +22,9 @@ import org.springframework.web.client.RestTemplate
 @ActiveProfiles(
     "integrasjonstest",
     "mock-oauth",
+    "mock-aap",
+    "mock-enslig",
+    "mock-etterlatte",
 )
 @EnableMockOAuth2Server
 abstract class IntegrationTest {
@@ -38,6 +42,9 @@ abstract class IntegrationTest {
     @Autowired
     private lateinit var mockOAuth2Server: MockOAuth2Server
 
+    @Autowired
+    private lateinit var cacheManagers: List<CacheManager>
+
     protected val listAppender = initLoggingEventListAppender()
     protected val loggingEvents: MutableList<ILoggingEvent> = listAppender.list
 
@@ -46,6 +53,14 @@ abstract class IntegrationTest {
         loggingEvents.clear()
         headers.clear()
         clearClientMocks()
+        clearCache()
+    }
+
+    private fun clearCache() {
+        cacheManagers.forEach { cacheManager ->
+            cacheManager.cacheNames.mapNotNull { cacheName -> cacheManager.getCache(cacheName) }
+                .forEach { cache -> cache.clear() }
+        }
     }
 
     private fun clearClientMocks() {

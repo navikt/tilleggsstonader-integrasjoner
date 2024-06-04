@@ -15,7 +15,7 @@ class OpprettJournalpostRequest(
     val tittel: String? = null,
     val kanal: String? = null,
     val journalfoerendeEnhet: String? = null,
-    val eksternReferanseId: String? = null,
+    val eksternReferanseId: String,
     val sak: Sak? = null,
     val dokumenter: List<ArkivDokument> = ArrayList(),
 )
