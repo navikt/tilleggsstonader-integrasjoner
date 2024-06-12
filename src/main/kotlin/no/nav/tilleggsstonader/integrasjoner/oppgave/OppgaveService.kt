@@ -14,6 +14,7 @@ import no.nav.tilleggsstonader.kontrakter.oppgave.MappeDto
 import no.nav.tilleggsstonader.kontrakter.oppgave.Oppgave
 import no.nav.tilleggsstonader.kontrakter.oppgave.OpprettOppgaveRequest
 import no.nav.tilleggsstonader.kontrakter.oppgave.StatusEnum
+import no.nav.tilleggsstonader.libs.log.SecureLogger.secureLogger
 import no.nav.tilleggsstonader.libs.utils.osloNow
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
@@ -41,6 +42,8 @@ class OppgaveService(
 
     fun fordelOppgave(oppgaveId: Long, saksbehandler: String?, versjon: Int?): Oppgave {
         val oppgave = oppgaveClient.finnOppgaveMedId(oppgaveId)
+        logger.info("Fordeler oppgave=$oppgaveId")
+        secureLogger.info("Fordeler oppgave=$oppgaveId fra ${oppgave.tilordnetRessurs ?: "<ingen>"} til ${saksbehandler ?: "<ingen>"}")
 
         if (oppgave.status === StatusEnum.FERDIGSTILT) {
             throw OppslagException(
