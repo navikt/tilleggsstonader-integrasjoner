@@ -14,8 +14,8 @@ import no.nav.tilleggsstonader.integrasjoner.IntegrationTest
 import no.nav.tilleggsstonader.integrasjoner.util.FileUtil.readFile
 import no.nav.tilleggsstonader.integrasjoner.util.ProblemDetailUtil.catchProblemDetailException
 import no.nav.tilleggsstonader.integrasjoner.util.graphqlCompatible
+import no.nav.tilleggsstonader.kontrakter.felles.Arkivtema
 import no.nav.tilleggsstonader.kontrakter.felles.BrukerIdType
-import no.nav.tilleggsstonader.kontrakter.felles.Tema
 import no.nav.tilleggsstonader.kontrakter.journalpost.Bruker
 import no.nav.tilleggsstonader.kontrakter.journalpost.Journalpost
 import no.nav.tilleggsstonader.kontrakter.journalpost.JournalposterForBrukerRequest
@@ -94,7 +94,7 @@ class HentJournalpostControllerTest : IntegrationTest() {
         val request = JournalposterForBrukerRequest(
             brukerId = Bruker("12345678901", BrukerIdType.FNR),
             antall = 10,
-            tema = listOf(Tema.TSO),
+            tema = listOf(Arkivtema.TSO),
             journalposttype = listOf(Journalposttype.I),
             journalstatus = emptyList(),
         )
