@@ -5,6 +5,7 @@ import no.nav.tilleggsstonader.kontrakter.aktivitet.AktivitetArenaDto
 import no.nav.tilleggsstonader.kontrakter.aktivitet.Kilde
 import no.nav.tilleggsstonader.kontrakter.aktivitet.StatusAktivitet
 import no.nav.tilleggsstonader.libs.utils.osloDateNow
+import java.math.BigDecimal
 import java.time.LocalDate
 
 object AktivitetDtoMapper {
@@ -17,8 +18,8 @@ object AktivitetDtoMapper {
             typeNavn = response.aktivitetsnavn,
             status = mapStatus(response),
             statusArena = response.status?.name,
-            antallDagerPerUke = response.antallDagerPerUke,
-            prosentDeltakelse = response.prosentAktivitetsdeltakelse,
+            antallDagerPerUke = response.antallDagerPerUke?.takeIf { it != 0 },
+            prosentDeltakelse = response.prosentAktivitetsdeltakelse?.takeIf { it != BigDecimal.ZERO },
             erStønadsberettiget = response.erStoenadsberettigetAktivitet,
             erUtdanning = response.erUtdanningsaktivitet,
             arrangør = response.arrangoer?.takeIf { it.isNotBlank() },
