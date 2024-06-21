@@ -68,6 +68,7 @@ spec:
       external:
         - host: oppgave-q1.dev-fss-pub.nais.io
         - host: arena-api-q1.dev-fss-pub.nais.io
+        - host: saf-q2.dev-fss-pub.nais.io
 
   env:
     - name: SPRING_PROFILES_ACTIVE
