@@ -5,6 +5,7 @@ import no.nav.tilleggsstonader.integrasjoner.journalpost.client.SafHentDokumentC
 import no.nav.tilleggsstonader.integrasjoner.util.SikkerhetsContext
 import no.nav.tilleggsstonader.kontrakter.journalpost.Journalpost
 import no.nav.tilleggsstonader.kontrakter.journalpost.JournalposterForBrukerRequest
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
@@ -13,6 +14,8 @@ class JournalpostService @Autowired constructor(
     private val safClient: SafClient,
     private val safHentDokumentClient: SafHentDokumentClient,
 ) {
+
+    private val logger = LoggerFactory.getLogger(javaClass)
 
     fun hentSaksnummer(journalpostId: String): String? {
         val journalpost = safClient.hentJournalpost(journalpostId)
@@ -44,8 +47,11 @@ class JournalpostService @Autowired constructor(
     }
 
     private fun skalRutesMotQ2() = try {
-        SikkerhetsContext.hentSaksbehandlerEllerSystembruker()
+        val saksbehandler = SikkerhetsContext.hentSaksbehandlerEllerSystembruker()
+        logger.info("Henter saf-dokumenter med $saksbehandler")
+        saksbehandler
     } catch (e: Exception) {
+        logger.error("Feilet utleding av saksbehandler", e)
         ""
     } == "Z994214"
 }
