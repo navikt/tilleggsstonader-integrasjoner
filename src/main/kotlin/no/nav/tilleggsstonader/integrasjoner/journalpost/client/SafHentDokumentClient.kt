@@ -22,10 +22,15 @@ import java.net.URI
 @Service
 class SafHentDokumentClient(
     @Value("\${clients.saf.uri}") safBaseUrl: URI,
+    @Value("\${clients.saf2.uri}") saf2BaseUrl: URI,
     @Qualifier("azure") restTemplate: RestTemplate,
 ) : AbstractRestClient(restTemplate) {
 
     private val safHentdokumentUri = UriComponentsBuilder.fromUri(safBaseUrl).path(PATH_HENT_DOKUMENT)
+        .encode()
+        .toUriString()
+
+    private val saf2HentdokumentUri = UriComponentsBuilder.fromUri(saf2BaseUrl).path(PATH_HENT_DOKUMENT)
         .encode()
         .toUriString()
 
@@ -44,6 +49,21 @@ class SafHentDokumentClient(
                 "variantFormat" to variantFormat,
             )
             return getForEntity(safHentdokumentUri, httpHeaders(), uriVariables = uriVariables)
+        } catch (e: HttpClientErrorException.Forbidden) {
+            throw JournalpostForbiddenException(e.message, e)
+        } catch (e: Exception) {
+            throw JournalpostRestClientException(e.message, e, journalpostId)
+        }
+    }
+
+    fun hentDokument2(journalpostId: String, dokumentInfoId: String, variantFormat: String): ByteArray {
+        try {
+            val uriVariables = mapOf(
+                "journalpostId" to journalpostId,
+                "dokumentInfoId" to dokumentInfoId,
+                "variantFormat" to variantFormat,
+            )
+            return getForEntity(saf2HentdokumentUri, httpHeaders(), uriVariables = uriVariables)
         } catch (e: HttpClientErrorException.Forbidden) {
             throw JournalpostForbiddenException(e.message, e)
         } catch (e: Exception) {

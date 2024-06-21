@@ -2,6 +2,7 @@ package no.nav.tilleggsstonader.integrasjoner.journalpost
 
 import no.nav.tilleggsstonader.integrasjoner.journalpost.client.SafClient
 import no.nav.tilleggsstonader.integrasjoner.journalpost.client.SafHentDokumentClient
+import no.nav.tilleggsstonader.integrasjoner.util.SikkerhetsContext
 import no.nav.tilleggsstonader.kontrakter.journalpost.Journalpost
 import no.nav.tilleggsstonader.kontrakter.journalpost.JournalposterForBrukerRequest
 import org.springframework.beans.factory.annotation.Autowired
@@ -23,7 +24,11 @@ class JournalpostService @Autowired constructor(
     }
 
     fun hentJournalpost(journalpostId: String): Journalpost {
-        return safClient.hentJournalpost(journalpostId)
+        if (SikkerhetsContext.hentSaksbehandlerEllerSystembruker() == "Z994214") {
+            return safClient.hentJournalpost2(journalpostId)
+        } else {
+            return safClient.hentJournalpost(journalpostId)
+        }
     }
 
     fun finnJournalposter(journalposterForBrukerRequest: JournalposterForBrukerRequest): List<Journalpost> {
@@ -31,6 +36,10 @@ class JournalpostService @Autowired constructor(
     }
 
     fun hentDokument(journalpostId: String, dokumentInfoId: String, variantFormat: String): ByteArray {
-        return safHentDokumentClient.hentDokument(journalpostId, dokumentInfoId, variantFormat)
+        if (SikkerhetsContext.hentSaksbehandlerEllerSystembruker() == "Z994214") {
+            return safHentDokumentClient.hentDokument2(journalpostId, dokumentInfoId, variantFormat)
+        } else {
+            return safHentDokumentClient.hentDokument(journalpostId, dokumentInfoId, variantFormat)
+        }
     }
 }

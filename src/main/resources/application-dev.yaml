@@ -15,5 +15,9 @@ clients:
     scope: api://${CLIENT_ENV}-fss.teamdokumenthandtering.saf-q1/.default
   saf:
     # saf-q1.dev er på saf.dev
+    uri: https://saf.dev-fss-pub.nais.io
+    scope: api://${CLIENT_ENV}-fss.teamdokumenthandtering.saf-q1/.default
+  saf2:
+    # saf-q1.dev er på saf.dev
     uri: https://saf-q2.dev-fss-pub.nais.io
     scope: api://${CLIENT_ENV}-fss.teamdokumenthandtering.saf/.default

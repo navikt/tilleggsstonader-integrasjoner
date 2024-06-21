@@ -26,18 +26,28 @@ import java.net.URI
 @Service
 class SafClient(
     @Value("\${clients.saf.uri}") safBaseUrl: URI,
+    @Value("\${clients.saf2.uri}") safBase2Url: URI,
     @Qualifier("azure") restTemplate: RestTemplate,
 ) : AbstractRestClient(restTemplate) {
 
     private val safUri = UriComponentsBuilder.fromUri(safBaseUrl).pathSegment(PATH_GRAPHQL).toUriString()
+    private val saf2Uri = UriComponentsBuilder.fromUri(safBase2Url).pathSegment(PATH_GRAPHQL).toUriString()
 
     fun hentJournalpost(journalpostId: String): Journalpost {
+        return journalpost(journalpostId, safUri)
+    }
+
+    fun hentJournalpost2(journalpostId: String): Journalpost {
+        return journalpost(journalpostId, saf2Uri)
+    }
+
+    private fun journalpost(journalpostId: String, s: String): Journalpost {
         val safJournalpostRequest = SafJournalpostRequest(
             SafRequestVariabler(journalpostId),
             graphqlQuery("/saf/journalpostForId.graphql"),
         )
         val response = postForEntity<SafJournalpostResponse<SafJournalpostData>>(
-            safUri,
+            s,
             safJournalpostRequest,
             httpHeaders(),
         )
