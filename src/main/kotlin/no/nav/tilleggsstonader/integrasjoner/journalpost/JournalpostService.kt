@@ -24,10 +24,10 @@ class JournalpostService @Autowired constructor(
     }
 
     fun hentJournalpost(journalpostId: String): Journalpost {
-        if (SikkerhetsContext.hentSaksbehandlerEllerSystembruker() == "Z994214") {
-            return safClient.hentJournalpost2(journalpostId)
+        return if (skalRutesMotQ2()) {
+            safClient.hentJournalpost2(journalpostId)
         } else {
-            return safClient.hentJournalpost(journalpostId)
+            safClient.hentJournalpost(journalpostId)
         }
     }
 
@@ -36,10 +36,16 @@ class JournalpostService @Autowired constructor(
     }
 
     fun hentDokument(journalpostId: String, dokumentInfoId: String, variantFormat: String): ByteArray {
-        if (SikkerhetsContext.hentSaksbehandlerEllerSystembruker() == "Z994214") {
-            return safHentDokumentClient.hentDokument2(journalpostId, dokumentInfoId, variantFormat)
+        return if (skalRutesMotQ2()) {
+            safHentDokumentClient.hentDokument2(journalpostId, dokumentInfoId, variantFormat)
         } else {
-            return safHentDokumentClient.hentDokument(journalpostId, dokumentInfoId, variantFormat)
+            safHentDokumentClient.hentDokument(journalpostId, dokumentInfoId, variantFormat)
         }
     }
+
+    private fun skalRutesMotQ2() = try {
+        SikkerhetsContext.hentSaksbehandlerEllerSystembruker()
+    } catch (e: Exception) {
+        ""
+    } == "Z994214"
 }
