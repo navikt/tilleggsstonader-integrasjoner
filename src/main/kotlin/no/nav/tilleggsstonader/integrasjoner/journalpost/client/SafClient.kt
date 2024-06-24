@@ -80,7 +80,19 @@ class SafClient(
         return finnJournalposter(safJournalpostRequest)
     }
 
-    fun finnJournalposter(safJournalpostRequest: SafJournalpostRequest): List<Journalpost> {
+    fun finnJournalposter2(journalposterForBrukerRequest: JournalposterForBrukerRequest): List<Journalpost> {
+        val safJournalpostRequest = SafJournalpostRequest(
+            journalposterForBrukerRequest,
+            graphqlQuery("/saf/journalposterForBruker.graphql"),
+        )
+        return finnJournalposter2(safJournalpostRequest)
+    }
+
+    fun finnJournalposter2(safJournalpostRequest: SafJournalpostRequest): List<Journalpost> {
+        return finnJournalposter(safJournalpostRequest, saf2Uri)
+    }
+
+    fun finnJournalposter(safJournalpostRequest: SafJournalpostRequest, url: String = safUri): List<Journalpost> {
         val response =
             postForEntity<SafJournalpostResponse<SafJournalpostBrukerData>>(
                 safUri,

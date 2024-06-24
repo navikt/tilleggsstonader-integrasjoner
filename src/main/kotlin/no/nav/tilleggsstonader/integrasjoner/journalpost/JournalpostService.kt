@@ -35,7 +35,11 @@ class JournalpostService @Autowired constructor(
     }
 
     fun finnJournalposter(journalposterForBrukerRequest: JournalposterForBrukerRequest): List<Journalpost> {
-        return safClient.finnJournalposter(journalposterForBrukerRequest)
+        return if (skalRutesMotQ2()) {
+            safClient.finnJournalposter2(journalposterForBrukerRequest)
+        } else {
+            safClient.finnJournalposter(journalposterForBrukerRequest)
+        }
     }
 
     fun hentDokument(journalpostId: String, dokumentInfoId: String, variantFormat: String): ByteArray {
