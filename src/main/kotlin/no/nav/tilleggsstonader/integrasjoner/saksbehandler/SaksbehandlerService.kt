@@ -1,5 +1,6 @@
 package no.nav.tilleggsstonader.integrasjoner.saksbehandler
 
+import no.nav.tilleggsstonader.integrasjoner.azure.client.AzureGraphRestClient
 import no.nav.tilleggsstonader.kontrakter.felles.Saksbehandler
 import org.springframework.core.env.Environment
 import org.springframework.stereotype.Service
@@ -13,17 +14,6 @@ class SaksbehandlerService(
     private val lengdeNavIdent = 7
 
     fun hentSaksbehandler(id: String): Saksbehandler {
-        // TODO: Midlertidig for å få ut funksjonalitet. Fjern når ba-sak-e2e fases ut.
-        if (environment.activeProfiles.any { it == "e2e" }) {
-            return Saksbehandler(
-                azureId = UUID.randomUUID(),
-                navIdent = id,
-                fornavn = "Mocka",
-                etternavn = "Saksbehandler",
-                enhet = "4402",
-            )
-        }
-
         if (id == ID_VEDTAKSLØSNINGEN) {
             return Saksbehandler(
                 UUID.randomUUID(),
