@@ -2,7 +2,6 @@ package no.nav.tilleggsstonader.integrasjoner.azure.client
 
 import no.nav.tilleggsstonader.integrasjoner.azure.domene.AzureAdBruker
 import no.nav.tilleggsstonader.integrasjoner.azure.domene.AzureAdBrukere
-import no.nav.tilleggsstonader.integrasjoner.azure.domene.Grupper
 import no.nav.tilleggsstonader.libs.http.client.AbstractRestClient
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
@@ -46,16 +45,8 @@ class AzureGraphRestClient(
         )
     }
 
-    fun hentSaksbehandler(): AzureAdBruker {
-        return getForEntity(saksbehandlerUri.toString())
-    }
-
     fun hentSaksbehandler(id: String): AzureAdBruker {
         return getForEntity(saksbehandlerUri(id).toString())
-    }
-
-    fun hentGrupper(): Grupper {
-        return getForEntity(grupperUri.toString())
     }
 
     companion object {
