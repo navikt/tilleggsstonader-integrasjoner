@@ -169,3 +169,7 @@ clients:
   etterlatte:
     uri: http://etterlatte-samordning-vedtak.etterlatte
     scope: api://${CLIENT_ENV}-gcp.etterlatte.etterlatte-samordning-vedtak/.default
+
+
+AAD_GRAPH_API_URI: https://graph.microsoft.com/v1.0/
+AAD_GRAPH_SCOPE: https://graph.microsoft.com/.default
