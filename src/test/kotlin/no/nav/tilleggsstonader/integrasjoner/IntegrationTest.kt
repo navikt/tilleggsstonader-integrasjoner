@@ -25,6 +25,7 @@ import org.springframework.web.client.RestTemplate
     "mock-aap",
     "mock-enslig",
     "mock-etterlatte",
+    "mock-az-ad",
 )
 @EnableMockOAuth2Server
 abstract class IntegrationTest {

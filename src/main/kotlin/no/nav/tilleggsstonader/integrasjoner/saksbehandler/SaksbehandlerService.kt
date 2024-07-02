@@ -2,23 +2,22 @@ package no.nav.tilleggsstonader.integrasjoner.saksbehandler
 
 import no.nav.tilleggsstonader.integrasjoner.azure.client.AzureGraphRestClient
 import no.nav.tilleggsstonader.kontrakter.felles.Saksbehandler
-import org.springframework.core.env.Environment
 import org.springframework.stereotype.Service
 import java.util.UUID
 
 @Service
 class SaksbehandlerService(
-    private val azureGraphRestClient: AzureGraphRestClient,
-    private val environment: Environment,
+    private val azureGraphRestClient: AzureGraphRestClient
 ) {
     private val lengdeNavIdent = 7
 
     fun hentSaksbehandler(id: String): Saksbehandler {
+        //håntering av at operasjoner kan utføres av saksbehandlingsløsningen selv, og dermed ikke har ID i azure-ad
         if (id == ID_VEDTAKSLØSNINGEN) {
             return Saksbehandler(
                 UUID.randomUUID(),
                 ID_VEDTAKSLØSNINGEN,
-                "Vedtaksløsning",
+                "Tilleggsstønader Vedtakslønsning",
                 "Nav",
                 "9999",
             )
