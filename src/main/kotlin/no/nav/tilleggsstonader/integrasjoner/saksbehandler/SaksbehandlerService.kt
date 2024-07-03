@@ -7,12 +7,12 @@ import java.util.UUID
 
 @Service
 class SaksbehandlerService(
-    private val azureGraphRestClient: AzureGraphRestClient
+    private val azureGraphRestClient: AzureGraphRestClient,
 ) {
     private val lengdeNavIdent = 7
 
     fun hentSaksbehandler(id: String): Saksbehandler {
-        //håntering av at operasjoner kan utføres av saksbehandlingsløsningen selv, og dermed ikke har ID i azure-ad
+        // håntering av at operasjoner kan utføres av saksbehandlingsløsningen selv, og dermed ikke har ID i azure-ad
         if (id == ID_VEDTAKSLØSNINGEN) {
             return Saksbehandler(
                 UUID.randomUUID(),

@@ -3,20 +3,16 @@ package no.nav.tilleggsstonader.integrasjoner.saksbehandler
 import no.nav.tilleggsstonader.integrasjoner.IntegrationTest
 import no.nav.tilleggsstonader.integrasjoner.azure.client.AzureGraphRestClient
 import no.nav.tilleggsstonader.integrasjoner.mocks.AzureADClientTestConfig
-
-
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-
 import java.util.UUID
 
-
-class SaksbehandlerControllerTest() :IntegrationTest()  {
+class SaksbehandlerControllerTest() : IntegrationTest() {
     @Autowired
     lateinit var azureGraphRestClient: AzureGraphRestClient
+
     @Autowired
     lateinit var saksbehandlerService: SaksbehandlerService
 
@@ -24,7 +20,6 @@ class SaksbehandlerControllerTest() :IntegrationTest()  {
     fun setUp() {
         AzureADClientTestConfig.resetMock(azureGraphRestClient)
     }
-
 
     @Test
     fun `skal kalle korrekt tjeneste for oppslag på id`() {
