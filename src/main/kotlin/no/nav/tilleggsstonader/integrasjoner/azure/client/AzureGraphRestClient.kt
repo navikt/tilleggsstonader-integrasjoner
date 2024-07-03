@@ -14,7 +14,7 @@ import java.net.URI
 @Service
 class AzureGraphRestClient(
     @Qualifier("azure") restTemplate: RestTemplate,
-    @Value("\${AAD_GRAPH_API_URI}") private val aadGraphURI: URI,
+    @Value("\${clients.azure-graph.uri}") private val aadGraphURI: URI,
 ) :
     AbstractRestClient(restTemplate) {
     val saksbehandlerUri: URI = UriComponentsBuilder.fromUri(aadGraphURI).pathSegment(ME).build().toUri()
