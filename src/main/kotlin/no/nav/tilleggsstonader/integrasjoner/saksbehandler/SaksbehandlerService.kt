@@ -15,11 +15,11 @@ class SaksbehandlerService(
         // håntering av at operasjoner kan utføres av saksbehandlingsløsningen selv, og dermed ikke har ID i azure-ad
         if (id == ID_VEDTAKSLØSNINGEN) {
             return Saksbehandler(
-                UUID.randomUUID(),
-                ID_VEDTAKSLØSNINGEN,
-                "Tilleggsstønader Vedtakslønsning",
-                "Nav",
-                "9999",
+                azureId = UUID.randomUUID(),
+                navIdent = ID_VEDTAKSLØSNINGEN,
+                fornavn = "Tilleggsstønader Vedtaksløsning",
+                etternavn = "Nav",
+                enhet = "9999",
             )
         }
 
@@ -36,16 +36,13 @@ class SaksbehandlerService(
             }
 
         return Saksbehandler(
-            azureAdBruker.id,
-            azureAdBruker.onPremisesSamAccountName,
-            azureAdBruker.givenName,
-            azureAdBruker.surname,
-            azureAdBruker.streetAddress,
+            azureId = azureAdBruker.id,
+            navIdent = azureAdBruker.onPremisesSamAccountName,
+            fornavn = azureAdBruker.givenName,
+            etternavn = azureAdBruker.surname,
+            enhet = azureAdBruker.streetAddress, // sic!
         )
     }
-
-    fun hentNavIdent(saksbehandlerId: String): String =
-        saksbehandlerId.takeIf { it.length == lengdeNavIdent } ?: hentSaksbehandler(saksbehandlerId).navIdent
 
     companion object {
         const val ID_VEDTAKSLØSNINGEN = "VL"

@@ -17,7 +17,6 @@ class AzureGraphRestClient(
     @Value("\${clients.azure-graph.uri}") private val aadGraphURI: URI,
 ) :
     AbstractRestClient(restTemplate) {
-    val saksbehandlerUri: URI = UriComponentsBuilder.fromUri(aadGraphURI).pathSegment(ME).build().toUri()
 
     fun saksbehandlerUri(id: String): URI =
         UriComponentsBuilder.fromUri(aadGraphURI)
@@ -34,8 +33,6 @@ class AzureGraphRestClient(
             .buildAndExpand(navIdent)
             .toUri()
 
-    val grupperUri: URI = UriComponentsBuilder.fromUri(aadGraphURI).pathSegment(ME, GRUPPER).build().toUri()
-
     fun finnSaksbehandler(navIdent: String): AzureAdBrukere {
         return getForEntity(
             saksbehandlersøkUri(navIdent).toString(),
@@ -50,9 +47,7 @@ class AzureGraphRestClient(
     }
 
     companion object {
-        private const val ME = "me"
         private const val USERS = "users"
-        private const val GRUPPER = "memberOf"
         private const val FELTER = "givenName,surname,onPremisesSamAccountName,id,userPrincipalName,streetAddress"
     }
 }
