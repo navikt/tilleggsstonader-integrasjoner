@@ -13,17 +13,17 @@ import java.net.URI
 
 @Service
 class AzureGraphRestClient(
-    @Qualifier("azure") restTemplate: RestTemplate,
+    @Qualifier("utenAuth") restTemplate: RestTemplate,
     @Value("\${clients.azure-graph.uri}") private val aadGraphURI: URI,
 ) :
     AbstractRestClient(restTemplate) {
 
-    fun saksbehandlerUri(id: String): String =
+    fun saksbehandlerUri(id: String): URI =
         UriComponentsBuilder.fromUri(aadGraphURI)
             .pathSegment(USERS, id)
             .queryParam("\$select", FELTER)
             .build()
-            .toUriString()
+            .toUri()
 
     fun saksbehandlersøkUri(navIdent: String): URI =
         UriComponentsBuilder.fromUri(aadGraphURI)
@@ -43,7 +43,7 @@ class AzureGraphRestClient(
     }
 
     fun hentSaksbehandler(id: String): AzureAdBruker {
-        return getForEntity(saksbehandlerUri(id))
+        return getForEntity(saksbehandlerUri(id).toString())
     }
 
     companion object {
