@@ -18,12 +18,12 @@ class AzureGraphRestClient(
 ) :
     AbstractRestClient(restTemplate) {
 
-    fun saksbehandlerUri(id: String): URI =
+    fun saksbehandlerUri(id: String): String =
         UriComponentsBuilder.fromUri(aadGraphURI)
             .pathSegment(USERS, id)
             .queryParam("\$select", FELTER)
             .build()
-            .toUri()
+            .toUriString()
 
     fun saksbehandlersøkUri(navIdent: String): URI =
         UriComponentsBuilder.fromUri(aadGraphURI)
@@ -43,7 +43,7 @@ class AzureGraphRestClient(
     }
 
     fun hentSaksbehandler(id: String): AzureAdBruker {
-        return getForEntity(saksbehandlerUri(id).toString())
+        return getForEntity(saksbehandlerUri(id))
     }
 
     companion object {
