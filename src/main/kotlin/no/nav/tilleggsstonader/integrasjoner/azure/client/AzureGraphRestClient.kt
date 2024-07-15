@@ -28,7 +28,7 @@ class AzureGraphRestClient(
     fun saksbehandlersøkUri(navIdent: String): URI =
         UriComponentsBuilder.fromUri(aadGraphURI)
             .pathSegment(USERS)
-            .queryParam("\$search", "\"onPremisesSamAccountName:{navIdent}\"")
+            .queryParam("\$search", FELTSØKPARAM)
             .queryParam("\$select", FELTER)
             .buildAndExpand(navIdent)
             .toUri()
@@ -49,5 +49,6 @@ class AzureGraphRestClient(
     companion object {
         private const val USERS = "users"
         private const val FELTER = "givenName,surname,onPremisesSamAccountName,id,userPrincipalName,streetAddress"
+        private const val FELTSØKPARAM = "onPremisesSamAccountName:{navIdent}"
     }
 }
