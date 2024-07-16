@@ -32,7 +32,6 @@ class AzureGraphRestClient(
             .queryParam("\$select", FELTER)
             .encode().toUriString()
 
-
     fun finnSaksbehandler(navIdent: String): AzureAdBrukere {
         return getForEntity(
             saksbehandlersøkUri(navIdent).toString(),
