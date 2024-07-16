@@ -11,6 +11,10 @@ import org.springframework.web.client.RestOperations
 import org.springframework.web.util.UriComponentsBuilder
 import java.net.URI
 
+/**  TODO: Bruker familie sin AbstractRestClient og RestOperations for å få at kallet går igjennom til Azure
+ * se favro for forklaring og hva problemet er https://favro.com/organization/98c34fb974ce445eac854de0/4d617346d79341c7fbd9a40a?card=NAV-21832
+ */
+
 @Service
 class AzureGraphRestClient(
     @Qualifier("azure") restTemplate: RestOperations,
@@ -28,7 +32,7 @@ class AzureGraphRestClient(
     fun saksbehandlersøkUri(navIdent: String): URI =
         UriComponentsBuilder.fromUri(aadGraphURI)
             .pathSegment(USERS)
-            .queryParam("\$search", "\"onPremisesSamAccountName:{navIdent}\"")
+            .queryParam("\$search", "\"onPremisesSamAccountName:{navIdent}\"") // Denne linjen blir det feilencoding på mot azureGraph
             .queryParam("\$select", FELTER)
             .buildAndExpand(navIdent)
             .toUri()
