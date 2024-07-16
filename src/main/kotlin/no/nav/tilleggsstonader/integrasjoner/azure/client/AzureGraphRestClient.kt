@@ -30,6 +30,7 @@ class AzureGraphRestClient(
             .pathSegment(USERS)
             .queryParam("\$search", "\"onPremisesSamAccountName:{navIdent}\"")
             .queryParam("\$select", FELTER)
+            .buildAndExpand(navIdent)
             .encode().toUriString()
 
     fun finnSaksbehandler(navIdent: String): AzureAdBrukere {
