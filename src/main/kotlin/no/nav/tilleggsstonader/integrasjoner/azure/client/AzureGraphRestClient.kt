@@ -3,13 +3,11 @@ package no.nav.tilleggsstonader.integrasjoner.azure.client
 import no.nav.familie.http.client.AbstractRestClient
 import no.nav.tilleggsstonader.integrasjoner.azure.domene.AzureAdBruker
 import no.nav.tilleggsstonader.integrasjoner.azure.domene.AzureAdBrukere
-
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpHeaders
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestOperations
-import org.springframework.web.client.RestTemplate
 import org.springframework.web.util.UriComponentsBuilder
 import java.net.URI
 
