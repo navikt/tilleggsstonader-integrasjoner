@@ -13,7 +13,7 @@ import java.net.URI
 
 @Service
 class AzureGraphRestClient(
-    @Qualifier("jwtBearer") restTemplate: RestTemplate,
+    @Qualifier("azure") restTemplate: RestTemplate,
     @Value("\${clients.azure-graph.uri}") private val aadGraphURI: URI,
 ) :
     AbstractRestClient(restTemplate) {
@@ -25,13 +25,13 @@ class AzureGraphRestClient(
             .build()
             .toUri()
 
-    fun saksbehandlersøkUri(navIdent: String): URI =
+    fun saksbehandlersøkUri(navIdent: String): String =
         UriComponentsBuilder.fromUri(aadGraphURI)
             .pathSegment(USERS)
-            .queryParam("\$search", FELTSØKPARAM)
+            .queryParam("\$search", "\"onPremisesSamAccountName:{navIdent}\"")
             .queryParam("\$select", FELTER)
-            .buildAndExpand(navIdent)
-            .toUri()
+            .encode().toUriString()
+
 
     fun finnSaksbehandler(navIdent: String): AzureAdBrukere {
         return getForEntity(
@@ -49,6 +49,5 @@ class AzureGraphRestClient(
     companion object {
         private const val USERS = "users"
         private const val FELTER = "givenName,surname,onPremisesSamAccountName,id,userPrincipalName,streetAddress"
-        private const val FELTSØKPARAM = "onPremisesSamAccountName:{navIdent}"
     }
 }
