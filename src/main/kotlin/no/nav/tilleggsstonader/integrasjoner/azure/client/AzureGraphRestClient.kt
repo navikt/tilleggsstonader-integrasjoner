@@ -20,7 +20,7 @@ class AzureGraphRestClient(
     @Qualifier("azure") restTemplate: RestOperations,
     @Value("\${clients.azure-graph.uri}") private val aadGraphURI: URI,
 ) :
-    AbstractRestClient(restTemplate, "azureGraph test") {
+    AbstractRestClient(restTemplate, "azureGraph-ts-integrasjoner") {
 
     fun saksbehandlerUri(id: String): URI =
         UriComponentsBuilder.fromUri(aadGraphURI)
