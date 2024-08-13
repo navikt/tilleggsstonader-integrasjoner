@@ -8,12 +8,11 @@ clients:
     uri: https://oppgave-q1.dev-fss-pub.nais.io
     scope: api://${CLIENT_ENV}-fss.oppgavehandtering.oppgave-q1/.default
   dokarkiv:
-    uri: https://dokarkiv.dev-fss-pub.nais.io
-    scope: api://${CLIENT_ENV}-fss.teamdokumenthandtering.dokarkiv-q1/.default
+    uri: https://dokarkiv.dev.intern.nav.no # kjører i q2
+    scope: api://${CLIENT_ENV}-fss.teamdokumenthandtering.dokarkiv/.default
   dokdist:
-    uri: https://dokdistfordeling-q1.dev-fss-pub.nais.io
-    scope: api://${CLIENT_ENV}-fss.teamdokumenthandtering.saf-q1/.default
+    uri: https://dokdistfordeling.dev.intern.nav.no # kjører i q2
+    scope: api://${CLIENT_ENV}-fss.teamdokumenthandtering.saf/.default
   saf:
-    # saf-q1.dev er på saf.dev
-    uri: https://saf.dev-fss-pub.nais.io
-    scope: api://${CLIENT_ENV}-fss.teamdokumenthandtering.saf-q1/.default
+    uri: https://saf.dev.intern.nav.no # kjører i q2
+    scope: api://${CLIENT_ENV}-fss.teamdokumenthandtering.saf/.default
