@@ -5,8 +5,8 @@ clients:
     uri: https://arena-api-q1.dev-fss-pub.nais.io
     scope: api://${CLIENT_ENV}-fss.teamarenanais.arena-api-q1/.default
   oppgave:
-    uri: https://oppgave-q1.dev-fss-pub.nais.io
-    scope: api://${CLIENT_ENV}-fss.oppgavehandtering.oppgave-q1/.default
+    uri: https://oppgave.dev-fss-pub.nais.io
+    scope: api://${CLIENT_ENV}-fss.oppgavehandtering.oppgave/.default
   dokarkiv:
     uri: https://dokarkiv.dev.intern.nav.no # kjører i q2
     scope: api://${CLIENT_ENV}-fss.teamdokumenthandtering.dokarkiv/.default
