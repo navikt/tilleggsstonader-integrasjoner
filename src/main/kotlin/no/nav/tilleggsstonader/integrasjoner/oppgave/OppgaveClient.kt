@@ -85,9 +85,9 @@ class OppgaveClient(
 
     private fun finnOppgave(queryParams: QueryParams) =
         getForEntity<FinnOppgaveResponseDto>(
-            buildOppgaveRequestUri(queryParams),
-            httpHeaders(),
-            queryParams.tilUriVariables(),
+            uri = buildOppgaveRequestUri(queryParams),
+            httpHeaders = httpHeaders(),
+            uriVariables = queryParams.tilUriVariables(),
         )
 
     fun finnMapper(finnMappeRequest: FinnMappeRequest): FinnMappeResponseDto {
