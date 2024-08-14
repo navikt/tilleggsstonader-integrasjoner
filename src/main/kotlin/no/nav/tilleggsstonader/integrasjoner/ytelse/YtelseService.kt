@@ -78,8 +78,9 @@ class YtelseService(
         return perioder.perioder.map {
             YtelsePeriode(
                 type = TypeYtelsePeriode.AAP,
-                fom = it.fraOgMedDato,
-                tom = it.tilOgMedDato,
+                fom = it.periode.fraOgMedDato,
+                tom = it.periode.tilOgMedDato,
+                aapErFerdigAvklart = it.aktivitetsfaseNavn == "Ferdig avklart",
             )
         }
     }
