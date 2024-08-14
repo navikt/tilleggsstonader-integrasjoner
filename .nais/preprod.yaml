@@ -66,8 +66,10 @@ spec:
         - application: etterlatte-samordning-vedtak
           namespace: etterlatte
       external:
+        - host: saf-q2.dev-fss-pub.nais.io
         - host: oppgave.dev-fss-pub.nais.io
         - host: arena-api-q1.dev-fss-pub.nais.io
+        - host: dokdistfordeling.dev-fss-pub.nais.io
 
   env:
     - name: SPRING_PROFILES_ACTIVE
