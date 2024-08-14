@@ -73,29 +73,29 @@ class SafClient(
     fun finnJournalposter(safJournalpostRequest: SafJournalpostRequest): List<Journalpost> {
         val response =
             postForEntity<SafJournalpostResponse<SafJournalpostBrukerData>>(
-                safUri,
-                safJournalpostRequest,
-                httpHeaders(),
+                uri = safUri,
+                payload = safJournalpostRequest,
+                httpHeaders = httpHeaders(),
             )
 
         if (!response.harFeil()) {
             return response.data?.dokumentoversiktBruker?.journalposter
                 ?: throw JournalpostRequestException(
-                    "Kan ikke hente journalposter",
-                    null,
-                    safJournalpostRequest,
+                    message = "Kan ikke hente journalposter",
+                    cause = null,
+                    safJournalpostRequest = safJournalpostRequest,
                 )
         } else {
             val tilgangFeil =
-                response.errors?.firstOrNull { it.message?.contains("Tilgang til ressurs ble avvist") == true }
+                response.errors?.firstOrNull { it.message.contains("Tilgang til ressurs ble avvist") }
 
             if (tilgangFeil != null) {
                 throw JournalpostForbiddenException(tilgangFeil.message)
             } else {
                 throw JournalpostRequestException(
-                    "Kan ikke hente journalposter " + response.errors?.toString(),
-                    null,
-                    safJournalpostRequest,
+                    message = "Kan ikke hente journalposter " + response.errors?.toString(),
+                    cause = null,
+                    safJournalpostRequest = safJournalpostRequest,
                 )
             }
         }
