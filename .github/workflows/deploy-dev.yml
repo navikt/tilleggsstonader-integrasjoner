@@ -6,5 +6,5 @@ jobs:
   build:
     uses: navikt/tilleggsstonader/.github/workflows/java-build-and-deploy.yml@main
     with:
-      dev-cluster: "dev-gcp"
-      dev-resource: ".nais/preprod.yaml"
+      cluster: "dev-gcp"
+      resource: ".nais/preprod.yaml"
