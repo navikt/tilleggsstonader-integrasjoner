@@ -3,11 +3,11 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  build-and-deploy:
+    name: "Bygger app og deployer til dev"
     uses: navikt/tilleggsstonader/.github/workflows/java-build-and-deploy.yml@main
     secrets: inherit
     permissions:
-      contents: "read"
       id-token: "write"
     with:
       cluster: "dev-gcp"
