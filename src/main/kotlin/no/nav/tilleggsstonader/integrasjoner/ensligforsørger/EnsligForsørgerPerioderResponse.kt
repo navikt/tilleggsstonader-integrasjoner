@@ -2,7 +2,6 @@ package no.nav.tilleggsstonader.integrasjoner.ensligforsørger
 
 import java.time.LocalDate
 
-
 data class EnsligForsørgerPerioderResponse(
     val data: EnsligForsørgerPerioder,
 )
