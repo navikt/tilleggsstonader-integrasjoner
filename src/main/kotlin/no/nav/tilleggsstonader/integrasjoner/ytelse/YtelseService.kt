@@ -5,6 +5,7 @@ import no.nav.tilleggsstonader.integrasjoner.ensligforsørger.EnsligForsørgerCl
 import no.nav.tilleggsstonader.integrasjoner.etterlatte.EtterlatteClient
 import no.nav.tilleggsstonader.integrasjoner.infrastruktur.config.getValue
 import no.nav.tilleggsstonader.integrasjoner.util.VirtualThreadUtil.parallelt
+import no.nav.tilleggsstonader.kontrakter.ytelse.EnsligForsørgerStønadstype
 import no.nav.tilleggsstonader.kontrakter.ytelse.HentetInformasjon
 import no.nav.tilleggsstonader.kontrakter.ytelse.StatusHentetInformasjon
 import no.nav.tilleggsstonader.kontrakter.ytelse.TypeYtelsePeriode
@@ -94,6 +95,7 @@ class YtelseService(
                 type = TypeYtelsePeriode.ENSLIG_FORSØRGER,
                 fom = it.fomDato,
                 tom = it.tomDato,
+                ensligForsørgerStønadstype = EnsligForsørgerStønadstype.valueOf(it.stønadstype.name),
             )
         }
     }
