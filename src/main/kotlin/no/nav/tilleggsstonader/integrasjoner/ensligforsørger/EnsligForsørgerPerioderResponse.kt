@@ -20,4 +20,5 @@ data class EnsligForsørgerPeriode(
 enum class EnsligForsørgerStønadstype {
     OVERGANGSSTØNAD,
     SKOLEPENGER,
+    BARNETILSYN,
 }
