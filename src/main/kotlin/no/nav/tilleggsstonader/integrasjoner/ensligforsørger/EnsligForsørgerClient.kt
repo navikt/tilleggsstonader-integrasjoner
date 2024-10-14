@@ -19,7 +19,7 @@ class EnsligForsørgerClient(
 ) : AbstractRestClient(restTemplate) {
 
     val uriPerioder = UriComponentsBuilder.fromUri(baseUrl)
-        .pathSegment("api", "ekstern", "perioder", "overgangsstonad-og-skolepenger")
+        .pathSegment("api", "ekstern", "perioder", "perioder-for-ytelser")
         .encode()
         .toUriString()
 
