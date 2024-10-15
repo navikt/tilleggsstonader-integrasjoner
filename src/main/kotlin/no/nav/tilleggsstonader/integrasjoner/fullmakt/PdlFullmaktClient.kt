@@ -1,14 +1,14 @@
-package no.nav.tilleggsstonader.integrasjoner.fullmakt;
+package no.nav.tilleggsstonader.integrasjoner.fullmakt
 
 import no.nav.tilleggsstonader.libs.http.client.AbstractRestClient
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.beans.factory.annotation.Qualifier
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.stereotype.Component
+import org.springframework.web.client.RestTemplate
 import org.springframework.web.util.UriComponentsBuilder
 import java.util.UUID
 
-import java.net.URI;
+import java.net.URI
 import java.time.LocalDate
 import java.time.LocalDateTime
 
@@ -18,20 +18,32 @@ class PdlFullmaktClient(
     @Qualifier("azure") restTemplate: RestTemplate,
 ) : AbstractRestClient(restTemplate) {
 
-    fun hentFullmaktsgiver(identRequest: FullmaktIdentRequest): List<Fullmaktsgiver> {
+    fun hentFullmektige(fullmaktsgiversIdent: String): List<FullmektigDto> {
         val uri = UriComponentsBuilder.fromUri(baseUrl)
             .pathSegment("api", "internbruker", "fullmaktsgiver")
             .encode().toUriString()
 
-        return postForEntity<List<Fullmaktsgiver>>(
+        return postForEntity<List<FullmaktsgiverPldDto>>(
             uri = uri,
-            payload = identRequest,
-        )
+            payload = FullmaktIdentPdlRequest(fullmaktsgiversIdent),
+        ).map { it.tilFullmektigDto() }
     }
 }
 
-// TODO: Flytt til kontrakter
-data class Fullmaktsgiver(
+// TODO: Legg i kontrakter
+data class FullmektigDto(
+    val fullmektigIdent: String,
+    val fullmektigNavn: String? = null,
+    val gyldigFraOgMed: LocalDate,
+    val gyldigTilOgMed: LocalDate,
+    val temaer: List<String>,
+)
+
+private data class FullmaktIdentPdlRequest(
+    private val ident: String,
+)
+
+private data class FullmaktsgiverPldDto(
     val fullmaktId: Int,
     val registrert: LocalDateTime,
     val registrertAv: String,
@@ -40,7 +52,7 @@ data class Fullmaktsgiver(
     val opphoert: Boolean,
     val fullmaktsgiver: String,
     val fullmektig: String,
-    val omraade: List<OmrådeMedHandling>,
+    val omraade: List<OmrådePldDto>,
     val gyldigFraOgMed: LocalDate,
     val gyldigTilOgMed: LocalDate,
     val fullmaktUuid: UUID,
@@ -50,15 +62,24 @@ data class Fullmaktsgiver(
     val kilde: String,
     val fullmaktsgiverNavn: String,
     val fullmektigsNavn: String,
-)
+) {
+    fun tilFullmektigDto(): FullmektigDto {
+        return FullmektigDto(
+            fullmektigIdent = fullmektig,
+            fullmektigNavn = fullmektigsNavn,
+            gyldigFraOgMed = gyldigFraOgMed,
+            gyldigTilOgMed = gyldigTilOgMed,
+            temaer = omraade.map { it.tema }
+        )
+    }
+}
 
-
-data class OmrådeMedHandling(
+private data class OmrådePldDto(
     val tema: String,
     val handling: Handling,
 )
 
-enum class Handling {
+private enum class Handling {
     LES,
     KOMMUNISER,
     SKRIV

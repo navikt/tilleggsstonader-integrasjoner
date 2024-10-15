@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RestController
 class FullmaktController(
     val fullmaktClient: PdlFullmaktClient,
 ) {
-    @PostMapping("fullmaktsgiver")
-    fun hentFullmaktsgiver(identRequest: IdentRequest): List<Fullmaktsgiver> {
-        return fullmaktClient.hentFullmaktsgiver(identRequest.tilFullmaktIdentRequest())
+    @PostMapping("fullmektige")
+    fun hentFullmektige(fullmaktsgiver: IdentRequest): List<FullmektigDto> {
+        return fullmaktClient.hentFullmektige(fullmaktsgiver.ident)
     }
 }
