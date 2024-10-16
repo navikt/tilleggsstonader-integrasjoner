@@ -11,6 +11,7 @@ import java.util.UUID
 import java.net.URI
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.util.Base64
 
 @Component
 class PdlFullmaktClient(
@@ -25,7 +26,7 @@ class PdlFullmaktClient(
 
         return postForEntity<List<FullmaktsgiverPldDto>>(
             uri = uri,
-            payload = FullmaktIdentPdlRequest(fullmaktsgiversIdent),
+            payload = FullmaktIdentPdlRequest.create(fullmaktsgiversIdent),
         ).map { it.tilFullmektigDto() }
     }
 }
@@ -39,9 +40,16 @@ data class FullmektigDto(
     val temaer: List<String>,
 )
 
-private data class FullmaktIdentPdlRequest(
-    val ident: String,
-)
+class FullmaktIdentPdlRequest private constructor(
+    val ident: String, // Base64 encoded
+) {
+    companion object {
+        fun create(ident: String): FullmaktIdentPdlRequest {
+            val encodedIdent = Base64.getEncoder().encodeToString(ident.toByteArray())
+            return FullmaktIdentPdlRequest(encodedIdent)
+        }
+    }
+}
 
 private data class FullmaktsgiverPldDto(
     val fullmaktId: Int,
