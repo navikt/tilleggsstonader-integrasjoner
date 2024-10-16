@@ -46,7 +46,7 @@ data class FullmektigDto(
 )
 
 private data class FullmaktIdentPdlRequest(
-    private val ident: String,
+    val ident: String,
 )
 
 private data class FullmaktsgiverPldDto(
