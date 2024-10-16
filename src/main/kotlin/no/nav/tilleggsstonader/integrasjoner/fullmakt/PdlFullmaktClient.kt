@@ -23,6 +23,8 @@ class PdlFullmaktClient(
             .pathSegment("api", "internbruker", "fullmaktsgiver")
             .encode().toUriString()
 
+        log.info("fullmaktsgiversIdent: {}", fullmaktsgiversIdent)
+
         val temp = postForEntity<String>(
             uri = uri,
             payload = FullmaktIdentPdlRequest(fullmaktsgiversIdent),
