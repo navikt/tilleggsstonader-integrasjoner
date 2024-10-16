@@ -16,6 +16,6 @@ clients:
   saf:
     uri: https://saf-q2.dev-fss-pub.nais.io # kjører i q2
     scope: api://${CLIENT_ENV}-fss.teamdokumenthandtering.saf/.default
-  pdl_fullmakt:
+  pdl-fullmakt:
     uri: https://pdl-fullmakt.dev-fss-pub.nais.io
     scope: api://dev-fss.pdl.pdl-fullmakt/.default
