@@ -15,7 +15,7 @@ import java.time.LocalDateTime
 @Component
 class PdlFullmaktClient(
     @Value("\${clients.pdl-fullmakt.uri}") private val baseUrl: URI,
-    @Qualifier("azure") restTemplate: RestTemplate,
+    @Qualifier("azureClientCredential") restTemplate: RestTemplate,
 ) : AbstractRestClient(restTemplate) {
 
     fun hentFullmektige(fullmaktsgiversIdent: String): String {
