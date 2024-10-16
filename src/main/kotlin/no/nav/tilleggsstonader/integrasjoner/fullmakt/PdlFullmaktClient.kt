@@ -1,6 +1,8 @@
 package no.nav.tilleggsstonader.integrasjoner.fullmakt
 
 import no.nav.tilleggsstonader.libs.http.client.AbstractRestClient
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
@@ -18,16 +20,19 @@ class PdlFullmaktClient(
     @Value("\${clients.pdl-fullmakt.uri}") private val baseUrl: URI,
     @Qualifier("azureClientCredential") restTemplate: RestTemplate,
 ) : AbstractRestClient(restTemplate) {
+    private val logger = LoggerFactory.getLogger(javaClass)
 
     fun hentFullmektige(fullmaktsgiversIdent: String): List<FullmektigDto> {
         val uri = UriComponentsBuilder.fromUri(baseUrl)
             .pathSegment("api", "internbruker", "fullmaktsgiver")
             .encode().toUriString()
 
+        logger.info("Henter fullmektige fra 'pdl-fullmakt'...")
+
         return postForEntity<List<FullmaktsgiverPldDto>>(
             uri = uri,
             payload = FullmaktIdentPdlRequest.create(fullmaktsgiversIdent),
-        ).map { it.tilFullmektigDto() }
+        ).map { it.tilFullmektigDto() }.also { logger.info("Fant n={} fullmektige", it.size) }
     }
 }
 
