@@ -16,7 +16,7 @@ class FullmaktController(
     val fullmaktClient: PdlFullmaktClient,
 ) {
     @PostMapping("fullmektige")
-    fun hentFullmektige(@RequestBody fullmaktsgiver: IdentRequest): List<FullmektigDto> {
+    fun hentFullmektige(@RequestBody fullmaktsgiver: IdentRequest): String {
         return fullmaktClient.hentFullmektige(fullmaktsgiver.ident)
     }
 }

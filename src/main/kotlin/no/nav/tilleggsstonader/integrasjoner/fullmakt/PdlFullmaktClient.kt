@@ -18,15 +18,19 @@ class PdlFullmaktClient(
     @Qualifier("azure") restTemplate: RestTemplate,
 ) : AbstractRestClient(restTemplate) {
 
-    fun hentFullmektige(fullmaktsgiversIdent: String): List<FullmektigDto> {
+    fun hentFullmektige(fullmaktsgiversIdent: String): String {
         val uri = UriComponentsBuilder.fromUri(baseUrl)
             .pathSegment("api", "internbruker", "fullmaktsgiver")
             .encode().toUriString()
 
-        return postForEntity<List<FullmaktsgiverPldDto>>(
+        val temp = postForEntity<String>(
             uri = uri,
             payload = FullmaktIdentPdlRequest(fullmaktsgiversIdent),
-        ).map { it.tilFullmektigDto() }
+        )
+
+        log.info("Debug: Respons fra Q2 er  \n {}", temp)
+
+        return temp;
     }
 }
 
