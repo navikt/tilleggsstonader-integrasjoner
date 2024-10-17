@@ -8,12 +8,11 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.util.UriComponentsBuilder
-import java.util.UUID
-
 import java.net.URI
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.Base64
+import java.util.UUID
 
 @Component
 class FullmaktClient(
@@ -70,7 +69,7 @@ private data class FullmaktsgiverResponse(
             fullmektigNavn = fullmektigsNavn,
             gyldigFraOgMed = gyldigFraOgMed,
             gyldigTilOgMed = gyldigTilOgMed,
-            temaer = omraade.map { it.tema }
+            temaer = omraade.map { it.tema },
         )
     }
 }
@@ -83,5 +82,5 @@ private data class OmrådeResponse(
 private enum class Handling {
     LES,
     KOMMUNISER,
-    SKRIV
+    SKRIV,
 }

@@ -47,7 +47,7 @@ class FullmaktControllerTest : IntegrationTest() {
             kallFullmektige()
         }
         assertThat(response.httpStatus).isEqualTo(HttpStatus.BAD_REQUEST)
-        assertThat(response.detail.detail).isEqualTo(fullmaktResponseStubs.badRequest)
+        assertThat(response.detail.detail).isEqualTo(FullmaktResponseStubs.badRequest)
     }
 
     @Test
@@ -57,7 +57,7 @@ class FullmaktControllerTest : IntegrationTest() {
             kallFullmektige()
         }
         assertThat(response.httpStatus).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR)
-        assertThat(response.detail.detail).isEqualTo(fullmaktResponseStubs.internalServerError)
+        assertThat(response.detail.detail).isEqualTo(FullmaktResponseStubs.internalServerError)
     }
 
     private fun kallFullmektige(): ResponseEntity<String> {
@@ -77,21 +77,21 @@ class FullmaktControllerTest : IntegrationTest() {
 
 private fun stubResponse(responseType: HttpStatus) {
     val response = when (responseType) {
-        HttpStatus.OK -> okJson(fullmaktResponseStubs.ok)
-        HttpStatus.INTERNAL_SERVER_ERROR -> serverError().withBody(fullmaktResponseStubs.internalServerError)
-        HttpStatus.BAD_REQUEST -> badRequest().withBody(fullmaktResponseStubs.badRequest)
+        HttpStatus.OK -> okJson(FullmaktResponseStubs.ok)
+        HttpStatus.INTERNAL_SERVER_ERROR -> serverError().withBody(FullmaktResponseStubs.internalServerError)
+        HttpStatus.BAD_REQUEST -> badRequest().withBody(FullmaktResponseStubs.badRequest)
         else -> throw NotImplementedError("Har ikke laget testrespons for $responseType")
     }
 
     stubFor(
         post("/api/internbruker/fullmaktsgiver")
             .willReturn(
-                response.withHeader("Content-Type", "application/json")
-            )
+                response.withHeader("Content-Type", "application/json"),
+            ),
     )
 }
 
-private object fullmaktResponseStubs {
+private object FullmaktResponseStubs {
     val ok: String = FileUtil.readFile("fullmakt/ok.json")
     val internalServerError: String = FileUtil.readFile("fullmakt/internal-server-error.json")
     val badRequest: String = FileUtil.readFile("fullmakt/bad-request.json")
