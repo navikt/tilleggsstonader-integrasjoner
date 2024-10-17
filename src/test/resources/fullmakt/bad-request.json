@@ -1,0 +1,7 @@
+{
+  "timestamp": "2024-10-17T11:02:13.870+00:00",
+  "status": 400,
+  "error": "Bad Request",
+  "message": "Vi har gjort noe feil",
+  "path": "/api/internbruker/fullmaktsgiver"
+}
