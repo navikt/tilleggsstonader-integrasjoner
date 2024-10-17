@@ -1,7 +1,6 @@
 package no.nav.tilleggsstonader.integrasjoner.fullmakt
 
 import no.nav.tilleggsstonader.libs.http.client.AbstractRestClient
-import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
@@ -89,7 +88,7 @@ private data class FullmaktsgiverPldDto(
 
 private data class OmrådePldDto(
     val tema: String,
-    val handling: Handling,
+    val handling: List<Handling>,
 )
 
 private enum class Handling {
