@@ -2,7 +2,6 @@ package no.nav.tilleggsstonader.integrasjoner.fullmakt
 
 import no.nav.tilleggsstonader.kontrakter.felles.IdentRequest
 import no.nav.tilleggsstonader.libs.http.client.AbstractRestClient
-import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
@@ -16,7 +15,7 @@ import java.time.LocalDateTime
 import java.util.Base64
 
 @Component
-class PdlFullmaktClient(
+class FullmaktClient(
     @Value("\${clients.pdl-fullmakt.uri}") private val baseUrl: URI,
     @Qualifier("azureClientCredential") restTemplate: RestTemplate,
 ) : AbstractRestClient(restTemplate) {
@@ -26,7 +25,7 @@ class PdlFullmaktClient(
             .pathSegment("api", "internbruker", "fullmaktsgiver")
             .encode().toUriString()
 
-        return postForEntity<List<FullmaktsgiverResponseDto>>(
+        return postForEntity<List<FullmaktsgiverResponse>>(
             uri = uri,
             payload = FullmaktIdentRequest.fra(fullmaktsgiversIdent),
         ).map { it.tilFullmektigDto() }
@@ -42,7 +41,7 @@ data class FullmektigDto(
     val temaer: List<String>,
 )
 
-class FullmaktIdentRequest private constructor(
+private data class FullmaktIdentRequest private constructor(
     val ident: String, // Base64 encoded
 ) {
     companion object {
@@ -53,7 +52,7 @@ class FullmaktIdentRequest private constructor(
     }
 }
 
-data class FullmaktsgiverResponseDto(
+private data class FullmaktsgiverResponse(
     val fullmaktId: Int,
     val registrert: LocalDateTime,
     val registrertAv: String,
@@ -62,7 +61,7 @@ data class FullmaktsgiverResponseDto(
     val opphoert: Boolean,
     val fullmaktsgiver: String,
     val fullmektig: String,
-    val omraade: List<OmrådeReprDto>,
+    val omraade: List<OmrådeResponse>,
     val gyldigFraOgMed: LocalDate,
     val gyldigTilOgMed: LocalDate?,
     val fullmaktUuid: UUID,
@@ -84,12 +83,12 @@ data class FullmaktsgiverResponseDto(
     }
 }
 
-data class OmrådeReprDto(
+private data class OmrådeResponse(
     val tema: String,
-    val handling: List<HandlingRepr>,
+    val handling: List<Handling>,
 )
 
-enum class HandlingRepr {
+private enum class Handling {
     LES,
     KOMMUNISER,
     SKRIV

@@ -17,7 +17,7 @@ import org.springframework.web.client.RestClientResponseException
 @RequestMapping("/api/fullmakt")
 @Validated
 class FullmaktController(
-    val fullmaktClient: PdlFullmaktClient,
+    val fullmaktClient: FullmaktClient,
 ) {
     private val secureLogger = LoggerFactory.getLogger("secureLogger")
 
