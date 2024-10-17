@@ -1,6 +1,7 @@
 package no.nav.tilleggsstonader.integrasjoner.fullmakt
 
 import no.nav.tilleggsstonader.kontrakter.felles.IdentRequest
+import no.nav.tilleggsstonader.kontrakter.fullmakt.FullmektigDto
 import no.nav.tilleggsstonader.libs.http.client.AbstractRestClient
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
@@ -32,22 +33,13 @@ class FullmaktClient(
     }
 }
 
-// TODO: Legg i kontrakter
-data class FullmektigDto(
-    val fullmektigIdent: String,
-    val fullmektigNavn: String,
-    val gyldigFraOgMed: LocalDate,
-    val gyldigTilOgMed: LocalDate?,
-    val temaer: List<String>,
-)
-
 private data class FullmaktIdentRequest private constructor(
-    val ident: String, // Base64 encoded
+    val ident: String, // Base64-encodet
 ) {
     companion object {
         fun fra(identRequest: IdentRequest): FullmaktIdentRequest {
-            val encodedIdent = Base64.getEncoder().encodeToString(identRequest.ident.toByteArray())
-            return FullmaktIdentRequest(encodedIdent)
+            val encodetIdent = Base64.getEncoder().encodeToString(identRequest.ident.toByteArray())
+            return FullmaktIdentRequest(encodetIdent)
         }
     }
 }

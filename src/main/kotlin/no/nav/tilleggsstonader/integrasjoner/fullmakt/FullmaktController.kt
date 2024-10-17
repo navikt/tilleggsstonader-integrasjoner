@@ -2,6 +2,7 @@ package no.nav.tilleggsstonader.integrasjoner.fullmakt
 
 import no.nav.security.token.support.core.api.ProtectedWithClaims
 import no.nav.tilleggsstonader.kontrakter.felles.IdentRequest
+import no.nav.tilleggsstonader.kontrakter.fullmakt.FullmektigDto
 import org.slf4j.LoggerFactory
 import org.springframework.http.ProblemDetail
 import org.springframework.validation.annotation.Validated
