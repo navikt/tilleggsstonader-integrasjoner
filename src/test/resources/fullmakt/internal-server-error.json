@@ -1,0 +1,7 @@
+{
+  "timestamp": "2024-10-17T10:13:56.166+00:00",
+  "status": 500,
+  "error": "Internal Server Error",
+  "message": "De har gjort noe feil",
+  "path": "/api/internbruker/fullmaktsgiver"
+}

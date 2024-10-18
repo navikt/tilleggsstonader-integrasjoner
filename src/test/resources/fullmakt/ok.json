@@ -1,0 +1,47 @@
+[
+  {
+    "fullmaktId": 17056,
+    "registrert": "2024-10-17T07:52:53.040492Z",
+    "registrertAv": "04469833610",
+    "endret": null,
+    "endretAv": null,
+    "opphoert": false,
+    "fullmaktsgiver": "12345678910",
+    "fullmektig": "30515505985",
+    "omraade": [
+      {
+        "tema": "TSO",
+        "handling": [
+          "LES",
+          "KOMMUNISER",
+          "SKRIV"
+        ]
+      },
+      {
+        "tema": "TSR",
+        "handling": [
+          "LES",
+          "KOMMUNISER",
+          "SKRIV"
+        ]
+      },
+      {
+        "tema": "AAP",
+        "handling": [
+          "LES",
+          "KOMMUNISER",
+          "SKRIV"
+        ]
+      }
+    ],
+    "gyldigFraOgMed": "2024-10-17",
+    "gyldigTilOgMed": null,
+    "fullmaktUuid": "4e083503-b34a-4aaa-bf28-f8e8cc6bd3e9",
+    "opplysningsId": null,
+    "endringsId": null,
+    "status": null,
+    "kilde": "BRUKER SELV",
+    "fullmaktsgiverNavn": "UINSPIRERT VANE",
+    "fullmektigsNavn": "UFORNUFTIG LYTE"
+  }
+]
