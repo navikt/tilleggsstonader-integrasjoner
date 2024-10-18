@@ -1,11 +1,14 @@
 package no.nav.tilleggsstonader.integrasjoner.fullmakt
 
+import no.nav.tilleggsstonader.integrasjoner.infrastruktur.exception.OppslagException
+import no.nav.tilleggsstonader.integrasjoner.infrastruktur.exception.OppslagException.Level.MEDIUM
 import no.nav.tilleggsstonader.kontrakter.felles.IdentRequest
 import no.nav.tilleggsstonader.kontrakter.fullmakt.FullmektigDto
 import no.nav.tilleggsstonader.libs.http.client.AbstractRestClient
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
+import org.springframework.web.client.RestClientResponseException
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.util.UriComponentsBuilder
 import java.net.URI
@@ -25,10 +28,21 @@ class FullmaktClient(
             .pathSegment("api", "internbruker", "fullmaktsgiver")
             .encode().toUriString()
 
-        return postForEntity<List<FullmaktsgiverResponse>>(
-            uri = uri,
-            payload = FullmaktIdentRequest.fra(fullmaktsgiversIdent),
-        ).map { it.tilFullmektigDto() }
+        return try {
+            postForEntity<List<FullmaktsgiverResponse>>(
+                uri = uri,
+                payload = FullmaktIdentRequest.fra(fullmaktsgiversIdent),
+            ).map { it.tilFullmektigDto() }
+        } catch (ex: RestClientResponseException) {
+            throw OppslagException(
+                message = "Kunne ikke hente ut fullmakter fra REPR",
+                kilde = "hentFullmektige",
+                level = MEDIUM,
+                httpStatus = ex.statusCode,
+                error = ex,
+                sensitiveInfo = "ident: $fullmaktsgiversIdent",
+            )
+        }
     }
 }
 

@@ -47,7 +47,7 @@ class FullmaktControllerTest : IntegrationTest() {
             kallFullmektige()
         }
         assertThat(response.httpStatus).isEqualTo(HttpStatus.BAD_REQUEST)
-        assertThat(response.detail.detail).isEqualTo(FullmaktResponseStubs.badRequest)
+        assertThat(response.detail.detail).contains("Kunne ikke hente ut fullmakter fra REPR")
     }
 
     @Test
@@ -57,7 +57,7 @@ class FullmaktControllerTest : IntegrationTest() {
             kallFullmektige()
         }
         assertThat(response.httpStatus).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR)
-        assertThat(response.detail.detail).isEqualTo(FullmaktResponseStubs.internalServerError)
+        assertThat(response.detail.detail).contains("Kunne ikke hente ut fullmakter fra REPR")
     }
 
     private fun kallFullmektige(): ResponseEntity<String> {
