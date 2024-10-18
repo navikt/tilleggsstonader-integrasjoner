@@ -190,8 +190,8 @@ clients:
     uri: http://etterlatte-samordning-vedtak.etterlatte
     scope: api://${CLIENT_ENV}-gcp.etterlatte.etterlatte-samordning-vedtak/.default
   pdl-fullmakt:
-    uri: https://pdl-fullmakt.prod-fss-pub.nais.io
-    scope: api://prod-fss.pdl.pdl-fullmakt/.default
+    uri: https://pdl-fullmakt.${CLIENT_ENV}-fss-pub.nais.io
+    scope: api://${CLIENT_ENV}-fss.pdl.pdl-fullmakt/.default
   azure-graph:
     uri: https://graph.microsoft.com/v1.0/
     scope: https://graph.microsoft.com/.default
