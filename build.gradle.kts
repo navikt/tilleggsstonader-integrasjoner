@@ -1,11 +1,11 @@
 val javaVersion = JavaLanguageVersion.of(21)
-val springdocVersion = "2.5.0"
+val springdocVersion = "2.6.0"
 val tilleggsstønaderLibsVersion = "2024.07.15-13.17.6c84c810950d"
-val tilleggsstønaderKontrakterVersion = "2024.10.17-13.39.8a7b232a6896"
-val tokenSupportVersion = "4.1.7"
-val springCloudVersion = "4.1.2"
+val tilleggsstønaderKontrakterVersion = "2024.10.23-08.49.09c6398487aa"
+val tokenSupportVersion = "5.0.5"
+val springCloudVersion = "4.1.4"
 
-val mockkVersion = "1.13.11"
+val mockkVersion = "1.13.13"
 val testcontainerVersion = "1.19.0"
 
 group = "no.nav.tilleggsstonader.integrasjoner"
@@ -14,16 +14,16 @@ version = "1.0.0"
 plugins {
     application
 
-    kotlin("jvm") version "1.9.24"
+    kotlin("jvm") version "2.0.20"
     id("com.diffplug.spotless") version "6.25.0"
     id("com.github.ben-manes.versions") version "0.51.0"
     id("se.patrikerdes.use-latest-versions") version "0.2.18"
 
-    id("org.springframework.boot") version "3.3.0"
-    id("io.spring.dependency-management") version "1.1.5"
-    kotlin("plugin.spring") version "1.9.24"
+    id("org.springframework.boot") version "3.3.4"
+    id("io.spring.dependency-management") version "1.1.6"
+    kotlin("plugin.spring") version "2.0.20"
 
-    id("org.cyclonedx.bom") version "1.8.2"
+    id("org.cyclonedx.bom") version "1.10.0"
 }
 
 repositories {
@@ -59,7 +59,7 @@ dependencies {
     implementation("org.springdoc:springdoc-openapi-starter-common:$springdocVersion")
 
     // Logging
-    implementation("net.logstash.logback:logstash-logback-encoder:7.4")
+    implementation("net.logstash.logback:logstash-logback-encoder:8.0")
 
     implementation("io.micrometer:micrometer-registry-prometheus")
 
@@ -72,7 +72,7 @@ dependencies {
     implementation("no.nav.tilleggsstonader.kontrakter:tilleggsstonader-kontrakter:$tilleggsstønaderKontrakterVersion")
 
     //azure ad-hack
-    implementation("no.nav.familie.felles:http-client:3.20240515152313_9dd5659")
+    implementation("no.nav.familie.felles:http-client:3.20240913110742_adb42f8")
 
     // Test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
