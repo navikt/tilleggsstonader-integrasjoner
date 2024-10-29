@@ -20,7 +20,7 @@ class AzureGraphRestClient(
     fun finnSaksbehandler(navIdent: String): AzureAdBrukere {
         val uri = UriComponentsBuilder.fromUri(aadGraphURI)
             .pathSegment(USERS)
-            .queryParam("\$search", "\"onPremisesSamAccountName:{navIdent}\"")
+            .queryParam("\$search", "{search}")
             .queryParam("\$select", FELTER)
             .encode()
             .toUriString()
@@ -29,7 +29,7 @@ class AzureGraphRestClient(
             HttpHeaders().apply {
                 add("ConsistencyLevel", "eventual")
             },
-            uriVariables = mapOf("navIdent" to navIdent)
+            uriVariables = mapOf("search" to "\"onPremisesSamAccountName:$navIdent\""),
         )
     }
 
