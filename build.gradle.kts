@@ -2,7 +2,7 @@ val javaVersion = JavaLanguageVersion.of(21)
 val springdocVersion = "2.6.0"
 val tilleggsstønaderLibsVersion = "2024.10.30-09.56.91115fdcae1e"
 val tilleggsstønaderKontrakterVersion = "2024.10.31-11.26.7172148519ea"
-val tokenSupportVersion = "5.0.8"
+val tokenSupportVersion = "5.0.11"
 val springCloudVersion = "4.1.4"
 
 val mockkVersion = "1.13.13"
@@ -72,7 +72,7 @@ dependencies {
     implementation("no.nav.tilleggsstonader.kontrakter:tilleggsstonader-kontrakter:$tilleggsstønaderKontrakterVersion")
 
     //azure ad-hack
-    implementation("no.nav.familie.felles:http-client:3.20240913110742_adb42f8")
+    implementation("no.nav.familie.felles:http-client:3.20241111113426_be51eee")
 
     // Test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
