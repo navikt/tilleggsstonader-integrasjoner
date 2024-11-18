@@ -2,7 +2,6 @@ package no.nav.tilleggsstonader.integrasjoner.dokdist
 
 import jakarta.validation.Valid
 import no.nav.security.token.support.core.api.ProtectedWithClaims
-import no.nav.tilleggsstonader.integrasjoner.dokdist.domene.DistribuerJournalpostResponseTo
 import no.nav.tilleggsstonader.integrasjoner.dokdist.domene.DokdistConflictException
 import no.nav.tilleggsstonader.kontrakter.dokdist.DistribuerJournalpostRequest
 import org.slf4j.LoggerFactory
@@ -31,8 +30,8 @@ class DokdistController(private val dokdistService: DokdistService) {
     }
 
     @ExceptionHandler(DokdistConflictException::class)
-    fun handleDokdistConflictException(ex: DokdistConflictException): ResponseEntity<DistribuerJournalpostResponseTo> {
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.response)
+    fun handleDokdistConflictException(ex: DokdistConflictException): ResponseEntity<String> {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.response.bestillingsId)
     }
 
     @PostMapping

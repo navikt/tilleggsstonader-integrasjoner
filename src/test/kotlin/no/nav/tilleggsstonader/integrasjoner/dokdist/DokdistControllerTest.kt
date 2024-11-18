@@ -121,15 +121,14 @@ class DokdistControllerTest : IntegrationTest() {
     }
 
     @Test
-    fun `skal returnere 409 med bodyved 409 response fra dokdist`() {
-        val responseBody = """{"bestillingsId":"123"}"""
+    fun `skal returnere 409 med body 409 response fra dokdist`() {
         stubFor(
             post("/rest/v1/distribuerjournalpost")
                 .willReturn(
                     aResponse()
                         .withHeader("Content-Type", "application/json;charset=UTF-8")
                         .withStatus(409)
-                        .withBody(responseBody),
+                        .withBody("""{"bestillingsId":"123"}"""),
                 ),
         )
         val response = catchThrowableOfType<HttpClientErrorException> {
@@ -141,7 +140,7 @@ class DokdistControllerTest : IntegrationTest() {
         }
 
         assertThat(response.statusCode).isEqualTo(HttpStatus.CONFLICT)
-        assertThat(response.responseBodyAsString).isEqualTo(responseBody)
+        assertThat(response.responseBodyAsString).isEqualTo("123")
     }
 
     private fun mockGodkjentKallMotDokDist() {
