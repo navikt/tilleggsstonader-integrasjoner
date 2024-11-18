@@ -1,5 +1,6 @@
 package no.nav.tilleggsstonader.integrasjoner.dokdist
 
+import com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import com.github.tomakehurst.wiremock.client.WireMock.badRequest
 import com.github.tomakehurst.wiremock.client.WireMock.okJson
 import com.github.tomakehurst.wiremock.client.WireMock.post
@@ -10,6 +11,7 @@ import no.nav.tilleggsstonader.kontrakter.dokdist.DistribuerJournalpostRequest
 import no.nav.tilleggsstonader.kontrakter.dokdist.Distribusjonstidspunkt
 import no.nav.tilleggsstonader.kontrakter.dokdist.Distribusjonstype
 import no.nav.tilleggsstonader.kontrakter.felles.Fagsystem
+import no.nav.tilleggsstonader.libs.test.assertions.catchThrowableOfType
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -20,6 +22,7 @@ import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.test.context.TestPropertySource
+import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.client.exchange
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
@@ -115,6 +118,30 @@ class DokdistControllerTest : IntegrationTest() {
         assertThat(response.httpStatus).isEqualTo(HttpStatus.BAD_REQUEST)
         assertThat(response.detail.detail)
             .contains("validering av distribusjonsforespørsel for journalpostId=453492547 feilet, feilmelding=")
+    }
+
+    @Test
+    fun `skal returnere 409 med bodyved 409 response fra dokdist`() {
+        val responseBody = """{"bestillingsId":"123"}"""
+        stubFor(
+            post("/rest/v1/distribuerjournalpost")
+                .willReturn(
+                    aResponse()
+                        .withHeader("Content-Type", "application/json;charset=UTF-8")
+                        .withStatus(409)
+                        .withBody(responseBody),
+                ),
+        )
+        val response = catchThrowableOfType<HttpClientErrorException> {
+            restTemplate.exchange<String>(
+                localhost(DOKDIST_URL),
+                HttpMethod.POST,
+                HttpEntity(request, headers),
+            )
+        }
+
+        assertThat(response.statusCode).isEqualTo(HttpStatus.CONFLICT)
+        assertThat(response.responseBodyAsString).isEqualTo(responseBody)
     }
 
     private fun mockGodkjentKallMotDokDist() {
