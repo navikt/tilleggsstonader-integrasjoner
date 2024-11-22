@@ -71,9 +71,6 @@ dependencies {
 
     implementation("no.nav.tilleggsstonader.kontrakter:tilleggsstonader-kontrakter:$tilleggsstønaderKontrakterVersion")
 
-    //azure ad-hack
-    implementation("no.nav.familie.felles:http-client:3.20240913110742_adb42f8")
-
     // Test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.cloud:spring-cloud-contract-wiremock:$springCloudVersion")
