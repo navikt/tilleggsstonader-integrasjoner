@@ -69,10 +69,11 @@ spec:
           namespace: teamfamilie
         - application: etterlatte-samordning-vedtak
           namespace: etterlatte
+        - application: repr-api
+          namespace: repr
       external:
         - host: oppgave.prod-fss-pub.nais.io
         - host: arena-api.prod-fss-pub.nais.io
-        - host: pdl-fullmakt.prod-fss-pub.nais.io
   env:
     - name: SPRING_PROFILES_ACTIVE
       value: prod

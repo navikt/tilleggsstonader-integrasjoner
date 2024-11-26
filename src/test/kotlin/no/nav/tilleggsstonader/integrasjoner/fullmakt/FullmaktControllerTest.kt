@@ -19,7 +19,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.test.context.TestPropertySource
 import org.springframework.web.client.exchange
 
-@TestPropertySource(properties = ["clients.pdl-fullmakt.uri=http://localhost:28086"])
+@TestPropertySource(properties = ["clients.repr-api.uri=http://localhost:28086"])
 @AutoConfigureWireMock(port = 28086)
 class FullmaktControllerTest : IntegrationTest() {
 
@@ -84,7 +84,7 @@ private fun stubResponse(responseType: HttpStatus) {
     }
 
     stubFor(
-        post("/api/internbruker/fullmaktsgiver")
+        post("/api/internbruker/fullmakt/fullmaktsgiver")
             .willReturn(
                 response.withHeader("Content-Type", "application/json"),
             ),
