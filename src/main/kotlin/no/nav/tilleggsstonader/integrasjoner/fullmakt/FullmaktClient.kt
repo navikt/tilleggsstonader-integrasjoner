@@ -14,18 +14,17 @@ import org.springframework.web.util.UriComponentsBuilder
 import java.net.URI
 import java.time.LocalDate
 import java.time.LocalDateTime
-import java.util.Base64
 import java.util.UUID
 
 @Component
 class FullmaktClient(
-    @Value("\${clients.pdl-fullmakt.uri}") private val baseUrl: URI,
+    @Value("\${clients.repr-api.uri}") private val baseUrl: URI,
     @Qualifier("azureClientCredential") restTemplate: RestTemplate,
 ) : AbstractRestClient(restTemplate) {
 
     fun hentFullmektige(fullmaktsgiversIdent: IdentRequest): List<FullmektigDto> {
         val uri = UriComponentsBuilder.fromUri(baseUrl)
-            .pathSegment("api", "internbruker", "fullmaktsgiver")
+            .pathSegment("api", "internbruker", "fullmakt", "fullmaktsgiver")
             .encode().toUriString()
 
         return try {
@@ -51,8 +50,7 @@ private data class FullmaktIdentRequest private constructor(
 ) {
     companion object {
         fun fra(identRequest: IdentRequest): FullmaktIdentRequest {
-            val encodetIdent = Base64.getEncoder().encodeToString(identRequest.ident.toByteArray())
-            return FullmaktIdentRequest(encodetIdent)
+            return FullmaktIdentRequest(identRequest.ident)
         }
     }
 }
