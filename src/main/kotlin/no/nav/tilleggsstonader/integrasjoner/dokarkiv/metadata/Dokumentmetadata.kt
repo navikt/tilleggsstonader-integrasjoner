@@ -46,7 +46,7 @@ fun Dokumenttype.tilMetadata(): Dokumentmetadata = when (this) {
 
     Dokumenttype.LÆREMIDLER_SØKNAD -> LæremidlerSøknadMetadata
     Dokumenttype.LÆREMIDLER_SØKNAD_VEDLEGG -> LæremidlerSøknadVedleggMetadata
-    Dokumenttype.LÆREMIDLER_VEDTAKSBREV -> TODO("Saksbehandling av læremidler er ikke implementert enda")
-    Dokumenttype.LÆREMIDLER_FRITTSTÅENDE_BREV -> TODO("Saksbehandling av læremidler er ikke implementert enda")
-    Dokumenttype.LÆREMIDLER_INTERNT_VEDTAK -> TODO("Saksbehandling av læremidler er ikke implementert enda")
+    Dokumenttype.LÆREMIDLER_VEDTAKSBREV -> LæremidlerVedtaksbrevMetadata
+    Dokumenttype.LÆREMIDLER_FRITTSTÅENDE_BREV -> LæremidlerFrittståendeBrevMetadata
+    Dokumenttype.LÆREMIDLER_INTERNT_VEDTAK -> LæremidlerInterntVedtakMetadata
 }
