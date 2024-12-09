@@ -77,11 +77,12 @@ class YtelseService(
             aapClient.hentPerioder(data.ident, fom = data.fom, tom = data.tom)
         }
         return perioder.perioder.map {
+            secureLogger.info("aktivitetsfaseKode=${it.aktivitetsfaseKode} aktivitetsfaseNavn=${it.aktivitetsfaseNavn}")
             YtelsePeriode(
                 type = TypeYtelsePeriode.AAP,
                 fom = it.periode.fraOgMedDato,
                 tom = it.periode.tilOgMedDato,
-                aapErFerdigAvklart = it.aktivitetsfaseNavn == "Ferdig avklart",
+                aapErFerdigAvklart = it.aktivitetsfaseKode.equals("FA", ignoreCase = true), // FA = Ferdig avklart
             )
         }
     }
