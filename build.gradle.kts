@@ -1,11 +1,11 @@
 val javaVersion = JavaLanguageVersion.of(21)
-val springdocVersion = "2.6.0"
+val springdocVersion = "2.8.1"
 val tilleggsstønaderLibsVersion = "2024.12.11-15.08.d370f00e88e3"
 val tilleggsstønaderKontrakterVersion = "2024.12.20-14.17.472e1112c9fb"
-val tokenSupportVersion = "5.0.8"
-val springCloudVersion = "4.1.4"
+val tokenSupportVersion = "5.0.14"
+val springCloudVersion = "4.2.0"
 
-val mockkVersion = "1.13.13"
+val mockkVersion = "1.13.16"
 val testcontainerVersion = "1.19.0"
 
 group = "no.nav.tilleggsstonader.integrasjoner"
@@ -14,14 +14,14 @@ version = "1.0.0"
 plugins {
     application
 
-    kotlin("jvm") version "2.0.21"
-    id("com.diffplug.spotless") version "6.25.0"
+    kotlin("jvm") version "2.1.0"
+    id("com.diffplug.spotless") version "7.0.1"
     id("com.github.ben-manes.versions") version "0.51.0"
     id("se.patrikerdes.use-latest-versions") version "0.2.18"
 
-    id("org.springframework.boot") version "3.3.5"
-    id("io.spring.dependency-management") version "1.1.6"
-    kotlin("plugin.spring") version "2.0.21"
+    id("org.springframework.boot") version "3.4.1"
+    id("io.spring.dependency-management") version "1.1.7"
+    kotlin("plugin.spring") version "2.1.0"
 
     id("org.cyclonedx.bom") version "1.10.0"
 }
