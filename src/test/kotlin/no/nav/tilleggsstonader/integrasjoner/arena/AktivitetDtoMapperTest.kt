@@ -3,6 +3,7 @@ package no.nav.tilleggsstonader.integrasjoner.arena
 import no.nav.tilleggsstonader.kontrakter.aktivitet.StatusAktivitet
 import no.nav.tilleggsstonader.kontrakter.aktivitet.TypeAktivitet
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
 import java.time.LocalDate
@@ -36,6 +37,22 @@ class AktivitetDtoMapperTest {
     fun `skal mappe 0 prosent til null`() {
         val dto = AktivitetDtoMapper.map(aktivitetArenaResponse(prosentAktivitetsdeltakelse = 0.toBigDecimal()))
         assertThat(dto.prosentDeltakelse).isNull()
+    }
+
+    @Nested
+    inner class ErStoenadsberettigetAktivitet {
+
+        @Test
+        fun `skal overstyre erStoenadsberettigetAktivitet dersom vi har overstyrt den i kontrakter sånn at den vises i søknad og behandling`() {
+            val dto = AktivitetDtoMapper.map(
+                aktivitetArenaResponse(
+                    aktivitetstype = TypeAktivitet.FORSFAGGRU.name,
+                    erStoenadsberettigetAktivitet = false,
+                ),
+            )
+
+            assertThat(dto.erStønadsberettiget).isTrue()
+        }
     }
 
     private fun aktivitetArenaResponse(

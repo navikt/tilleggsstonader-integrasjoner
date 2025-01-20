@@ -4,6 +4,7 @@ import no.nav.tilleggsstonader.integrasjoner.util.DatoUtil.min
 import no.nav.tilleggsstonader.kontrakter.aktivitet.AktivitetArenaDto
 import no.nav.tilleggsstonader.kontrakter.aktivitet.Kilde
 import no.nav.tilleggsstonader.kontrakter.aktivitet.StatusAktivitet
+import no.nav.tilleggsstonader.kontrakter.aktivitet.TypeAktivitet
 import no.nav.tilleggsstonader.libs.utils.osloDateNow
 import java.math.BigDecimal
 import java.time.LocalDate
@@ -20,7 +21,7 @@ object AktivitetDtoMapper {
             statusArena = response.status?.name,
             antallDagerPerUke = response.antallDagerPerUke?.takeIf { it != 0 },
             prosentDeltakelse = response.prosentAktivitetsdeltakelse?.takeIf { it != BigDecimal.ZERO },
-            erStønadsberettiget = response.erStoenadsberettigetAktivitet,
+            erStønadsberettiget = response.erStoenadsberettigetAktivitet == true || TypeAktivitet.valueOf(response.aktivitetstype).rettTilStønad,
             erUtdanning = response.erUtdanningsaktivitet,
             arrangør = response.arrangoer?.takeIf { it.isNotBlank() },
             kilde = Kilde.ARENA,
