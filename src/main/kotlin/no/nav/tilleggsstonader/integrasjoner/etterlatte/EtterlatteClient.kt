@@ -3,7 +3,6 @@ package no.nav.tilleggsstonader.integrasjoner.etterlatte
 import no.nav.tilleggsstonader.libs.http.client.AbstractRestClient
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.http.HttpHeaders
 import org.springframework.stereotype.Component
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.util.UriComponentsBuilder
@@ -23,10 +22,10 @@ class EtterlatteClient(
         .toUriString()
 
     fun hentPerioder(ident: String, fom: LocalDate): List<Samordningsvedtak> {
-        return getForEntity<List<Samordningsvedtak>>(
-            uriPerioder,
-            httpHeaders = HttpHeaders().apply { add("fnr", ident) },
-            uriVariables = mapOf("fomDato" to fom),
+        val requestBody = mapOf(
+            "fnr" to ident,
+            "fomDato" to fom,
         )
+        return postForEntity(uriPerioder, requestBody)
     }
 }
