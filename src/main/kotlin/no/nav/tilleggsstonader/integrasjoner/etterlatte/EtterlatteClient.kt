@@ -3,9 +3,6 @@ package no.nav.tilleggsstonader.integrasjoner.etterlatte
 import no.nav.tilleggsstonader.libs.http.client.AbstractRestClient
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.http.HttpEntity
-import org.springframework.http.HttpHeaders
-import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.util.UriComponentsBuilder
@@ -18,21 +15,17 @@ class EtterlatteClient(
     @Qualifier("azure") restTemplate: RestTemplate,
 ) : AbstractRestClient(restTemplate) {
 
-    fun hentPerioder(ident: String, fom: LocalDate): List<Samordningsvedtak> {
-        val uriPerioder = UriComponentsBuilder.fromUri(baseUrl)
-            .pathSegment("api", "pensjon", "vedtak")
-            .queryParam("fomDato", fom)
-            .encode()
-            .toUriString()
-        val body = FoedselsnummerDTO(ident)
-        val headers = HttpHeaders().apply {
-            contentType = MediaType.APPLICATION_JSON
-        }
-        val httpEntity = HttpEntity(body, headers)
+    val uriPerioder = UriComponentsBuilder.fromUri(baseUrl)
+        .pathSegment("api", "pensjon", "vedtak")
+        .queryParam("fomDato", "{fomDato}")
+        .encode()
+        .toUriString()
 
+    fun hentPerioder(ident: String, fom: LocalDate): List<Samordningsvedtak> {
+        val requestBody = FoedselsnummerDTO(foedselsnummer = ident)
         return postForEntity<List<Samordningsvedtak>>(
             uriPerioder,
-            httpEntity,
+            requestBody,
             uriVariables = mapOf("fomDato" to fom),
         )
     }
