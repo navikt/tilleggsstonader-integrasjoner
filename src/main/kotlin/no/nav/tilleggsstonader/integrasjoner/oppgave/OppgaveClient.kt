@@ -29,7 +29,6 @@ class OppgaveClient(
     @Value("\${clients.oppgave.uri}") private val oppgaveBaseUrl: URI,
     @Qualifier("azure") restTemplate: RestTemplate,
 ) : AbstractRestClient(restTemplate) {
-
     fun finnOppgaveMedId(oppgaveId: Long): Oppgave {
         try {
             return getForEntity(oppgaveIdUrl, httpHeaders(), oppgaveIdUriVariables(oppgaveId))
@@ -44,14 +43,16 @@ class OppgaveClient(
     }
 
     fun buildOppgaveRequestUri(queryParams: QueryParams): String =
-        UriComponentsBuilder.fromUri(oppgaveBaseUrl)
+        UriComponentsBuilder
+            .fromUri(oppgaveBaseUrl)
             .path(PATH_OPPGAVE)
             .medQueryParams(queryParams)
             .encode()
             .toUriString()
 
     fun buildMappeRequestUri(queryParams: QueryParams): String =
-        UriComponentsBuilder.fromUri(oppgaveBaseUrl)
+        UriComponentsBuilder
+            .fromUri(oppgaveBaseUrl)
             .path(PATH_MAPPE)
             .medQueryParams(queryParams)
             .encode()
@@ -95,81 +96,83 @@ class OppgaveClient(
         return getForEntity(buildMappeRequestUri(queryParams), httpHeaders(), queryParams.tilUriVariables())
     }
 
-    fun oppdaterOppgave(patchDto: Oppgave): Oppgave {
-        return Result.runCatching {
-            patchForEntity<Oppgave>(
-                oppgaveIdUrl,
-                patchDto,
-                httpHeaders(),
-                oppgaveIdUriVariables(patchDto.id),
-            )
-        }.fold(
-            onSuccess = { it },
-            onFailure = {
-                var feilmelding = "Feil ved oppdatering av oppgave for ${patchDto.id}."
-                if (it is HttpStatusCodeException) {
-                    feilmelding += " Response fra oppgave = ${it.responseBodyAsString}"
-
-                    if (it.statusCode == HttpStatus.CONFLICT) {
-                        throw OppslagException(
-                            feilmelding,
-                            "Oppgave.oppdaterOppgave",
-                            OppslagException.Level.LAV,
-                            HttpStatus.CONFLICT,
-                            it,
-                        )
-                    }
-                }
-
-                throw OppslagException(
-                    feilmelding,
-                    "Oppgave.oppdaterOppgave",
-                    OppslagException.Level.KRITISK,
-                    HttpStatus.INTERNAL_SERVER_ERROR,
-                    it,
+    fun oppdaterOppgave(patchDto: Oppgave): Oppgave =
+        Result
+            .runCatching {
+                patchForEntity<Oppgave>(
+                    oppgaveIdUrl,
+                    patchDto,
+                    httpHeaders(),
+                    oppgaveIdUriVariables(patchDto.id),
                 )
-            },
-        )
-    }
+            }.fold(
+                onSuccess = { it },
+                onFailure = {
+                    var feilmelding = "Feil ved oppdatering av oppgave for ${patchDto.id}."
+                    if (it is HttpStatusCodeException) {
+                        feilmelding += " Response fra oppgave = ${it.responseBodyAsString}"
 
-    fun fjernBehandlesAvApplikasjon(fjernBehandlesAvApplikasjon: OppgaveFjernBehandlesAvApplikasjon): Oppgave? {
-        return Result.runCatching {
-            patchForEntity<Oppgave>(
-                oppgaveIdUrl,
-                fjernBehandlesAvApplikasjon,
-                httpHeaders(),
-                oppgaveIdUriVariables(fjernBehandlesAvApplikasjon.id),
-            )
-        }.fold(
-            onSuccess = { it },
-            onFailure = {
-                var feilmelding = "Feil ved fjerning av behandlesAvApplikasjon for ${fjernBehandlesAvApplikasjon.id}."
-                val statusCode = if (it is HttpStatusCodeException) {
-                    feilmelding += " Response fra oppgave = ${it.responseBodyAsString}"
-
-                    if (it.statusCode == HttpStatus.CONFLICT) {
-                        HttpStatus.CONFLICT
-                    } else {
-                        HttpStatus.INTERNAL_SERVER_ERROR
+                        if (it.statusCode == HttpStatus.CONFLICT) {
+                            throw OppslagException(
+                                feilmelding,
+                                "Oppgave.oppdaterOppgave",
+                                OppslagException.Level.LAV,
+                                HttpStatus.CONFLICT,
+                                it,
+                            )
+                        }
                     }
-                } else {
-                    HttpStatus.INTERNAL_SERVER_ERROR
-                }
 
-                throw OppslagException(
-                    feilmelding,
-                    "Oppgave.fjernBehandlesAvApplikasjon",
-                    OppslagException.Level.LAV,
-                    statusCode,
-                    it,
+                    throw OppslagException(
+                        feilmelding,
+                        "Oppgave.oppdaterOppgave",
+                        OppslagException.Level.KRITISK,
+                        HttpStatus.INTERNAL_SERVER_ERROR,
+                        it,
+                    )
+                },
+            )
+
+    fun fjernBehandlesAvApplikasjon(fjernBehandlesAvApplikasjon: OppgaveFjernBehandlesAvApplikasjon): Oppgave? =
+        Result
+            .runCatching {
+                patchForEntity<Oppgave>(
+                    oppgaveIdUrl,
+                    fjernBehandlesAvApplikasjon,
+                    httpHeaders(),
+                    oppgaveIdUriVariables(fjernBehandlesAvApplikasjon.id),
                 )
-            },
-        )
-    }
+            }.fold(
+                onSuccess = { it },
+                onFailure = {
+                    var feilmelding = "Feil ved fjerning av behandlesAvApplikasjon for ${fjernBehandlesAvApplikasjon.id}."
+                    val statusCode =
+                        if (it is HttpStatusCodeException) {
+                            feilmelding += " Response fra oppgave = ${it.responseBodyAsString}"
+
+                            if (it.statusCode == HttpStatus.CONFLICT) {
+                                HttpStatus.CONFLICT
+                            } else {
+                                HttpStatus.INTERNAL_SERVER_ERROR
+                            }
+                        } else {
+                            HttpStatus.INTERNAL_SERVER_ERROR
+                        }
+
+                    throw OppslagException(
+                        feilmelding,
+                        "Oppgave.fjernBehandlesAvApplikasjon",
+                        OppslagException.Level.LAV,
+                        statusCode,
+                        it,
+                    )
+                },
+            )
 
     fun opprettOppgave(dto: OpprettOppgaveRequestDto): Long {
         val uri = UriComponentsBuilder.fromUri(oppgaveBaseUrl).path(PATH_OPPGAVE).toUriString()
-        return Result.runCatching { postForEntity<Oppgave>(uri, dto, httpHeaders()) }
+        return Result
+            .runCatching { postForEntity<Oppgave>(uri, dto, httpHeaders()) }
             .map { it.id }
             .onFailure {
                 var feilmelding = "Feil ved oppretting av oppgave for ${dto.aktoerId}."
@@ -184,25 +187,25 @@ class OppgaveClient(
                     HttpStatus.INTERNAL_SERVER_ERROR,
                     it,
                 )
-            }
-            .getOrThrow()
+            }.getOrThrow()
     }
 
-    private fun oppgaveIdUriVariables(oppgaveId: Long) =
-        mapOf("id" to oppgaveId)
+    private fun oppgaveIdUriVariables(oppgaveId: Long) = mapOf("id" to oppgaveId)
 
     private val oppgaveIdUrl =
-        UriComponentsBuilder.fromUri(oppgaveBaseUrl)
+        UriComponentsBuilder
+            .fromUri(oppgaveBaseUrl)
             .path(PATH_OPPGAVE)
             .pathSegment("{id}")
-            .encode().toUriString()
+            .encode()
+            .toUriString()
 
-    private fun httpHeaders(): HttpHeaders = HttpHeaders().apply {
-        add(X_CORRELATION_ID, MDC.get(MDCConstants.MDC_CALL_ID))
-    }
+    private fun httpHeaders(): HttpHeaders =
+        HttpHeaders().apply {
+            add(X_CORRELATION_ID, MDC.get(MDCConstants.MDC_CALL_ID))
+        }
 
     companion object {
-
         private const val PATH_OPPGAVE = "/api/v1/oppgaver"
         private const val PATH_MAPPE = "/api/v1/mapper"
         private const val X_CORRELATION_ID = "X-Correlation-ID"

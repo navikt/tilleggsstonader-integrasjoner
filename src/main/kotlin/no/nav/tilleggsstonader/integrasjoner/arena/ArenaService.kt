@@ -14,11 +14,14 @@ import java.time.LocalDate
 class ArenaService(
     private val arenaClient: ArenaClient,
 ) {
-
     private val logger = LoggerFactory.getLogger(javaClass)
 
     @Cacheable("aktiviteter", cacheManager = "shortCache")
-    fun hentAktiviteter(ident: String, fom: LocalDate, tom: LocalDate): List<AktivitetArenaDto> {
+    fun hentAktiviteter(
+        ident: String,
+        fom: LocalDate,
+        tom: LocalDate,
+    ): List<AktivitetArenaDto> {
         val aktiviteter = arenaClient.hentAktiviteter(ident, fom, tom)
 
         return aktiviteter.mapNotNull {
@@ -33,7 +36,11 @@ class ArenaService(
     }
 
     @Cacheable("målgrupper", cacheManager = "shortCache")
-    fun hentMålgrupper(ident: String, fom: LocalDate, tom: LocalDate): List<MålgruppeArenaDto> {
+    fun hentMålgrupper(
+        ident: String,
+        fom: LocalDate,
+        tom: LocalDate,
+    ): List<MålgruppeArenaDto> {
         val målgrupper = arenaClient.hentMålgrupper(ident, fom, tom)
 
         return målgrupper.mapNotNull {
@@ -53,15 +60,16 @@ class ArenaService(
         }
     }
 
-    private fun TypeMålgruppeArena.tilType(): TypeMålgruppe = when (this) {
-        TypeMålgruppeArena.NEDSARBEVN -> TypeMålgruppe.NEDSATT_ARBEIDSEVNE
-        TypeMålgruppeArena.ENSFORUTD -> TypeMålgruppe.ENSLIG_FORSØRGER
-        TypeMålgruppeArena.ENSFORARBS -> TypeMålgruppe.ENSLIG_FORSØRGER
-        TypeMålgruppeArena.TIDLFAMPL -> TypeMålgruppe.TIDLIGERE_FAMILIEPLEIER
-        TypeMålgruppeArena.GJENEKUTD -> TypeMålgruppe.GJENLEVENDE_EKTEFELLE
-        TypeMålgruppeArena.GJENEKARBS -> TypeMålgruppe.GJENLEVENDE_EKTEFELLE
-        TypeMålgruppeArena.MOTTILTPEN -> TypeMålgruppe.TILTAKSPENGER
-        TypeMålgruppeArena.ARBSOKERE -> TypeMålgruppe.ARBEIDSSØKER
-        TypeMålgruppeArena.MOTDAGPEN -> TypeMålgruppe.DAGPENGER
-    }
+    private fun TypeMålgruppeArena.tilType(): TypeMålgruppe =
+        when (this) {
+            TypeMålgruppeArena.NEDSARBEVN -> TypeMålgruppe.NEDSATT_ARBEIDSEVNE
+            TypeMålgruppeArena.ENSFORUTD -> TypeMålgruppe.ENSLIG_FORSØRGER
+            TypeMålgruppeArena.ENSFORARBS -> TypeMålgruppe.ENSLIG_FORSØRGER
+            TypeMålgruppeArena.TIDLFAMPL -> TypeMålgruppe.TIDLIGERE_FAMILIEPLEIER
+            TypeMålgruppeArena.GJENEKUTD -> TypeMålgruppe.GJENLEVENDE_EKTEFELLE
+            TypeMålgruppeArena.GJENEKARBS -> TypeMålgruppe.GJENLEVENDE_EKTEFELLE
+            TypeMålgruppeArena.MOTTILTPEN -> TypeMålgruppe.TILTAKSPENGER
+            TypeMålgruppeArena.ARBSOKERE -> TypeMålgruppe.ARBEIDSSØKER
+            TypeMålgruppeArena.MOTDAGPEN -> TypeMålgruppe.DAGPENGER
+        }
 }

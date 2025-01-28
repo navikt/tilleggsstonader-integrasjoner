@@ -13,7 +13,9 @@ data class Gyldighetsperiode(
     val tom: LocalDate,
 )
 
-enum class TypeMålgruppeArena(val beskrivelse: String) {
+enum class TypeMålgruppeArena(
+    val beskrivelse: String,
+) {
     NEDSARBEVN("Person med nedsatt arbeidsevne pga. sykdom"),
     ENSFORUTD("Enslig forsørger under utdanning"),
     ENSFORARBS("Enslig forsørger som søker arbeid"),

@@ -47,7 +47,9 @@ data class PeriodeArena(
  * VENTL	2
  * null	    1693
  */
-enum class StatusAktivitetArena(val beskrivelse: String) {
+enum class StatusAktivitetArena(
+    val beskrivelse: String,
+) {
     AKTUL("Aktuell"),
     AVBR("Avbrutt"),
     BEHOV("Behov"),

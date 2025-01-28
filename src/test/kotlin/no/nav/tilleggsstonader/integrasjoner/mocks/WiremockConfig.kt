@@ -7,11 +7,9 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 class WiremockConfig {
-
     @Bean
-    fun optionsCustomizer(): WireMockConfigurationCustomizer {
-        return WireMockConfigurationCustomizer { config ->
+    fun optionsCustomizer(): WireMockConfigurationCustomizer =
+        WireMockConfigurationCustomizer { config ->
             config.notifier(ConsoleNotifier(false))
         }
-    }
 }

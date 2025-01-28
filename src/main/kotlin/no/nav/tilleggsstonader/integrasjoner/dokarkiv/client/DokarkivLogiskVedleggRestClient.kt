@@ -20,15 +20,17 @@ import java.net.URI
 class DokarkivLogiskVedleggRestClient(
     @Value("\${clients.dokarkiv.uri}") private val dokarkivUrl: URI,
     @Qualifier("azure") restTemplate: RestTemplate,
-) :
-    AbstractRestClient(restTemplate) {
-
-    fun opprettLogiskVedlegg(dokumentInfoId: String, request: LogiskVedleggRequest): LogiskVedleggResponse {
-        val uri = UriComponentsBuilder
-            .fromUri(dokarkivUrl)
-            .path(PATH_LOGISKVEDLEGG)
-            .encode()
-            .toUriString()
+) : AbstractRestClient(restTemplate) {
+    fun opprettLogiskVedlegg(
+        dokumentInfoId: String,
+        request: LogiskVedleggRequest,
+    ): LogiskVedleggResponse {
+        val uri =
+            UriComponentsBuilder
+                .fromUri(dokarkivUrl)
+                .path(PATH_LOGISKVEDLEGG)
+                .encode()
+                .toUriString()
         try {
             return postForEntity(uri, request, headers(), mapOf("dokumentInfo" to dokumentInfoId))
         } catch (e: RuntimeException) {
@@ -44,12 +46,16 @@ class DokarkivLogiskVedleggRestClient(
         }
     }
 
-    fun slettLogiskVedlegg(dokumentInfoId: String, logiskVedleggId: String) {
-        val uri = UriComponentsBuilder
-            .fromUri(dokarkivUrl)
-            .path(PATH_SLETT_LOGISK_VEDLEGG)
-            .encode()
-            .toUriString()
+    fun slettLogiskVedlegg(
+        dokumentInfoId: String,
+        logiskVedleggId: String,
+    ) {
+        val uri =
+            UriComponentsBuilder
+                .fromUri(dokarkivUrl)
+                .path(PATH_SLETT_LOGISK_VEDLEGG)
+                .encode()
+                .toUriString()
         try {
             val uriVariables = mapOf("dokumentInfo" to dokumentInfoId, "logiskVedleggId" to logiskVedleggId)
             deleteForEntity<String>(uri, null, headers(), uriVariables)
@@ -93,16 +99,14 @@ class DokarkivLogiskVedleggRestClient(
     }
 
     companion object {
-
         private const val PATH_LOGISKVEDLEGG = "rest/journalpostapi/v1/dokumentInfo/{dokumentInfo}/logiskVedlegg/"
         private const val PATH_SLETT_LOGISK_VEDLEGG = "$PATH_LOGISKVEDLEGG/{logiskVedleggId}"
 
         private const val NAV_CALL_ID = "Nav-Callid"
 
-        private fun headers(): HttpHeaders {
-            return HttpHeaders().apply {
+        private fun headers(): HttpHeaders =
+            HttpHeaders().apply {
                 add(NAV_CALL_ID, MDCOperations.getCallId())
             }
-        }
     }
 }

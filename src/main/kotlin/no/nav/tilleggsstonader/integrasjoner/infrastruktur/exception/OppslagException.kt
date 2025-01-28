@@ -11,7 +11,6 @@ data class OppslagException(
     val error: Throwable? = null,
     val sensitiveInfo: String? = null,
 ) : RuntimeException(message, error) {
-
     enum class Level {
         LAV,
         MEDIUM,

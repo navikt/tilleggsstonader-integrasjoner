@@ -21,8 +21,9 @@ import org.springframework.web.client.HttpClientErrorException
 @ProtectedWithClaims(issuer = "azuread")
 @RequestMapping("/api/dist")
 @Validated
-class DokdistController(private val dokdistService: DokdistService) {
-
+class DokdistController(
+    private val dokdistService: DokdistService,
+) {
     @ExceptionHandler(HttpClientErrorException::class)
     fun handleHttpClientException(e: HttpClientErrorException): ProblemDetail {
         secureLogger.warn("Feil ved distribusjon: ${e.message}")
@@ -30,21 +31,17 @@ class DokdistController(private val dokdistService: DokdistService) {
     }
 
     @ExceptionHandler(DokdistConflictException::class)
-    fun handleDokdistConflictException(ex: DokdistConflictException): ResponseEntity<String> {
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.response.bestillingsId)
-    }
+    fun handleDokdistConflictException(ex: DokdistConflictException): ResponseEntity<String> =
+        ResponseEntity.status(HttpStatus.CONFLICT).body(ex.response.bestillingsId)
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
     fun distribuerJournalpost(
         @RequestBody @Valid
         request: DistribuerJournalpostRequest,
-    ): String {
-        return dokdistService.distribuerDokumentForJournalpost(request).bestillingsId
-    }
+    ): String = dokdistService.distribuerDokumentForJournalpost(request).bestillingsId
 
     companion object {
-
         private val secureLogger = LoggerFactory.getLogger("secureLogger")
     }
 }

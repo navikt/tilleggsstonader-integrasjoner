@@ -29,11 +29,14 @@ import java.net.URI
 class DokarkivRestClient(
     @Value("\${clients.dokarkiv.uri}") private val dokarkivUrl: URI,
     @Qualifier("azure") restTemplate: RestTemplate,
-) :
-    AbstractRestClient(restTemplate) {
-
-    fun lagJournalpostUri(ferdigstill: Boolean): String = UriComponentsBuilder
-        .fromUri(dokarkivUrl).path(PATH_JOURNALPOST).query(QUERY_FERDIGSTILL).encode().toUriString()
+) : AbstractRestClient(restTemplate) {
+    fun lagJournalpostUri(ferdigstill: Boolean): String =
+        UriComponentsBuilder
+            .fromUri(dokarkivUrl)
+            .path(PATH_JOURNALPOST)
+            .query(QUERY_FERDIGSTILL)
+            .encode()
+            .toUriString()
 
     fun lagJournalpost(
         request: OpprettJournalpostRequest,
@@ -73,10 +76,13 @@ class DokarkivRestClient(
         journalpostId: String,
         navIdent: String? = null,
     ): OppdaterJournalpostResponse {
-        val uri = UriComponentsBuilder.fromUri(dokarkivUrl)
-            .path(PATH_JOURNALPOST)
-            .pathSegment("{journalpostId}")
-            .encode().toUriString()
+        val uri =
+            UriComponentsBuilder
+                .fromUri(dokarkivUrl)
+                .path(PATH_JOURNALPOST)
+                .pathSegment("{journalpostId}")
+                .encode()
+                .toUriString()
         try {
             return putForEntity(uri, request, headers(navIdent), mapOf("journalpostId" to journalpostId))
         } catch (e: RuntimeException) {
@@ -84,7 +90,11 @@ class DokarkivRestClient(
         }
     }
 
-    private fun oppslagExceptionVed(requestType: String, e: RuntimeException, brukerId: String?): Throwable {
+    private fun oppslagExceptionVed(
+        requestType: String,
+        e: RuntimeException,
+        brukerId: String?,
+    ): Throwable {
         val message = "Feil ved $requestType av journalpost "
         val sensitiveInfo =
             if (e is HttpStatusCodeException) e.responseBodyAsString else "$message for bruker $brukerId "
@@ -99,11 +109,18 @@ class DokarkivRestClient(
         )
     }
 
-    fun ferdigstillJournalpost(journalpostId: String, journalførendeEnhet: String, navIdent: String?) {
-        val uri = UriComponentsBuilder.fromUri(dokarkivUrl)
-            .path(PATH_JOURNALPOST)
-            .pathSegment("{journalpostId}", "ferdigstill")
-            .encode().toUriString()
+    fun ferdigstillJournalpost(
+        journalpostId: String,
+        journalførendeEnhet: String,
+        navIdent: String?,
+    ) {
+        val uri =
+            UriComponentsBuilder
+                .fromUri(dokarkivUrl)
+                .path(PATH_JOURNALPOST)
+                .pathSegment("{journalpostId}", "ferdigstill")
+                .encode()
+                .toUriString()
         try {
             patchForEntity<String>(
                 uri,
@@ -123,7 +140,6 @@ class DokarkivRestClient(
     }
 
     companion object {
-
         private val logger = LoggerFactory.getLogger(DokarkivRestClient::class.java)
 
         private const val PATH_JOURNALPOST = "rest/journalpostapi/v1/journalpost"
@@ -132,8 +148,8 @@ class DokarkivRestClient(
 
         private val NAVIDENT_REGEX = """^[a-zA-Z]\d{6}$""".toRegex()
 
-        fun headers(navIdent: String?): HttpHeaders {
-            return HttpHeaders().apply {
+        fun headers(navIdent: String?): HttpHeaders =
+            HttpHeaders().apply {
                 add(NAV_CALL_ID, MDCOperations.getCallId())
                 if (!navIdent.isNullOrEmpty()) {
                     if (NAVIDENT_REGEX.matches(navIdent)) {
@@ -143,6 +159,5 @@ class DokarkivRestClient(
                     }
                 }
             }
-        }
     }
 }

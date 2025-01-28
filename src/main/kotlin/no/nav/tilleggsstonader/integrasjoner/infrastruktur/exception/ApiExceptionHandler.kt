@@ -14,16 +14,18 @@ import java.util.concurrent.TimeoutException
 
 @ControllerAdvice
 class ApiExceptionHandler {
-
     private val logger = LoggerFactory.getLogger(javaClass)
     private val secureLogger = SecureLogger.secureLogger
 
     @ExceptionHandler(Throwable::class)
     fun handleThrowable(throwable: Throwable): ProblemDetail {
-        val responseStatus = throwable::class.annotations.find { it is ResponseStatus }
-            ?.let { it as ResponseStatus }
-            ?.value
-            ?: HttpStatus.INTERNAL_SERVER_ERROR
+        val responseStatus =
+            throwable::class
+                .annotations
+                .find { it is ResponseStatus }
+                ?.let { it as ResponseStatus }
+                ?.value
+                ?: HttpStatus.INTERNAL_SERVER_ERROR
 
         val metodeSomFeiler = finnMetodeSomFeiler(throwable)
 
@@ -71,12 +73,11 @@ class ApiExceptionHandler {
     }
 
     @ExceptionHandler(JwtTokenMissingException::class)
-    fun handleJwtTokenMissingException(jwtTokenMissingException: JwtTokenMissingException): ProblemDetail {
-        return ProblemDetail.forStatusAndDetail(
+    fun handleJwtTokenMissingException(jwtTokenMissingException: JwtTokenMissingException): ProblemDetail =
+        ProblemDetail.forStatusAndDetail(
             HttpStatus.UNAUTHORIZED,
             "En uventet feil oppstod: Kall ikke autorisert",
         )
-    }
 
     @ExceptionHandler(PdlNotFoundException::class)
     fun handleThrowable(feil: PdlNotFoundException): ProblemDetail {
@@ -84,17 +85,19 @@ class ApiExceptionHandler {
         return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, "Finner ingen personer for valgt personident")
     }
 
-    private fun lagTimeoutfeilRessurs(): ProblemDetail = ProblemDetail.forStatusAndDetail(
-        HttpStatus.INTERNAL_SERVER_ERROR,
-        "Kommunikasjonsproblemer med andre systemer - prøv igjen",
-    )
+    private fun lagTimeoutfeilRessurs(): ProblemDetail =
+        ProblemDetail.forStatusAndDetail(
+            HttpStatus.INTERNAL_SERVER_ERROR,
+            "Kommunikasjonsproblemer med andre systemer - prøv igjen",
+        )
 
     fun finnMetodeSomFeiler(e: Throwable): String {
-        val firstElement = e.stackTrace.firstOrNull {
-            it.className.startsWith("no.nav.tilleggsstonader.integrasjoner") &&
-                !it.className.contains("$") &&
-                !it.className.contains("InsertUpdateRepositoryImpl")
-        }
+        val firstElement =
+            e.stackTrace.firstOrNull {
+                it.className.startsWith("no.nav.tilleggsstonader.integrasjoner") &&
+                    !it.className.contains("$") &&
+                    !it.className.contains("InsertUpdateRepositoryImpl")
+            }
         if (firstElement != null) {
             val className = firstElement.className.split(".").lastOrNull()
             return "$className::${firstElement.methodName}(${firstElement.lineNumber})"
@@ -102,11 +105,7 @@ class ApiExceptionHandler {
         return e.cause?.let { finnMetodeSomFeiler(it) } ?: "(Ukjent metode som feiler)"
     }
 
-    private fun rootCause(throwable: Throwable): String {
-        return throwable.getMostSpecificCause().javaClass.simpleName
-    }
+    private fun rootCause(throwable: Throwable): String = throwable.getMostSpecificCause().javaClass.simpleName
 
-    private fun Throwable.getMostSpecificCause(): Throwable {
-        return NestedExceptionUtils.getMostSpecificCause(this)
-    }
+    private fun Throwable.getMostSpecificCause(): Throwable = NestedExceptionUtils.getMostSpecificCause(this)
 }

@@ -28,10 +28,13 @@ class DokarkivService(
     private val dokarkivRestClient: DokarkivRestClient,
     private val dokarkivLogiskVedleggRestClient: DokarkivLogiskVedleggRestClient,
 ) {
-
     private val logger = LoggerFactory.getLogger(javaClass)
 
-    fun ferdistillJournalpost(journalpost: String, journalførendeEnhet: String, navIdent: String? = null) {
+    fun ferdistillJournalpost(
+        journalpost: String,
+        journalførendeEnhet: String,
+        navIdent: String? = null,
+    ) {
         dokarkivRestClient.ferdigstillJournalpost(journalpost, journalførendeEnhet, navIdent)
     }
 
@@ -48,14 +51,16 @@ class DokarkivService(
         val dokarkivBruker = DokarkivBruker(BrukerIdType.FNR, arkiverDokumentRequest.fnr)
         val hoveddokument = arkiverDokumentRequest.hoveddokumentvarianter[0]
         val metadata = hoveddokument.dokumenttype.tilMetadata()
-        val avsenderMottaker = arkiverDokumentRequest.avsenderMottaker
-            ?: AvsenderMottaker(arkiverDokumentRequest.fnr, BrukerIdType.FNR, navn = null)
+        val avsenderMottaker =
+            arkiverDokumentRequest.avsenderMottaker
+                ?: AvsenderMottaker(arkiverDokumentRequest.fnr, BrukerIdType.FNR, navn = null)
 
         val dokumenter = mutableListOf(mapHoveddokument(arkiverDokumentRequest.hoveddokumentvarianter))
         dokumenter.addAll(arkiverDokumentRequest.vedleggsdokumenter.map(this::mapTilArkivdokument))
-        val sak = arkiverDokumentRequest.fagsakId?.let {
-            Sak(fagsakId = it, sakstype = "FAGSAK", fagsaksystem = metadata.fagsakSystem)
-        }
+        val sak =
+            arkiverDokumentRequest.fagsakId?.let {
+                Sak(fagsakId = it, sakstype = "FAGSAK", fagsaksystem = metadata.fagsakSystem)
+            }
 
         logger.info("Journalfører fagsak ${sak?.fagsakId} med tittel ${hoveddokument.tittel ?: metadata.tittel}")
         return OpprettJournalpostRequest(
@@ -77,21 +82,19 @@ class DokarkivService(
         request: OppdaterJournalpostRequest,
         journalpostId: String,
         navIdent: String? = null,
-    ): OppdaterJournalpostResponse {
-        return dokarkivRestClient.oppdaterJournalpost(supplerDefaultVerdier(request), journalpostId, navIdent)
-    }
+    ): OppdaterJournalpostResponse = dokarkivRestClient.oppdaterJournalpost(supplerDefaultVerdier(request), journalpostId, navIdent)
 
-    private fun supplerDefaultVerdier(request: OppdaterJournalpostRequest): OppdaterJournalpostRequest {
-        return request.copy(sak = request.sak?.copy(sakstype = request.sak?.sakstype ?: "FAGSAK"))
-    }
+    private fun supplerDefaultVerdier(request: OppdaterJournalpostRequest): OppdaterJournalpostRequest =
+        request.copy(sak = request.sak?.copy(sakstype = request.sak?.sakstype ?: "FAGSAK"))
 
     private fun mapHoveddokument(dokumenter: List<Dokument>): ArkivDokument {
         val dokument = dokumenter[0]
         val metadata = dokument.dokumenttype.tilMetadata()
-        val dokumentvarianter = dokumenter.map {
-            val variantFormat: String = hentVariantformat(it)
-            Dokumentvariant(it.filtype.name, variantFormat, it.dokument, it.filnavn)
-        }
+        val dokumentvarianter =
+            dokumenter.map {
+                val variantFormat: String = hentVariantformat(it)
+                Dokumentvariant(it.filtype.name, variantFormat, it.dokument, it.filnavn)
+            }
 
         return ArkivDokument(
             brevkode = metadata.brevkode,
@@ -101,13 +104,12 @@ class DokarkivService(
         )
     }
 
-    private fun hentVariantformat(dokument: Dokument): String {
-        return if (dokument.filtype == Filtype.PDFA) {
+    private fun hentVariantformat(dokument: Dokument): String =
+        if (dokument.filtype == Filtype.PDFA) {
             "ARKIV" // ustrukturert dokumentDto
         } else {
             "ORIGINAL" // strukturert dokumentDto
         }
-    }
 
     private fun mapTilArkivdokument(dokument: Dokument): ArkivDokument {
         val metadata = dokument.dokumenttype.tilMetadata()
@@ -116,33 +118,34 @@ class DokarkivService(
             brevkode = metadata.brevkode,
             dokumentKategori = metadata.dokumentKategori,
             tittel = metadata.tittel ?: dokument.tittel,
-            dokumentvarianter = listOf(
-                Dokumentvariant(
-                    dokument.filtype.name,
-                    variantFormat,
-                    dokument.dokument,
-                    dokument.filnavn,
+            dokumentvarianter =
+                listOf(
+                    Dokumentvariant(
+                        dokument.filtype.name,
+                        variantFormat,
+                        dokument.dokument,
+                        dokument.filnavn,
+                    ),
                 ),
-            ),
         )
     }
 
-    private fun mapTilArkiverDokumentResponse(response: OpprettJournalpostResponse): ArkiverDokumentResponse {
-        return ArkiverDokumentResponse(
+    private fun mapTilArkiverDokumentResponse(response: OpprettJournalpostResponse): ArkiverDokumentResponse =
+        ArkiverDokumentResponse(
             response.journalpostId!!,
             response.journalpostferdigstilt ?: false,
             response.dokumenter,
         )
-    }
 
     fun lagNyttLogiskVedlegg(
         dokumentInfoId: String,
         request: LogiskVedleggRequest,
-    ): LogiskVedleggResponse {
-        return dokarkivLogiskVedleggRestClient.opprettLogiskVedlegg(dokumentInfoId, request)
-    }
+    ): LogiskVedleggResponse = dokarkivLogiskVedleggRestClient.opprettLogiskVedlegg(dokumentInfoId, request)
 
-    fun slettLogiskVedlegg(dokumentInfoId: String, logiskVedleggId: String) {
+    fun slettLogiskVedlegg(
+        dokumentInfoId: String,
+        logiskVedleggId: String,
+    ) {
         dokarkivLogiskVedleggRestClient.slettLogiskVedlegg(dokumentInfoId, logiskVedleggId)
     }
 

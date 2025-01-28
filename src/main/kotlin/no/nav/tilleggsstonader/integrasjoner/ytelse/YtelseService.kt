@@ -26,7 +26,6 @@ class YtelseService(
     @Qualifier("shortCache")
     private val cacheManager: CacheManager,
 ) {
-
     private val logger = LoggerFactory.getLogger(javaClass)
 
     // TODO fjern filter når AAP har lagt til mulighet for å hente perioder i prod
@@ -35,7 +34,8 @@ class YtelseService(
         val hentetInformasjon = mutableListOf<HentetInformasjon>()
 
         val data = HentYtelserCacheData(ident = request.ident, fom = request.fom, tom = request.tom)
-        request.typer.distinct()
+        request.typer
+            .distinct()
             .map { hentPeriodeFn(it, data) }
             .parallelt()
             .forEach {
@@ -52,30 +52,31 @@ class YtelseService(
     private fun hentPeriodeFn(
         it: TypeYtelsePeriode,
         data: HentYtelserCacheData,
-    ): () -> Pair<List<YtelsePeriode>, HentetInformasjon> = {
-        try {
-            Pair(hentPerioder(it, data), HentetInformasjon(type = it, status = StatusHentetInformasjon.OK))
-        } catch (e: Exception) {
-            logError(it, data, e)
-            Pair(emptyList(), HentetInformasjon(type = it, status = StatusHentetInformasjon.FEILET))
+    ): () -> Pair<List<YtelsePeriode>, HentetInformasjon> =
+        {
+            try {
+                Pair(hentPerioder(it, data), HentetInformasjon(type = it, status = StatusHentetInformasjon.OK))
+            } catch (e: Exception) {
+                logError(it, data, e)
+                Pair(emptyList(), HentetInformasjon(type = it, status = StatusHentetInformasjon.FEILET))
+            }
         }
-    }
 
     private fun hentPerioder(
         it: TypeYtelsePeriode,
         data: HentYtelserCacheData,
-    ): List<YtelsePeriode> {
-        return when (it) {
+    ): List<YtelsePeriode> =
+        when (it) {
             TypeYtelsePeriode.AAP -> hentAap(data)
             TypeYtelsePeriode.ENSLIG_FORSØRGER -> hentEnslig(data)
             TypeYtelsePeriode.OMSTILLINGSSTØNAD -> hentOmstillingsstønad(data)
         }
-    }
 
     private fun hentAap(data: HentYtelserCacheData): List<YtelsePeriode> {
-        val perioder = cacheManager.getValue("ytelser-aap", data) {
-            aapClient.hentPerioder(data.ident, fom = data.fom, tom = data.tom)
-        }
+        val perioder =
+            cacheManager.getValue("ytelser-aap", data) {
+                aapClient.hentPerioder(data.ident, fom = data.fom, tom = data.tom)
+            }
         return perioder.perioder.map {
             YtelsePeriode(
                 type = TypeYtelsePeriode.AAP,
@@ -87,9 +88,10 @@ class YtelseService(
     }
 
     private fun hentEnslig(data: HentYtelserCacheData): List<YtelsePeriode> {
-        val perioder = cacheManager.getValue("ytelser-enslig", data) {
-            ensligForsørgerClient.hentPerioder(data.ident, fom = data.fom, tom = data.tom)
-        }
+        val perioder =
+            cacheManager.getValue("ytelser-enslig", data) {
+                ensligForsørgerClient.hentPerioder(data.ident, fom = data.fom, tom = data.tom)
+            }
         return perioder.data.perioder.map {
             YtelsePeriode(
                 type = TypeYtelsePeriode.ENSLIG_FORSØRGER,
@@ -101,9 +103,10 @@ class YtelseService(
     }
 
     private fun hentOmstillingsstønad(data: HentYtelserCacheData): List<YtelsePeriode> {
-        val perioder = cacheManager.getValue("ytelser-etterlatte", data) {
-            etterlatteClient.hentPerioder(data.ident, fom = data.fom)
-        }
+        val perioder =
+            cacheManager.getValue("ytelser-etterlatte", data) {
+                etterlatteClient.hentPerioder(data.ident, fom = data.fom)
+            }
         return perioder.flatMap { it.perioder }.map {
             YtelsePeriode(
                 type = TypeYtelsePeriode.OMSTILLINGSSTØNAD,
@@ -113,7 +116,11 @@ class YtelseService(
         }
     }
 
-    private fun logError(type: TypeYtelsePeriode, data: HentYtelserCacheData, e: Exception) {
+    private fun logError(
+        type: TypeYtelsePeriode,
+        data: HentYtelserCacheData,
+        e: Exception,
+    ) {
         val logMsg = "Feilet henting av perioder fra $type"
         logger.error("$logMsg, se secure logs for mer info")
         secureLogger.error("$logMsg ident=${data.ident} fom=${data.fom} tom=${data.tom}", e)

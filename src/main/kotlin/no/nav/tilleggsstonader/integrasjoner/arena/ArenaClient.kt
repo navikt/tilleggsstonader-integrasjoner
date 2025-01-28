@@ -20,25 +20,34 @@ class ArenaClient(
     @Value("\${clients.arena.uri}") private val baseUrl: URI,
     @Qualifier("azure") restTemplate: RestTemplate,
 ) : AbstractRestClient(restTemplate) {
-
     private val logger = LoggerFactory.getLogger(javaClass)
 
-    val uriAktiviteter = UriComponentsBuilder.fromUri(baseUrl)
-        .pathSegment("api", "v1", "tilleggsstoenad", "aktiviteter")
-        .queryParam("fom", "{fom}")
-        .queryParam("tom", "{tom}")
-        .encode().toUriString()
+    val uriAktiviteter =
+        UriComponentsBuilder
+            .fromUri(baseUrl)
+            .pathSegment("api", "v1", "tilleggsstoenad", "aktiviteter")
+            .queryParam("fom", "{fom}")
+            .queryParam("tom", "{tom}")
+            .encode()
+            .toUriString()
 
-    val uriMålgrupper = UriComponentsBuilder.fromUri(baseUrl)
-        .pathSegment("api", "v1", "maalgrupper")
-        .queryParam("fom", "{fom}")
-        .queryParam("tom", "{tom}")
-        .encode().toUriString()
+    val uriMålgrupper =
+        UriComponentsBuilder
+            .fromUri(baseUrl)
+            .pathSegment("api", "v1", "maalgrupper")
+            .queryParam("fom", "{fom}")
+            .queryParam("tom", "{tom}")
+            .encode()
+            .toUriString()
 
     /**
      * @param tom Default: 60 dager frem i tid.
      */
-    fun hentAktiviteter(ident: String, fom: LocalDate, tom: LocalDate): List<AktivitetArenaResponse> {
+    fun hentAktiviteter(
+        ident: String,
+        fom: LocalDate,
+        tom: LocalDate,
+    ): List<AktivitetArenaResponse> {
         val uriVariables = mutableMapOf<String, Any>("fom" to fom, "tom" to tom)
 
         val headers = hentAktivitetHeaders(ident)
@@ -51,7 +60,11 @@ class ArenaClient(
         }
     }
 
-    fun hentMålgrupper(ident: String, fom: LocalDate, tom: LocalDate): List<MålgruppeArenaResponse> {
+    fun hentMålgrupper(
+        ident: String,
+        fom: LocalDate,
+        tom: LocalDate,
+    ): List<MålgruppeArenaResponse> {
         val uriVariables = mutableMapOf<String, Any>("fom" to fom, "tom" to tom)
 
         val headers = hentAktivitetHeaders(ident)
@@ -72,6 +85,5 @@ class ArenaClient(
         return false
     }
 
-    private fun hentAktivitetHeaders(ident: String): HttpHeaders =
-        HttpHeaders().apply { add("NAV-Personident", ident) }
+    private fun hentAktivitetHeaders(ident: String): HttpHeaders = HttpHeaders().apply { add("NAV-Personident", ident) }
 }

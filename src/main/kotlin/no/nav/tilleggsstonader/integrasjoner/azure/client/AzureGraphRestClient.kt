@@ -16,14 +16,15 @@ class AzureGraphRestClient(
     @Qualifier("azure") restTemplate: RestTemplate,
     @Value("\${clients.azure-graph.uri}") private val aadGraphURI: URI,
 ) : AbstractRestClient(restTemplate) {
-
     fun finnSaksbehandler(navIdent: String): AzureAdBrukere {
-        val uri = UriComponentsBuilder.fromUri(aadGraphURI)
-            .pathSegment(USERS)
-            .queryParam("\$search", "{search}")
-            .queryParam("\$select", FELTER)
-            .encode()
-            .toUriString()
+        val uri =
+            UriComponentsBuilder
+                .fromUri(aadGraphURI)
+                .pathSegment(USERS)
+                .queryParam("\$search", "{search}")
+                .queryParam("\$select", FELTER)
+                .encode()
+                .toUriString()
         return getForEntity(
             uri,
             HttpHeaders().apply {
@@ -34,11 +35,13 @@ class AzureGraphRestClient(
     }
 
     fun hentSaksbehandler(id: String): AzureAdBruker {
-        val uri = UriComponentsBuilder.fromUri(aadGraphURI)
-            .pathSegment(USERS, "{id}")
-            .queryParam("\$select", FELTER)
-            .encode()
-            .toUriString()
+        val uri =
+            UriComponentsBuilder
+                .fromUri(aadGraphURI)
+                .pathSegment(USERS, "{id}")
+                .queryParam("\$select", FELTER)
+                .encode()
+                .toUriString()
         return getForEntity(uri, uriVariables = mapOf("id" to id))
     }
 

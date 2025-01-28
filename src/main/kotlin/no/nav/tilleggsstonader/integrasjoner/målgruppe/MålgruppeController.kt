@@ -19,13 +19,10 @@ import java.time.LocalDate
 class MålgruppeController(
     private val arenaService: ArenaService,
 ) {
-
     @PostMapping("finn")
     fun hentMålgrupper(
         @RequestBody identRequest: IdentRequest,
         @RequestParam fom: LocalDate,
         @RequestParam tom: LocalDate,
-    ): List<MålgruppeArenaDto> {
-        return arenaService.hentMålgrupper(identRequest.ident, fom, tom)
-    }
+    ): List<MålgruppeArenaDto> = arenaService.hentMålgrupper(identRequest.ident, fom, tom)
 }

@@ -37,8 +37,9 @@ import java.util.function.Consumer
 @ProtectedWithClaims(issuer = "azuread")
 @RequestMapping("/api/arkiv")
 @Validated
-class DokarkivController(private val journalføringService: DokarkivService) {
-
+class DokarkivController(
+    private val journalføringService: DokarkivService,
+) {
     @ExceptionHandler(MethodArgumentNotValidException::class)
     fun handleValidationExceptions(ex: MethodArgumentNotValidException): ProblemDetail {
         val errors: MutableMap<String, String> = HashMap()
@@ -63,19 +64,18 @@ class DokarkivController(private val journalføringService: DokarkivService) {
     }
 
     @ExceptionHandler(DokarkivConflictException::class)
-    fun handleDokarkivConflictException(ex: DokarkivConflictException): ResponseEntity<ArkiverDokumentResponse> {
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.response)
-    }
+    fun handleDokarkivConflictException(ex: DokarkivConflictException): ResponseEntity<ArkiverDokumentResponse> =
+        ResponseEntity.status(HttpStatus.CONFLICT).body(ex.response)
 
     @PostMapping
     fun arkiverDokument(
         @RequestBody @Valid
         arkiverDokumentRequest: ArkiverDokumentRequest,
         @RequestHeader(name = NAV_USER_ID) navIdent: String? = null,
-    ): ResponseEntity<ArkiverDokumentResponse> {
-        return ResponseEntity.status(HttpStatus.CREATED)
+    ): ResponseEntity<ArkiverDokumentResponse> =
+        ResponseEntity
+            .status(HttpStatus.CREATED)
             .body(journalføringService.lagJournalpost(arkiverDokumentRequest, navIdent))
-    }
 
     @PutMapping("{journalpostId}")
     fun oppdaterJournalpost(
@@ -83,9 +83,7 @@ class DokarkivController(private val journalføringService: DokarkivService) {
         @RequestHeader(name = NAV_USER_ID) navIdent: String? = null,
         @RequestBody @Valid
         oppdaterJournalpostRequest: OppdaterJournalpostRequest,
-    ): OppdaterJournalpostResponse {
-        return journalføringService.oppdaterJournalpost(oppdaterJournalpostRequest, journalpostId, navIdent)
-    }
+    ): OppdaterJournalpostResponse = journalføringService.oppdaterJournalpost(oppdaterJournalpostRequest, journalpostId, navIdent)
 
     @PutMapping("{journalpostId}/ferdigstill")
     @ResponseStatus(HttpStatus.OK)
@@ -103,10 +101,10 @@ class DokarkivController(private val journalføringService: DokarkivService) {
         @PathVariable(name = "dokumentinfoId") dokumentinfoId: String,
         @RequestBody @Valid
         request: LogiskVedleggRequest,
-    ): ResponseEntity<LogiskVedleggResponse> {
-        return ResponseEntity.status(HttpStatus.CREATED)
+    ): ResponseEntity<LogiskVedleggResponse> =
+        ResponseEntity
+            .status(HttpStatus.CREATED)
             .body(journalføringService.lagNyttLogiskVedlegg(dokumentinfoId, request))
-    }
 
     @DeleteMapping(path = ["/dokument/{dokumentinfoId}/logiskVedlegg/{logiskVedleggId}"])
     fun slettLogiskVedlegg(
@@ -128,7 +126,6 @@ class DokarkivController(private val journalføringService: DokarkivService) {
     }
 
     companion object {
-
         private val LOG = LoggerFactory.getLogger(DokarkivController::class.java)
         const val ARKIVERT_OK_MELDING = "Arkivert journalpost OK"
         const val NAV_USER_ID = "Nav-User-Id"

@@ -15,18 +15,21 @@ class EtterlatteClient(
     @Value("\${clients.etterlatte.uri}") private val baseUrl: URI,
     @Qualifier("azure") restTemplate: RestTemplate,
 ) : AbstractRestClient(restTemplate) {
+    val uriPerioder =
+        UriComponentsBuilder
+            .fromUri(baseUrl)
+            .pathSegment("api", "pensjon", "vedtak")
+            .queryParam("fomDato", "{fomDato}")
+            .encode()
+            .toUriString()
 
-    val uriPerioder = UriComponentsBuilder.fromUri(baseUrl)
-        .pathSegment("api", "pensjon", "vedtak")
-        .queryParam("fomDato", "{fomDato}")
-        .encode()
-        .toUriString()
-
-    fun hentPerioder(ident: String, fom: LocalDate): List<Samordningsvedtak> {
-        return getForEntity<List<Samordningsvedtak>>(
+    fun hentPerioder(
+        ident: String,
+        fom: LocalDate,
+    ): List<Samordningsvedtak> =
+        getForEntity<List<Samordningsvedtak>>(
             uriPerioder,
             httpHeaders = HttpHeaders().apply { add("fnr", ident) },
             uriVariables = mapOf("fomDato" to fom),
         )
-    }
 }

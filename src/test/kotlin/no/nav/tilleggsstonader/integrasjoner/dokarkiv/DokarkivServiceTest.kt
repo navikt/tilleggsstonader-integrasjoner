@@ -33,7 +33,6 @@ import org.slf4j.MDC
 import java.util.UUID
 
 class DokarkivServiceTest {
-
     @MockK
     lateinit var dokarkivRestClient: DokarkivRestClient
 
@@ -46,10 +45,11 @@ class DokarkivServiceTest {
     fun setUp() {
         MDC.put(MDCConstants.MDC_CALL_ID, UUID.randomUUID().toString()) // settes vanligvis i LogFilter
         MockKAnnotations.init(this)
-        dokarkivService = DokarkivService(
-            dokarkivRestClient,
-            dokarkivLogiskVedleggRestClient,
-        )
+        dokarkivService =
+            DokarkivService(
+                dokarkivRestClient,
+                dokarkivLogiskVedleggRestClient,
+            )
     }
 
     @AfterEach
@@ -81,13 +81,14 @@ class DokarkivServiceTest {
         every { dokarkivRestClient.lagJournalpost(capture(slot), any()) }
             .answers { OpprettJournalpostResponse(journalpostId = "123", journalpostferdigstilt = false) }
 
-        val dto = ArkiverDokumentRequest(
-            FNR,
-            false,
-            listOf(Dokument(PDF_DOK, Filtype.PDFA, FILNAVN, null, Dokumenttype.BARNETILSYN_SØKNAD)),
-            eksternReferanseId = "id",
-            avsenderMottaker = AvsenderMottaker("fnr", BrukerIdType.FNR, "navn"),
-        )
+        val dto =
+            ArkiverDokumentRequest(
+                FNR,
+                false,
+                listOf(Dokument(PDF_DOK, Filtype.PDFA, FILNAVN, null, Dokumenttype.BARNETILSYN_SØKNAD)),
+                eksternReferanseId = "id",
+                avsenderMottaker = AvsenderMottaker("fnr", BrukerIdType.FNR, "navn"),
+            )
 
         dokarkivService.lagJournalpost(dto)
 
@@ -105,17 +106,18 @@ class DokarkivServiceTest {
         every { dokarkivRestClient.lagJournalpost(capture(slot), any()) }
             .answers { OpprettJournalpostResponse(journalpostId = "123", journalpostferdigstilt = false) }
 
-        val dto = ArkiverDokumentRequest(
-            FNR,
-            false,
-            listOf(Dokument(PDF_DOK, Filtype.PDFA, FILNAVN, null, Dokumenttype.BARNETILSYN_SØKNAD)),
-            listOf(
-                Dokument(PDF_DOK, Filtype.PDFA, null, TITTEL, Dokumenttype.BARNETILSYN_SØKNAD_VEDLEGG),
-            ),
-            fagsakId = FAGSAK_ID,
-            eksternReferanseId = "id",
-            avsenderMottaker = AvsenderMottaker("fnr", BrukerIdType.FNR, "navn"),
-        )
+        val dto =
+            ArkiverDokumentRequest(
+                FNR,
+                false,
+                listOf(Dokument(PDF_DOK, Filtype.PDFA, FILNAVN, null, Dokumenttype.BARNETILSYN_SØKNAD)),
+                listOf(
+                    Dokument(PDF_DOK, Filtype.PDFA, null, TITTEL, Dokumenttype.BARNETILSYN_SØKNAD_VEDLEGG),
+                ),
+                fagsakId = FAGSAK_ID,
+                eksternReferanseId = "id",
+                avsenderMottaker = AvsenderMottaker("fnr", BrukerIdType.FNR, "navn"),
+            )
 
         dokarkivService.lagJournalpost(dto)
 
@@ -137,13 +139,14 @@ class DokarkivServiceTest {
         every { dokarkivRestClient.lagJournalpost(capture(slot), any()) }
             .answers { OpprettJournalpostResponse(journalpostId = "123", journalpostferdigstilt = false) }
 
-        val dto = ArkiverDokumentRequest(
-            FNR,
-            false,
-            listOf(Dokument(JSON_DOK, Filtype.JSON, FILNAVN, null, Dokumenttype.BARNETILSYN_SØKNAD)),
-            eksternReferanseId = "id",
-            avsenderMottaker = AvsenderMottaker("fnr", BrukerIdType.FNR, "navn"),
-        )
+        val dto =
+            ArkiverDokumentRequest(
+                FNR,
+                false,
+                listOf(Dokument(JSON_DOK, Filtype.JSON, FILNAVN, null, Dokumenttype.BARNETILSYN_SØKNAD)),
+                eksternReferanseId = "id",
+                avsenderMottaker = AvsenderMottaker("fnr", BrukerIdType.FNR, "navn"),
+            )
 
         dokarkivService.lagJournalpost(dto)
 
@@ -166,13 +169,14 @@ class DokarkivServiceTest {
         every { dokarkivRestClient.lagJournalpost(any(), any()) }
             .answers { OpprettJournalpostResponse(journalpostId = JOURNALPOST_ID, journalpostferdigstilt = true) }
 
-        val dto = ArkiverDokumentRequest(
-            FNR,
-            false,
-            listOf(Dokument(JSON_DOK, Filtype.JSON, FILNAVN, null, Dokumenttype.BARNETILSYN_SØKNAD)),
-            eksternReferanseId = "id",
-            avsenderMottaker = AvsenderMottaker("fnr", BrukerIdType.FNR, "navn"),
-        )
+        val dto =
+            ArkiverDokumentRequest(
+                FNR,
+                false,
+                listOf(Dokument(JSON_DOK, Filtype.JSON, FILNAVN, null, Dokumenttype.BARNETILSYN_SØKNAD)),
+                eksternReferanseId = "id",
+                avsenderMottaker = AvsenderMottaker("fnr", BrukerIdType.FNR, "navn"),
+            )
 
         val arkiverDokumentResponse = dokarkivService.lagJournalpost(dto)
 
@@ -243,7 +247,6 @@ class DokarkivServiceTest {
     }
 
     companion object {
-
         private const val FNR = "fnr"
         private val PDF_DOK = "dok".toByteArray()
         private const val ARKIV_VARIANTFORMAT = "ARKIV"

@@ -16,7 +16,6 @@ import java.time.LocalDate
 @Configuration
 @Profile("mock-aap")
 class AAPClientTestConfig {
-
     @Bean
     @Primary
     fun aapClient(): AAPClient {
@@ -26,11 +25,13 @@ class AAPClientTestConfig {
     }
 
     companion object {
-        private val periode = AAPPeriode(
-            aktivitetsfaseNavn = "Arbeidsutprøving",
-            aktivitetsfaseKode = "AU",
-            periode = Periode(LocalDate.now(), LocalDate.now()),
-        )
+        private val periode =
+            AAPPeriode(
+                aktivitetsfaseNavn = "Arbeidsutprøving",
+                aktivitetsfaseKode = "AU",
+                periode = Periode(LocalDate.now(), LocalDate.now()),
+            )
+
         fun resetMock(client: AAPClient) {
             clearMocks(client)
             every { client.hentPerioder(any(), any(), any()) } returns AAPPerioderResponse(listOf(periode))

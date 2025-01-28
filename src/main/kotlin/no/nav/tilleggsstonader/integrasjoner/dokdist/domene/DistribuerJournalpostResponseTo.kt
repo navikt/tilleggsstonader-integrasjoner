@@ -1,5 +1,9 @@
 package no.nav.tilleggsstonader.integrasjoner.dokdist.domene
 
-data class DistribuerJournalpostResponseTo(val bestillingsId: String)
+data class DistribuerJournalpostResponseTo(
+    val bestillingsId: String,
+)
 
-class DokdistConflictException(val response: DistribuerJournalpostResponseTo) : RuntimeException()
+class DokdistConflictException(
+    val response: DistribuerJournalpostResponseTo,
+) : RuntimeException()

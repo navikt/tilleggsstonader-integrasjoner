@@ -24,42 +24,39 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @ProtectedWithClaims(issuer = "azuread")
 @RequestMapping("/api/oppgave")
-class OppgaveController(private val oppgaveService: OppgaveService) {
-
+class OppgaveController(
+    private val oppgaveService: OppgaveService,
+) {
     @GetMapping("/{oppgaveId}")
-    fun hentOppgave(@PathVariable(name = "oppgaveId") oppgaveId: String): Oppgave {
-        return oppgaveService.hentOppgave(oppgaveId.toLong())
-    }
+    fun hentOppgave(
+        @PathVariable(name = "oppgaveId") oppgaveId: String,
+    ): Oppgave = oppgaveService.hentOppgave(oppgaveId.toLong())
 
     @PostMapping("/finn")
-    fun finnOppgaverV4(@RequestBody finnOppgaveRequest: FinnOppgaveRequest): FinnOppgaveResponseDto {
-        return oppgaveService.finnOppgaver(finnOppgaveRequest)
-    }
+    fun finnOppgaverV4(
+        @RequestBody finnOppgaveRequest: FinnOppgaveRequest,
+    ): FinnOppgaveResponseDto = oppgaveService.finnOppgaver(finnOppgaveRequest)
 
     @PostMapping("/mappe/sok")
     @Deprecated(message = "Bruk get under") // Hvilken burde vi bruke?
-    fun finnMapperV1Deprecated(@RequestBody finnMappeRequest: FinnMappeRequest): FinnMappeResponseDto {
-        return oppgaveService.finnMapper(finnMappeRequest)
-    }
+    fun finnMapperV1Deprecated(
+        @RequestBody finnMappeRequest: FinnMappeRequest,
+    ): FinnMappeResponseDto = oppgaveService.finnMapper(finnMappeRequest)
 
     @GetMapping("/mappe/sok")
-    fun finnMapperV1(finnMappeRequest: FinnMappeRequest): FinnMappeResponseDto {
-        return oppgaveService.finnMapper(finnMappeRequest)
-    }
+    fun finnMapperV1(finnMappeRequest: FinnMappeRequest): FinnMappeResponseDto = oppgaveService.finnMapper(finnMappeRequest)
 
     @GetMapping("/mappe/finn/{enhetNr}")
-    fun finnMapper(@PathVariable enhetNr: String): List<MappeDto> {
-        return oppgaveService.finnMapper(enhetNr)
-    }
+    fun finnMapper(
+        @PathVariable enhetNr: String,
+    ): List<MappeDto> = oppgaveService.finnMapper(enhetNr)
 
     @PostMapping("/{oppgaveId}/fordel")
     fun fordelOppgave(
         @PathVariable(name = "oppgaveId") oppgaveId: Long,
         @RequestParam("saksbehandler") saksbehandler: String?,
         @RequestParam("versjon") versjon: Int?,
-    ): Oppgave {
-        return oppgaveService.fordelOppgave(oppgaveId, saksbehandler, versjon)
-    }
+    ): Oppgave = oppgaveService.fordelOppgave(oppgaveId, saksbehandler, versjon)
 
     @PatchMapping("/{oppgaveId}/oppdater")
     fun patchOppgave(
@@ -72,7 +69,9 @@ class OppgaveController(private val oppgaveService: OppgaveService) {
     }
 
     @PostMapping("/opprett")
-    fun opprettOppgaveV2(@RequestBody oppgave: OpprettOppgaveRequest): ResponseEntity<OppgaveResponse> {
+    fun opprettOppgaveV2(
+        @RequestBody oppgave: OpprettOppgaveRequest,
+    ): ResponseEntity<OppgaveResponse> {
         val oppgaveId = oppgaveService.opprettOppgave(oppgave)
         return ResponseEntity.status(HttpStatus.CREATED).body(OppgaveResponse(oppgaveId = oppgaveId))
     }

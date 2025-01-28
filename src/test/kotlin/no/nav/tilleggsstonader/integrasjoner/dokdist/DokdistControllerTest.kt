@@ -30,7 +30,6 @@ import java.nio.file.Files
 @TestPropertySource(properties = ["clients.dokdist.uri=http://localhost:28085"])
 @AutoConfigureWireMock(port = 28085)
 class DokdistControllerTest : IntegrationTest() {
-
     private val request = DistribuerJournalpostRequest(JOURNALPOST_ID, Fagsystem.TILLEGGSSTONADER, "ba-sak", null)
 
     @BeforeEach
@@ -42,19 +41,21 @@ class DokdistControllerTest : IntegrationTest() {
     fun `dokdist returnerer OK uten kjernetid og distribusjonstidspunkt`() {
         mockGodkjentKallMotDokDist()
 
-        val body2 = """
+        val body2 =
+            """
             {
                 "journalpostId": "$JOURNALPOST_ID",
                 "bestillendeFagsystem": "${Fagsystem.TILLEGGSSTONADER}",
                 "dokumentProdApp": "ts-sak"
             }
-        """.trimIndent()
+            """.trimIndent()
         headers.set("Content-Type", "application/json")
-        val response: ResponseEntity<String> = restTemplate.exchange(
-            localhost(DOKDIST_URL),
-            HttpMethod.POST,
-            HttpEntity(body2, headers),
-        )
+        val response: ResponseEntity<String> =
+            restTemplate.exchange(
+                localhost(DOKDIST_URL),
+                HttpMethod.POST,
+                HttpEntity(body2, headers),
+            )
 
         assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         assertThat(response.body).contains("1234567")
@@ -64,18 +65,20 @@ class DokdistControllerTest : IntegrationTest() {
     fun `dokdist returnerer OK med distribusjonstype`() {
         mockGodkjentKallMotDokDist()
 
-        val body = DistribuerJournalpostRequest(
-            JOURNALPOST_ID,
-            Fagsystem.TILLEGGSSTONADER,
-            "ts-sak",
-            Distribusjonstype.VIKTIG,
-            Distribusjonstidspunkt.KJERNETID,
-        )
-        val response: ResponseEntity<String> = restTemplate.exchange(
-            localhost(DOKDIST_URL),
-            HttpMethod.POST,
-            HttpEntity(body, headers),
-        )
+        val body =
+            DistribuerJournalpostRequest(
+                JOURNALPOST_ID,
+                Fagsystem.TILLEGGSSTONADER,
+                "ts-sak",
+                Distribusjonstype.VIKTIG,
+                Distribusjonstidspunkt.KJERNETID,
+            )
+        val response: ResponseEntity<String> =
+            restTemplate.exchange(
+                localhost(DOKDIST_URL),
+                HttpMethod.POST,
+                HttpEntity(body, headers),
+            )
 
         assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         assertThat(response.body).contains("1234567")
@@ -85,11 +88,12 @@ class DokdistControllerTest : IntegrationTest() {
     fun `dokdist returnerer OK`() {
         mockGodkjentKallMotDokDist()
 
-        val response: ResponseEntity<String> = restTemplate.exchange(
-            localhost(DOKDIST_URL),
-            HttpMethod.POST,
-            HttpEntity(request, headers),
-        )
+        val response: ResponseEntity<String> =
+            restTemplate.exchange(
+                localhost(DOKDIST_URL),
+                HttpMethod.POST,
+                HttpEntity(request, headers),
+            )
 
         assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         assertThat(response.body).contains("1234567")
@@ -107,13 +111,14 @@ class DokdistControllerTest : IntegrationTest() {
         )
 
         val body = request
-        val response = catchProblemDetailException {
-            restTemplate.exchange<String>(
-                localhost(DOKDIST_URL),
-                HttpMethod.POST,
-                HttpEntity(body, headers),
-            )
-        }
+        val response =
+            catchProblemDetailException {
+                restTemplate.exchange<String>(
+                    localhost(DOKDIST_URL),
+                    HttpMethod.POST,
+                    HttpEntity(body, headers),
+                )
+            }
 
         assertThat(response.httpStatus).isEqualTo(HttpStatus.BAD_REQUEST)
         assertThat(response.detail.detail)
@@ -131,13 +136,14 @@ class DokdistControllerTest : IntegrationTest() {
                         .withBody("""{"bestillingsId":"123"}"""),
                 ),
         )
-        val response = catchThrowableOfType<HttpClientErrorException> {
-            restTemplate.exchange<String>(
-                localhost(DOKDIST_URL),
-                HttpMethod.POST,
-                HttpEntity(request, headers),
-            )
-        }
+        val response =
+            catchThrowableOfType<HttpClientErrorException> {
+                restTemplate.exchange<String>(
+                    localhost(DOKDIST_URL),
+                    HttpMethod.POST,
+                    HttpEntity(request, headers),
+                )
+            }
 
         assertThat(response.statusCode).isEqualTo(HttpStatus.CONFLICT)
         assertThat(response.responseBodyAsString).isEqualTo("123")
@@ -150,12 +156,10 @@ class DokdistControllerTest : IntegrationTest() {
         )
     }
 
-    private fun badRequestResponse(): String {
-        return Files.readString(ClassPathResource("dokdist/badrequest.json").file.toPath(), StandardCharsets.UTF_8)
-    }
+    private fun badRequestResponse(): String =
+        Files.readString(ClassPathResource("dokdist/badrequest.json").file.toPath(), StandardCharsets.UTF_8)
 
     companion object {
-
         private const val DOKDIST_URL = "/api/dist"
         private const val JOURNALPOST_ID = "453492547"
     }

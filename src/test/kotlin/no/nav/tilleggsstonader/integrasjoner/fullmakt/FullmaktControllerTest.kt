@@ -22,7 +22,6 @@ import org.springframework.web.client.exchange
 @TestPropertySource(properties = ["clients.repr-api.uri=http://localhost:28086"])
 @AutoConfigureWireMock(port = 28086)
 class FullmaktControllerTest : IntegrationTest() {
-
     private val fullmaktsgiverIdent = "12345678910"
     private val fullmektigIdent = "30515505985"
 
@@ -43,9 +42,10 @@ class FullmaktControllerTest : IntegrationTest() {
     @Test
     fun `skal svare med problem detail i tilfelle klientfeil`() {
         stubResponse(HttpStatus.BAD_REQUEST)
-        val response = catchProblemDetailException {
-            kallFullmektige()
-        }
+        val response =
+            catchProblemDetailException {
+                kallFullmektige()
+            }
         assertThat(response.httpStatus).isEqualTo(HttpStatus.BAD_REQUEST)
         assertThat(response.detail.detail).contains("Kunne ikke hente ut fullmakter fra REPR")
     }
@@ -53,19 +53,21 @@ class FullmaktControllerTest : IntegrationTest() {
     @Test
     fun `skal svare med problem detail i tilfelle serverfeil`() {
         stubResponse(HttpStatus.INTERNAL_SERVER_ERROR)
-        val response = catchProblemDetailException {
-            kallFullmektige()
-        }
+        val response =
+            catchProblemDetailException {
+                kallFullmektige()
+            }
         assertThat(response.httpStatus).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR)
         assertThat(response.detail.detail).contains("Kunne ikke hente ut fullmakter fra REPR")
     }
 
     private fun kallFullmektige(): ResponseEntity<String> {
-        val identRequestJson = """
-        {
-            "ident": "$fullmaktsgiverIdent"
-        }
-        """.trimIndent()
+        val identRequestJson =
+            """
+            {
+                "ident": "$fullmaktsgiverIdent"
+            }
+            """.trimIndent()
 
         return restTemplate.exchange<String>(
             localhost("/api/fullmakt/fullmektige"),
@@ -76,12 +78,13 @@ class FullmaktControllerTest : IntegrationTest() {
 }
 
 private fun stubResponse(responseType: HttpStatus) {
-    val response = when (responseType) {
-        HttpStatus.OK -> okJson(FullmaktResponseStubs.ok)
-        HttpStatus.INTERNAL_SERVER_ERROR -> serverError().withBody(FullmaktResponseStubs.internalServerError)
-        HttpStatus.BAD_REQUEST -> badRequest().withBody(FullmaktResponseStubs.badRequest)
-        else -> throw NotImplementedError("Har ikke laget testrespons for $responseType")
-    }
+    val response =
+        when (responseType) {
+            HttpStatus.OK -> okJson(FullmaktResponseStubs.ok)
+            HttpStatus.INTERNAL_SERVER_ERROR -> serverError().withBody(FullmaktResponseStubs.internalServerError)
+            HttpStatus.BAD_REQUEST -> badRequest().withBody(FullmaktResponseStubs.badRequest)
+            else -> throw NotImplementedError("Har ikke laget testrespons for $responseType")
+        }
 
     stubFor(
         post("/api/internbruker/fullmakt/fullmaktsgiver")

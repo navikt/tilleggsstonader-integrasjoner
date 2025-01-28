@@ -19,8 +19,9 @@ import org.springframework.web.client.HttpStatusCodeException
 @RestController
 @RequestMapping("/api/journalpost")
 @ProtectedWithClaims(issuer = "azuread")
-class HentJournalpostController(private val journalpostService: JournalpostService) {
-
+class HentJournalpostController(
+    private val journalpostService: JournalpostService,
+) {
     @ExceptionHandler(JournalpostRestClientException::class)
     fun handleRestClientException(ex: JournalpostRestClientException): ProblemDetail {
         val errorBaseMessage = "Feil ved henting av journalpost=${ex.journalpostId}"
@@ -54,14 +55,13 @@ class HentJournalpostController(private val journalpostService: JournalpostServi
         return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, "Sak mangler for journalpostId=${e.id}")
     }
 
-    private fun byggFeilmelding(ex: RuntimeException): String {
-        return if (ex.cause is HttpStatusCodeException) {
+    private fun byggFeilmelding(ex: RuntimeException): String =
+        if (ex.cause is HttpStatusCodeException) {
             val cex = ex.cause as HttpStatusCodeException
             " statuscode=${cex.statusCode} body=${cex.responseBodyAsString}"
         } else {
             " klientfeilmelding=${ex.message}"
         }
-    }
 
     @ExceptionHandler(RuntimeException::class)
     fun handleRequestParserException(ex: RuntimeException): ProblemDetail {
@@ -71,34 +71,34 @@ class HentJournalpostController(private val journalpostService: JournalpostServi
     }
 
     @GetMapping("sak")
-    fun hentSaksnummer(@RequestParam(name = "journalpostId") journalpostId: String): Map<String, String> {
-        val saksnummer = journalpostService.hentSaksnummer(journalpostId)
-            ?: throw JournalpostIkkeFunnetException(journalpostId)
+    fun hentSaksnummer(
+        @RequestParam(name = "journalpostId") journalpostId: String,
+    ): Map<String, String> {
+        val saksnummer =
+            journalpostService.hentSaksnummer(journalpostId)
+                ?: throw JournalpostIkkeFunnetException(journalpostId)
 
         return mapOf("saksnummer" to saksnummer)
     }
 
     @GetMapping
-    fun hentJournalpost(@RequestParam(name = "journalpostId") journalpostId: String): Journalpost {
-        return journalpostService.hentJournalpost(journalpostId)
-    }
+    fun hentJournalpost(
+        @RequestParam(name = "journalpostId") journalpostId: String,
+    ): Journalpost = journalpostService.hentJournalpost(journalpostId)
 
     @PostMapping
-    fun hentJournalpostForBruker(@RequestBody journalposterForBrukerRequest: JournalposterForBrukerRequest): List<Journalpost> {
-        return journalpostService.finnJournalposter(journalposterForBrukerRequest)
-    }
+    fun hentJournalpostForBruker(
+        @RequestBody journalposterForBrukerRequest: JournalposterForBrukerRequest,
+    ): List<Journalpost> = journalpostService.finnJournalposter(journalposterForBrukerRequest)
 
     @GetMapping("hentdokument/{journalpostId}/{dokumentInfoId}")
     fun hentDokument(
         @PathVariable journalpostId: String,
         @PathVariable dokumentInfoId: String,
         @RequestParam("variantFormat", required = false) variantFormat: String?,
-    ): ByteArray {
-        return journalpostService.hentDokument(journalpostId, dokumentInfoId, variantFormat ?: "ARKIV")
-    }
+    ): ByteArray = journalpostService.hentDokument(journalpostId, dokumentInfoId, variantFormat ?: "ARKIV")
 
     companion object {
-
         private val LOG = LoggerFactory.getLogger(HentJournalpostController::class.java)
         private val secureLogger = LoggerFactory.getLogger("secureLogger")
     }

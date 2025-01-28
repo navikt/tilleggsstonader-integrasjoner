@@ -7,7 +7,6 @@ import no.nav.tilleggsstonader.kontrakter.felles.Fagsystem
 import no.nav.tilleggsstonader.kontrakter.felles.Tema
 
 sealed interface Dokumentmetadata {
-
     val journalpostType: JournalpostType
     val fagsakSystem: Fagsystem?
     val tema: Tema
@@ -19,7 +18,9 @@ sealed interface Dokumentmetadata {
     val dokumentKategori: Dokumentkategori
 }
 
-enum class Dokumentkategori(private val beskrivelse: String) {
+enum class Dokumentkategori(
+    private val beskrivelse: String,
+) {
     B("Brev"),
     VB("Vedtaksbrev"),
     IB("Infobrev"),
@@ -37,20 +38,21 @@ enum class Dokumentkategori(private val beskrivelse: String) {
     KA("Klage eller anke"),
 }
 
-fun Dokumenttype.tilMetadata(): Dokumentmetadata = when (this) {
-    Dokumenttype.BARNETILSYN_SØKNAD -> BarnetilsynSøknadMetadata
-    Dokumenttype.BARNETILSYN_SØKNAD_VEDLEGG -> BarnetilsynSøknadVedleggMetadata
-    Dokumenttype.BARNETILSYN_VEDTAKSBREV -> BarnetilsynVedtaksbrevMetadata
-    Dokumenttype.BARNETILSYN_FRITTSTÅENDE_BREV -> BarnetilsynFrittståendeBrevMetadata
-    Dokumenttype.BARNETILSYN_INTERNT_VEDTAK -> BarnetilsynInterntVedtakMetadata
-    Dokumenttype.BARNETILSYN_KLAGE_VEDTAKSBREV -> KlageVedtakTilsynBarn
-    Dokumenttype.BARNETILSYN_KLAGE_INTERNT_VEDTAK -> KlageInterntVedtakTilsynBarn
+fun Dokumenttype.tilMetadata(): Dokumentmetadata =
+    when (this) {
+        Dokumenttype.BARNETILSYN_SØKNAD -> BarnetilsynSøknadMetadata
+        Dokumenttype.BARNETILSYN_SØKNAD_VEDLEGG -> BarnetilsynSøknadVedleggMetadata
+        Dokumenttype.BARNETILSYN_VEDTAKSBREV -> BarnetilsynVedtaksbrevMetadata
+        Dokumenttype.BARNETILSYN_FRITTSTÅENDE_BREV -> BarnetilsynFrittståendeBrevMetadata
+        Dokumenttype.BARNETILSYN_INTERNT_VEDTAK -> BarnetilsynInterntVedtakMetadata
+        Dokumenttype.BARNETILSYN_KLAGE_VEDTAKSBREV -> KlageVedtakTilsynBarn
+        Dokumenttype.BARNETILSYN_KLAGE_INTERNT_VEDTAK -> KlageInterntVedtakTilsynBarn
 
-    Dokumenttype.LÆREMIDLER_SØKNAD -> LæremidlerSøknadMetadata
-    Dokumenttype.LÆREMIDLER_SØKNAD_VEDLEGG -> LæremidlerSøknadVedleggMetadata
-    Dokumenttype.LÆREMIDLER_VEDTAKSBREV -> LæremidlerVedtaksbrevMetadata
-    Dokumenttype.LÆREMIDLER_FRITTSTÅENDE_BREV -> LæremidlerFrittståendeBrevMetadata
-    Dokumenttype.LÆREMIDLER_INTERNT_VEDTAK -> LæremidlerInterntVedtakMetadata
-    Dokumenttype.LÆREMIDLER_KLAGE_VEDTAKSBREV -> KlageVedtakLæremidler
-    Dokumenttype.LÆREMIDLER_KLAGE_INTERNT_VEDTAK -> KlageInterntVedtakLæremidler
-}
+        Dokumenttype.LÆREMIDLER_SØKNAD -> LæremidlerSøknadMetadata
+        Dokumenttype.LÆREMIDLER_SØKNAD_VEDLEGG -> LæremidlerSøknadVedleggMetadata
+        Dokumenttype.LÆREMIDLER_VEDTAKSBREV -> LæremidlerVedtaksbrevMetadata
+        Dokumenttype.LÆREMIDLER_FRITTSTÅENDE_BREV -> LæremidlerFrittståendeBrevMetadata
+        Dokumenttype.LÆREMIDLER_INTERNT_VEDTAK -> LæremidlerInterntVedtakMetadata
+        Dokumenttype.LÆREMIDLER_KLAGE_VEDTAKSBREV -> KlageVedtakLæremidler
+        Dokumenttype.LÆREMIDLER_KLAGE_INTERNT_VEDTAK -> KlageInterntVedtakLæremidler
+    }

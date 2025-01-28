@@ -16,11 +16,8 @@ import org.springframework.web.bind.annotation.RestController
 class YtelseController(
     private val ytelseService: YtelseService,
 ) {
-
     @PostMapping("finn")
     fun hentYtelser(
         @RequestBody request: YtelsePerioderRequest,
-    ): YtelsePerioderDto {
-        return ytelseService.hentYtelser(request)
-    }
+    ): YtelsePerioderDto = ytelseService.hentYtelser(request)
 }

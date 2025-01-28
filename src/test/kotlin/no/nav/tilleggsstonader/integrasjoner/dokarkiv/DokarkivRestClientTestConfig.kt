@@ -18,16 +18,16 @@ import java.time.format.DateTimeFormatter
 @Configuration
 @Profile("mock-dokarkiv")
 class DokarkivRestClientTestConfig {
-
     @Bean
     @Primary
     fun dokarkivMockRestClient(): DokarkivRestClient {
         val klient = mockk<DokarkivRestClient>(relaxed = true)
         val pattern = DateTimeFormatter.ofPattern("yyyyMMddHHmmss")
-        val response = OpprettJournalpostResponse(
-            journalpostId = osloNow().format(pattern),
-            journalpostferdigstilt = false,
-        )
+        val response =
+            OpprettJournalpostResponse(
+                journalpostId = osloNow().format(pattern),
+                journalpostferdigstilt = false,
+            )
         every {
             klient.lagJournalpost(any(), any())
         } returns response

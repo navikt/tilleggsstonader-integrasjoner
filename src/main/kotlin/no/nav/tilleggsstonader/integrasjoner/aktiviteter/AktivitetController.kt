@@ -21,22 +21,17 @@ import java.time.LocalDate
 class AktivitetController(
     private val arenaService: ArenaService,
 ) {
-
     @PostMapping("finn")
     fun hentAktiviteter(
         @RequestBody identRequest: IdentRequest,
         @RequestParam fom: LocalDate,
         @RequestParam tom: LocalDate,
-    ): List<AktivitetArenaDto> {
-        return arenaService.hentAktiviteter(identRequest.ident, fom, tom)
-    }
+    ): List<AktivitetArenaDto> = arenaService.hentAktiviteter(identRequest.ident, fom, tom)
 
     @GetMapping("tokenx")
     @ProtectedWithClaims(issuer = EksternBrukerUtils.ISSUER_TOKENX, claimMap = ["acr=Level4"])
     fun hentAktiviteterTokenX(
         @RequestParam fom: LocalDate,
         @RequestParam tom: LocalDate,
-    ): List<AktivitetArenaDto> {
-        return arenaService.hentAktiviteter(EksternBrukerUtils.hentFnrFraToken(), fom, tom)
-    }
+    ): List<AktivitetArenaDto> = arenaService.hentAktiviteter(EksternBrukerUtils.hentFnrFraToken(), fom, tom)
 }

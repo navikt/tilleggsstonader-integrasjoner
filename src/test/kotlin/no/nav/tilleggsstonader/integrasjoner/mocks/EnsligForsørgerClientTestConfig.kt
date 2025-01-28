@@ -17,7 +17,6 @@ import java.time.LocalDate
 @Configuration
 @Profile("mock-enslig")
 class EnsligForsørgerClientTestConfig {
-
     @Bean
     @Primary
     fun ensligForsørgerClient(): EnsligForsørgerClient {
@@ -29,13 +28,14 @@ class EnsligForsørgerClientTestConfig {
     companion object {
         fun resetMock(client: EnsligForsørgerClient) {
             clearMocks(client)
-            val perioder = listOf(
-                EnsligForsørgerPeriode(
-                    LocalDate.now(),
-                    LocalDate.now(),
-                    stønadstype = EnsligForsørgerStønadstype.OVERGANGSSTØNAD,
-                ),
-            )
+            val perioder =
+                listOf(
+                    EnsligForsørgerPeriode(
+                        LocalDate.now(),
+                        LocalDate.now(),
+                        stønadstype = EnsligForsørgerStønadstype.OVERGANGSSTØNAD,
+                    ),
+                )
             every { client.hentPerioder(any(), any(), any()) } answers {
                 EnsligForsørgerPerioderResponse(EnsligForsørgerPerioder(firstArg(), perioder))
             }

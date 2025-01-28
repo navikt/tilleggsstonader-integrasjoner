@@ -17,7 +17,7 @@ class FullmaktController(
     val fullmaktClient: FullmaktClient,
 ) {
     @PostMapping("fullmektige")
-    fun hentFullmektige(@RequestBody fullmaktsgiver: IdentRequest): List<FullmektigDto> {
-        return fullmaktClient.hentFullmektige(fullmaktsgiver)
-    }
+    fun hentFullmektige(
+        @RequestBody fullmaktsgiver: IdentRequest,
+    ): List<FullmektigDto> = fullmaktClient.hentFullmektige(fullmaktsgiver)
 }

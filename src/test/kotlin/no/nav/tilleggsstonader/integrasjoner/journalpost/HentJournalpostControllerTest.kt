@@ -39,7 +39,6 @@ import java.time.LocalDateTime
 @TestPropertySource(properties = ["clients.saf.uri=http://localhost:28085"])
 @AutoConfigureWireMock(port = 28085)
 class HentJournalpostControllerTest : IntegrationTest() {
-
     private val testLogger = LoggerFactory.getLogger(HentJournalpostController::class.java) as Logger
 
     private lateinit var uriHentSaksnummer: String
@@ -50,10 +49,16 @@ class HentJournalpostControllerTest : IntegrationTest() {
     fun setUp() {
         testLogger.addAppender(listAppender)
         headers.setBearerAuth(onBehalfOfToken())
-        uriHentSaksnummer = UriComponentsBuilder.fromHttpUrl(localhost(JOURNALPOST_BASE_URL) + "/sak")
-            .queryParam("journalpostId", JOURNALPOST_ID).toUriString()
-        uriHentJournalpost = UriComponentsBuilder.fromHttpUrl(localhost(JOURNALPOST_BASE_URL))
-            .queryParam("journalpostId", JOURNALPOST_ID).toUriString()
+        uriHentSaksnummer =
+            UriComponentsBuilder
+                .fromHttpUrl(localhost(JOURNALPOST_BASE_URL) + "/sak")
+                .queryParam("journalpostId", JOURNALPOST_ID)
+                .toUriString()
+        uriHentJournalpost =
+            UriComponentsBuilder
+                .fromHttpUrl(localhost(JOURNALPOST_BASE_URL))
+                .queryParam("journalpostId", JOURNALPOST_ID)
+                .toUriString()
         uriHentDokument = localhost(JOURNALPOST_BASE_URL) + "/hentdokument/$JOURNALPOST_ID/$DOKUMENTINFO_ID"
     }
 
@@ -61,11 +66,12 @@ class HentJournalpostControllerTest : IntegrationTest() {
     fun `hent saksnummer skal returnere saksnummer og status ok`() {
         stubGraphqlEndpoint("saf/gyldigsakresponse.json", expectedRequestBody = gyldigJournalPostIdRequest())
 
-        val response = restTemplate.exchange<Map<String, String>>(
-            uriHentSaksnummer,
-            HttpMethod.GET,
-            HttpEntity<String>(headers),
-        )
+        val response =
+            restTemplate.exchange<Map<String, String>>(
+                uriHentSaksnummer,
+                HttpMethod.GET,
+                HttpEntity<String>(headers),
+            )
 
         assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         assertThat(response.body?.get("saksnummer")).isEqualTo(SAKSNUMMER)
@@ -75,11 +81,12 @@ class HentJournalpostControllerTest : IntegrationTest() {
     fun `hent journalpost skal returnere journalpost og status ok`() {
         stubGraphqlEndpoint("saf/gyldigjournalpostresponse.json", expectedRequestBody = gyldigJournalPostIdRequest())
 
-        val response = restTemplate.exchange<Journalpost>(
-            uriHentJournalpost,
-            HttpMethod.GET,
-            HttpEntity<String>(headers),
-        )
+        val response =
+            restTemplate.exchange<Journalpost>(
+                uriHentJournalpost,
+                HttpMethod.GET,
+                HttpEntity<String>(headers),
+            )
 
         assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         assertThat(response.body?.journalposttype).isEqualTo(Journalposttype.I)
@@ -91,25 +98,28 @@ class HentJournalpostControllerTest : IntegrationTest() {
     fun `hent journalpostForBruker skal returnere journalposter og status ok`() {
         stubGraphqlEndpoint("saf/gyldigJournalposterResponse.json")
 
-        val request = JournalposterForBrukerRequest(
-            brukerId = Bruker("12345678901", BrukerIdType.FNR),
-            antall = 10,
-            tema = listOf(Arkivtema.TSO),
-            journalposttype = listOf(Journalposttype.I),
-            journalstatus = emptyList(),
-        )
-        val response = restTemplate.exchange<List<Journalpost>>(
-            uriHentJournalpost,
-            HttpMethod.POST,
-            HttpEntity(request, headers),
-        )
+        val request =
+            JournalposterForBrukerRequest(
+                brukerId = Bruker("12345678901", BrukerIdType.FNR),
+                antall = 10,
+                tema = listOf(Arkivtema.TSO),
+                journalposttype = listOf(Journalposttype.I),
+                journalstatus = emptyList(),
+            )
+        val response =
+            restTemplate.exchange<List<Journalpost>>(
+                uriHentJournalpost,
+                HttpMethod.POST,
+                HttpEntity(request, headers),
+            )
 
         assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         assertThat(response.body?.first()?.journalposttype).isEqualTo(Journalposttype.I)
         assertThat(response.body?.first()?.journalstatus).isEqualTo(Journalstatus.JOURNALFOERT)
         assertThat(response.body?.first()?.datoMottatt).isEqualTo(LocalDateTime.parse("2020-01-31T08:00:17"))
-        val utsendingsinfo = response.body?.find { it.utsendingsinfo != null }?.utsendingsinfo
-            ?: error("Finner ikke utsendingsinfo på noen journalposter")
+        val utsendingsinfo =
+            response.body?.find { it.utsendingsinfo != null }?.utsendingsinfo
+                ?: error("Finner ikke utsendingsinfo på noen journalposter")
         assertThat(utsendingsinfo.utsendingsmåter).hasSize(1)
         assertThat(utsendingsinfo.utsendingsmåter).contains(Utsendingsmåte.DIGITAL_POST)
         assertThat(utsendingsinfo.digitalpostSendt?.adresse).isEqualTo("0000487236")
@@ -129,11 +139,12 @@ class HentJournalpostControllerTest : IntegrationTest() {
                 ),
         )
 
-        val response = restTemplate.exchange<ByteArray>(
-            uriHentDokument,
-            HttpMethod.GET,
-            HttpEntity<String>(headers),
-        )
+        val response =
+            restTemplate.exchange<ByteArray>(
+                uriHentDokument,
+                HttpMethod.GET,
+                HttpEntity<String>(headers),
+            )
         assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         assertThat(String(response.body!!)).isEqualTo("pdf")
     }
@@ -142,13 +153,14 @@ class HentJournalpostControllerTest : IntegrationTest() {
     fun `hent saksnummer skal returnere status 404 hvis sak mangler`() {
         stubGraphqlEndpoint("saf/mangler_sak.json")
 
-        val exception = catchProblemDetailException {
-            restTemplate.exchange<Map<String, String>>(
-                uriHentSaksnummer,
-                HttpMethod.GET,
-                HttpEntity<String>(headers),
-            )
-        }
+        val exception =
+            catchProblemDetailException {
+                restTemplate.exchange<Map<String, String>>(
+                    uriHentSaksnummer,
+                    HttpMethod.GET,
+                    HttpEntity<String>(headers),
+                )
+            }
 
         assertThat(exception.httpStatus).isEqualTo(HttpStatus.NOT_FOUND)
         assertThat(exception.detail.detail).isEqualTo("Sak mangler for journalpostId=$JOURNALPOST_ID")
@@ -158,13 +170,14 @@ class HentJournalpostControllerTest : IntegrationTest() {
     fun `hent saksnummer skal returnere status 404 hvis sak ikke er gsak`() {
         stubGraphqlEndpoint("saf/feil_arkivsaksystem.json")
 
-        val exception = catchProblemDetailException {
-            restTemplate.exchange<Map<String, String>>(
-                uriHentSaksnummer,
-                HttpMethod.GET,
-                HttpEntity<String>(headers),
-            )
-        }
+        val exception =
+            catchProblemDetailException {
+                restTemplate.exchange<Map<String, String>>(
+                    uriHentSaksnummer,
+                    HttpMethod.GET,
+                    HttpEntity<String>(headers),
+                )
+            }
 
         assertThat(exception.httpStatus).isEqualTo(HttpStatus.NOT_FOUND)
         assertThat(exception.detail.detail).isEqualTo("Sak mangler for journalpostId=$JOURNALPOST_ID")
@@ -174,13 +187,14 @@ class HentJournalpostControllerTest : IntegrationTest() {
     fun `hent saksnummer skal returnerer 500 hvis klient returnerer 200 med feilmeldinger`() {
         stubGraphqlEndpoint("saf/error_fra_saf.json")
 
-        val exception = catchProblemDetailException {
-            restTemplate.exchange<Map<String, String>>(
-                uriHentSaksnummer,
-                HttpMethod.GET,
-                HttpEntity<String>(headers),
-            )
-        }
+        val exception =
+            catchProblemDetailException {
+                restTemplate.exchange<Map<String, String>>(
+                    uriHentSaksnummer,
+                    HttpMethod.GET,
+                    HttpEntity<String>(headers),
+                )
+            }
 
         assertThat(exception.httpStatus).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR)
         assertThat(exception.detail.detail)
@@ -201,13 +215,14 @@ class HentJournalpostControllerTest : IntegrationTest() {
                 .willReturn(serverError().withBody("feilmelding")),
         )
 
-        val exception = catchProblemDetailException {
-            restTemplate.exchange<Map<String, String>>(
-                uriHentSaksnummer,
-                HttpMethod.GET,
-                HttpEntity<String>(headers),
-            )
-        }
+        val exception =
+            catchProblemDetailException {
+                restTemplate.exchange<Map<String, String>>(
+                    uriHentSaksnummer,
+                    HttpMethod.GET,
+                    HttpEntity<String>(headers),
+                )
+            }
 
         assertThat(exception.httpStatus).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR)
         assertThat(exception.detail.detail).contains("Feil ved henting av journalpost")
@@ -216,34 +231,35 @@ class HentJournalpostControllerTest : IntegrationTest() {
             .containsExactly(Level.WARN)
     }
 
-    private fun stubGraphqlEndpoint(responseFilnavn: String, expectedRequestBody: String? = null) {
+    private fun stubGraphqlEndpoint(
+        responseFilnavn: String,
+        expectedRequestBody: String? = null,
+    ) {
         stubFor(
-            post("/graphql").apply {
-                if (expectedRequestBody != null) {
-                    this.withRequestBody(equalTo(expectedRequestBody))
-                }
-            }.willReturn(okJson(readFile(responseFilnavn))),
+            post("/graphql")
+                .apply {
+                    if (expectedRequestBody != null) {
+                        this.withRequestBody(equalTo(expectedRequestBody))
+                    }
+                }.willReturn(okJson(readFile(responseFilnavn))),
         )
     }
 
-    private fun gyldigJournalPostIdRequest(): String {
-        return readFile("saf/gyldigJournalpostIdRequest.json")
+    private fun gyldigJournalPostIdRequest(): String =
+        readFile("saf/gyldigJournalpostIdRequest.json")
             .replace(
                 "GRAPHQL-PLACEHOLDER",
                 readFile("saf/journalpostForId.graphql").graphqlCompatible(),
             )
-    }
 
-    private fun gyldigBrukerRequest(): String {
-        return readFile("saf/gyldigBrukerRequest.json")
+    private fun gyldigBrukerRequest(): String =
+        readFile("saf/gyldigBrukerRequest.json")
             .replace(
                 "GRAPHQL-PLACEHOLDER",
                 readFile("saf/journalposterForBruker.graphql").graphqlCompatible(),
             )
-    }
 
     companion object {
-
         const val JOURNALPOST_ID = "12345678"
         const val DOKUMENTINFO_ID = "123456789"
         const val SAKSNUMMER = "87654321"

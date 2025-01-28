@@ -23,7 +23,6 @@ import org.springframework.web.client.postForEntity
 import java.time.LocalDate
 
 class YtelseServiceTest : IntegrationTest() {
-
     @Autowired
     lateinit var ytelseService: YtelseService
 
@@ -102,12 +101,14 @@ class YtelseServiceTest : IntegrationTest() {
     @Test
     fun `skal håndtere feil fra en klient`() {
         every { aapClient.hentPerioder(any(), any(), any()) } answers {
-            restTemplate.postForEntity<AAPPerioderResponse>("http://localhost:1234", null)
+            restTemplate
+                .postForEntity<AAPPerioderResponse>("http://localhost:1234", null)
                 .body!!
         }
 
         every { ensligForsørgerClient.hentPerioder(any(), any(), any()) } answers {
-            restTemplate.postForEntity<EnsligForsørgerPerioderResponse>("http://localhost:1234", null)
+            restTemplate
+                .postForEntity<EnsligForsørgerPerioderResponse>("http://localhost:1234", null)
                 .body!!
         }
 

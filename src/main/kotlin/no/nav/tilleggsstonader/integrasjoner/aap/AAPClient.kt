@@ -17,18 +17,24 @@ class AAPClient(
     @Value("\${clients.aap.uri}") private val baseUrl: URI,
     @Qualifier("azure") restTemplate: RestTemplate,
 ) : AbstractRestClient(restTemplate) {
+    val uriPerioder =
+        UriComponentsBuilder
+            .fromUri(baseUrl)
+            .pathSegment("perioder", "aktivitetfase")
+            .encode()
+            .toUriString()
 
-    val uriPerioder = UriComponentsBuilder.fromUri(baseUrl)
-        .pathSegment("perioder", "aktivitetfase")
-        .encode()
-        .toUriString()
-
-    fun hentPerioder(ident: String, fom: LocalDate, tom: LocalDate): AAPPerioderResponse {
-        val request = mapOf(
-            "personidentifikator" to ident,
-            "fraOgMedDato" to fom,
-            "tilOgMedDato" to tom,
-        )
+    fun hentPerioder(
+        ident: String,
+        fom: LocalDate,
+        tom: LocalDate,
+    ): AAPPerioderResponse {
+        val request =
+            mapOf(
+                "personidentifikator" to ident,
+                "fraOgMedDato" to fom,
+                "tilOgMedDato" to tom,
+            )
         return postForEntity<AAPPerioderResponse>(uriPerioder, request)
     }
 }

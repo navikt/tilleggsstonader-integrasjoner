@@ -10,8 +10,8 @@ import java.math.BigDecimal
 import java.time.LocalDate
 
 object AktivitetDtoMapper {
-    fun map(response: AktivitetArenaResponse): AktivitetArenaDto {
-        return AktivitetArenaDto(
+    fun map(response: AktivitetArenaResponse): AktivitetArenaDto =
+        AktivitetArenaDto(
             id = response.aktivitetId,
             fom = response.periode.fom,
             tom = response.periode.tom,
@@ -21,12 +21,12 @@ object AktivitetDtoMapper {
             statusArena = response.status?.name,
             antallDagerPerUke = response.antallDagerPerUke?.takeIf { it != 0 },
             prosentDeltakelse = response.prosentAktivitetsdeltakelse?.takeIf { it != BigDecimal.ZERO },
-            erStønadsberettiget = response.erStoenadsberettigetAktivitet == true || TypeAktivitet.valueOf(response.aktivitetstype).rettTilStønad,
+            erStønadsberettiget =
+                response.erStoenadsberettigetAktivitet == true || TypeAktivitet.valueOf(response.aktivitetstype).rettTilStønad,
             erUtdanning = response.erUtdanningsaktivitet,
             arrangør = response.arrangoer?.takeIf { it.isNotBlank() },
             kilde = Kilde.ARENA,
         )
-    }
 
     /**
      * Mapping i tiltakspenger som får en annen type status, deltakerstatus

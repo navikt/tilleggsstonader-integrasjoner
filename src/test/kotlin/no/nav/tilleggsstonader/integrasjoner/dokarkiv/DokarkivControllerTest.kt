@@ -55,7 +55,6 @@ import org.springframework.web.client.exchange
 @TestPropertySource(properties = ["clients.dokarkiv.uri=http://localhost:28085"])
 @AutoConfigureWireMock(port = 28085)
 class DokarkivControllerTest : IntegrationTest() {
-
     @BeforeEach
     fun setUp() {
         headers.setBearerAuth(onBehalfOfToken())
@@ -69,13 +68,14 @@ class DokarkivControllerTest : IntegrationTest() {
             post("/rest/journalpostapi/v1/journalpost?forsoekFerdigstill=false")
                 .willReturn(okJson(gyldigDokarkivResponse())),
         )
-        val body = ArkiverDokumentRequest(
-            "FNR",
-            false,
-            listOf(HOVEDDOKUMENT),
-            eksternReferanseId = "id",
-            avsenderMottaker = AvsenderMottaker("fnr", BrukerIdType.FNR, "navn"),
-        )
+        val body =
+            ArkiverDokumentRequest(
+                "FNR",
+                false,
+                listOf(HOVEDDOKUMENT),
+                eksternReferanseId = "id",
+                avsenderMottaker = AvsenderMottaker("fnr", BrukerIdType.FNR, "navn"),
+            )
 
         val response: ResponseEntity<ArkiverDokumentResponse> =
             restTemplate.exchange(
@@ -95,13 +95,14 @@ class DokarkivControllerTest : IntegrationTest() {
             post("/rest/journalpostapi/v1/journalpost?forsoekFerdigstill=false")
                 .willReturn(okJson(gyldigDokarkivResponse())),
         )
-        val body = ArkiverDokumentRequest(
-            "FNR",
-            false,
-            listOf(HOVEDDOKUMENT),
-            eksternReferanseId = "id",
-            avsenderMottaker = AvsenderMottaker("fnr", BrukerIdType.FNR, "navn"),
-        )
+        val body =
+            ArkiverDokumentRequest(
+                "FNR",
+                false,
+                listOf(HOVEDDOKUMENT),
+                eksternReferanseId = "id",
+                avsenderMottaker = AvsenderMottaker("fnr", BrukerIdType.FNR, "navn"),
+            )
 
         val response: ResponseEntity<ArkiverDokumentResponse> =
             restTemplate.exchange(
@@ -129,21 +130,23 @@ class DokarkivControllerTest : IntegrationTest() {
                         .withBody(responseBody),
                 ),
         )
-        val body = ArkiverDokumentRequest(
-            "FNR",
-            false,
-            listOf(HOVEDDOKUMENT),
-            eksternReferanseId = "id",
-            avsenderMottaker = AvsenderMottaker("fnr", BrukerIdType.FNR, "navn"),
-        )
-
-        val response = catchThrowableOfType<HttpClientErrorException> {
-            restTemplate.exchange<ArkiverDokumentResponse>(
-                localhost(DOKARKIV_URL),
-                HttpMethod.POST,
-                HttpEntity(body, headersWithNavUserId()),
+        val body =
+            ArkiverDokumentRequest(
+                "FNR",
+                false,
+                listOf(HOVEDDOKUMENT),
+                eksternReferanseId = "id",
+                avsenderMottaker = AvsenderMottaker("fnr", BrukerIdType.FNR, "navn"),
             )
-        }
+
+        val response =
+            catchThrowableOfType<HttpClientErrorException> {
+                restTemplate.exchange<ArkiverDokumentResponse>(
+                    localhost(DOKARKIV_URL),
+                    HttpMethod.POST,
+                    HttpEntity(body, headersWithNavUserId()),
+                )
+            }
 
         assertThat(response.statusCode).isEqualTo(HttpStatus.CONFLICT)
         assertThat(response.responseBodyAsString).isEqualTo(responseBody)
@@ -160,24 +163,30 @@ class DokarkivControllerTest : IntegrationTest() {
                         .withBody("Tekst fra body"),
                 ),
         )
-        val body = ArkiverDokumentRequest(
-            "FNR",
-            false,
-            listOf(HOVEDDOKUMENT),
-            eksternReferanseId = "id",
-            avsenderMottaker = AvsenderMottaker("fnr", BrukerIdType.FNR, "navn"),
-        )
-
-        val response = catchProblemDetailException {
-            restTemplate.exchange<ArkiverDokumentResponse>(
-                localhost(DOKARKIV_URL),
-                HttpMethod.POST,
-                HttpEntity(body, headersWithNavUserId()),
+        val body =
+            ArkiverDokumentRequest(
+                "FNR",
+                false,
+                listOf(HOVEDDOKUMENT),
+                eksternReferanseId = "id",
+                avsenderMottaker = AvsenderMottaker("fnr", BrukerIdType.FNR, "navn"),
             )
-        }
+
+        val response =
+            catchProblemDetailException {
+                restTemplate.exchange<ArkiverDokumentResponse>(
+                    localhost(DOKARKIV_URL),
+                    HttpMethod.POST,
+                    HttpEntity(body, headersWithNavUserId()),
+                )
+            }
 
         assertThat(response.httpStatus).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR)
-        assertThat(response.detail.detail).isEqualTo("[Dokarkiv][Klarer ikke å parse response fra dokarkiv ved 409][org.springframework.web.client.HttpClientErrorException\$Conflict]")
+        assertThat(
+            response.detail.detail,
+        ).isEqualTo(
+            "[Dokarkiv][Klarer ikke å parse response fra dokarkiv ved 409][org.springframework.web.client.HttpClientErrorException\$Conflict]",
+        )
     }
 
     @Test
@@ -187,14 +196,15 @@ class DokarkivControllerTest : IntegrationTest() {
                 .willReturn(okJson(gyldigDokarkivResponse())),
         )
 
-        val body = ArkiverDokumentRequest(
-            "FNR",
-            false,
-            listOf(HOVEDDOKUMENT),
-            listOf(VEDLEGG),
-            eksternReferanseId = "id",
-            avsenderMottaker = AvsenderMottaker("fnr", BrukerIdType.FNR, "navn"),
-        )
+        val body =
+            ArkiverDokumentRequest(
+                "FNR",
+                false,
+                listOf(HOVEDDOKUMENT),
+                listOf(VEDLEGG),
+                eksternReferanseId = "id",
+                avsenderMottaker = AvsenderMottaker("fnr", BrukerIdType.FNR, "navn"),
+            )
 
         val response: ResponseEntity<ArkiverDokumentResponse> =
             restTemplate.exchange(
@@ -219,21 +229,23 @@ class DokarkivControllerTest : IntegrationTest() {
                         .withBody("Tekst fra body"),
                 ),
         )
-        val body = ArkiverDokumentRequest(
-            "FNR",
-            false,
-            listOf(HOVEDDOKUMENT),
-            eksternReferanseId = "id",
-            avsenderMottaker = AvsenderMottaker("fnr", BrukerIdType.FNR, "navn"),
-        )
-
-        val exception = catchProblemDetailException {
-            restTemplate.exchange<ArkiverDokumentResponse>(
-                localhost(DOKARKIV_URL),
-                HttpMethod.POST,
-                HttpEntity(body, headers),
+        val body =
+            ArkiverDokumentRequest(
+                "FNR",
+                false,
+                listOf(HOVEDDOKUMENT),
+                eksternReferanseId = "id",
+                avsenderMottaker = AvsenderMottaker("fnr", BrukerIdType.FNR, "navn"),
             )
-        }
+
+        val exception =
+            catchProblemDetailException {
+                restTemplate.exchange<ArkiverDokumentResponse>(
+                    localhost(DOKARKIV_URL),
+                    HttpMethod.POST,
+                    HttpEntity(body, headers),
+                )
+            }
 
         assertThat(exception.httpStatus).isEqualTo(HttpStatus.UNAUTHORIZED)
         assertThat(exception.detail.detail).contains("Unauthorized")
@@ -247,11 +259,12 @@ class DokarkivControllerTest : IntegrationTest() {
                 .willReturn(okJson(gyldigDokarkivResponse())),
         )
 
-        val body = OppdaterJournalpostRequest(
-            bruker = DokarkivBruker(BrukerIdType.FNR, "12345678910"),
-            tema = Tema.TSO,
-            sak = Sak("11111111", "fagsaksystem"),
-        )
+        val body =
+            OppdaterJournalpostRequest(
+                bruker = DokarkivBruker(BrukerIdType.FNR, "12345678910"),
+                tema = Tema.TSO,
+                sak = Sak("11111111", "fagsaksystem"),
+            )
 
         val response: ResponseEntity<OppdaterJournalpostResponse> =
             restTemplate.exchange(
@@ -276,19 +289,21 @@ class DokarkivControllerTest : IntegrationTest() {
                 ),
         )
 
-        val body = OppdaterJournalpostRequest(
-            bruker = DokarkivBruker(BrukerIdType.FNR, "12345678910"),
-            tema = Tema.TSO,
-            sak = Sak("11111111", "fagsaksystem"),
-        )
-
-        val exception = catchProblemDetailException {
-            restTemplate.exchange<OppdaterJournalpostResponse>(
-                localhost("$DOKARKIV_URL/12345678"),
-                HttpMethod.PUT,
-                HttpEntity(body, headers),
+        val body =
+            OppdaterJournalpostRequest(
+                bruker = DokarkivBruker(BrukerIdType.FNR, "12345678910"),
+                tema = Tema.TSO,
+                sak = Sak("11111111", "fagsaksystem"),
             )
-        }
+
+        val exception =
+            catchProblemDetailException {
+                restTemplate.exchange<OppdaterJournalpostResponse>(
+                    localhost("$DOKARKIV_URL/12345678"),
+                    HttpMethod.PUT,
+                    HttpEntity(body, headers),
+                )
+            }
 
         assertThat(exception.httpStatus).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR)
         assertThat(loggingEvents)
@@ -325,13 +340,14 @@ class DokarkivControllerTest : IntegrationTest() {
                 .willReturn(aResponse().withStatus(400)),
         )
 
-        val exception = catchProblemDetailException {
-            restTemplate.exchange<Map<String, String>>(
-                localhost("$DOKARKIV_URL/123/ferdigstill?journalfoerendeEnhet=9999"),
-                HttpMethod.PUT,
-                HttpEntity(null, headers),
-            )
-        }
+        val exception =
+            catchProblemDetailException {
+                restTemplate.exchange<Map<String, String>>(
+                    localhost("$DOKARKIV_URL/123/ferdigstill?journalfoerendeEnhet=9999"),
+                    HttpMethod.PUT,
+                    HttpEntity(null, headers),
+                )
+            }
 
         assertThat(exception.httpStatus).isEqualTo(HttpStatus.BAD_REQUEST)
         assertThat(exception.detail.detail).contains("Kan ikke ferdigstille journalpost 123")
@@ -344,11 +360,12 @@ class DokarkivControllerTest : IntegrationTest() {
                 .willReturn(okJson(objectMapper.writeValueAsString(LogiskVedleggResponse(21L)))),
         )
 
-        val response = restTemplate.exchange<LogiskVedleggResponse>(
-            localhost("$DOKARKIV_URL/dokument/321/logiskVedlegg"),
-            HttpMethod.POST,
-            HttpEntity(LogiskVedleggRequest("Ny tittel"), headers),
-        )
+        val response =
+            restTemplate.exchange<LogiskVedleggResponse>(
+                localhost("$DOKARKIV_URL/dokument/321/logiskVedlegg"),
+                HttpMethod.POST,
+                HttpEntity(LogiskVedleggRequest("Ny tittel"), headers),
+            )
 
         assertThat(response.statusCode).isEqualTo(HttpStatus.CREATED)
         assertThat(response.body?.logiskVedleggId).isEqualTo(21L)
@@ -361,13 +378,14 @@ class DokarkivControllerTest : IntegrationTest() {
                 .willReturn(aResponse().withStatus(404).withBody("melding fra klient")),
         )
 
-        val exception = catchProblemDetailException {
-            restTemplate.exchange<LogiskVedleggResponse>(
-                localhost("$DOKARKIV_URL/dokument/321/logiskVedlegg"),
-                HttpMethod.POST,
-                HttpEntity(LogiskVedleggRequest("Ny tittel"), headers),
-            )
-        }
+        val exception =
+            catchProblemDetailException {
+                restTemplate.exchange<LogiskVedleggResponse>(
+                    localhost("$DOKARKIV_URL/dokument/321/logiskVedlegg"),
+                    HttpMethod.POST,
+                    HttpEntity(LogiskVedleggRequest("Ny tittel"), headers),
+                )
+            }
 
         assertThat(exception.httpStatus).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR)
         assertThat(exception.detail.detail).contains("melding fra klient")
@@ -398,13 +416,14 @@ class DokarkivControllerTest : IntegrationTest() {
                 .willReturn(aResponse().withStatus(404).withBody("sletting feilet")),
         )
 
-        val exception = catchProblemDetailException {
-            restTemplate.exchange<LogiskVedleggResponse>(
-                localhost("$DOKARKIV_URL/dokument/321/logiskVedlegg/432"),
-                HttpMethod.DELETE,
-                HttpEntity(LogiskVedleggRequest("Ny tittel"), headers),
-            )
-        }
+        val exception =
+            catchProblemDetailException {
+                restTemplate.exchange<LogiskVedleggResponse>(
+                    localhost("$DOKARKIV_URL/dokument/321/logiskVedlegg/432"),
+                    HttpMethod.DELETE,
+                    HttpEntity(LogiskVedleggRequest("Ny tittel"), headers),
+                )
+            }
 
         assertThat(exception.httpStatus).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR)
         assertThat(exception.detail.detail).contains("sletting feilet")
@@ -431,18 +450,15 @@ class DokarkivControllerTest : IntegrationTest() {
         assertThat(response.body).isEqualTo("321")
     }
 
-    private fun gyldigDokarkivResponse(statusKode: Int? = null): String {
-        return FileUtil.readFile("dokarkiv/gyldig${statusKode ?: ""}response.json")
-    }
+    private fun gyldigDokarkivResponse(statusKode: Int? = null): String =
+        FileUtil.readFile("dokarkiv/gyldig${statusKode ?: ""}response.json")
 
-    private fun headersWithNavUserId(): HttpHeaders {
-        return headers.apply {
+    private fun headersWithNavUserId(): HttpHeaders =
+        headers.apply {
             add("Nav-User-Id", NAV_USER_ID_VALUE)
         }
-    }
 
     companion object {
-
         private const val DOKARKIV_URL = "/api/arkiv"
 
         private const val NAV_USER_ID_VALUE = "k123123"

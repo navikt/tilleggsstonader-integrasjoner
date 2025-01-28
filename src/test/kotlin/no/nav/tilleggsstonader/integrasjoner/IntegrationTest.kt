@@ -29,7 +29,6 @@ import org.springframework.web.client.RestTemplate
 )
 @EnableMockOAuth2Server
 abstract class IntegrationTest {
-
     @Suppress("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired
     @Qualifier("utenAuth")
@@ -59,7 +58,8 @@ abstract class IntegrationTest {
 
     private fun clearCache() {
         cacheManagers.forEach { cacheManager ->
-            cacheManager.cacheNames.mapNotNull { cacheName -> cacheManager.getCache(cacheName) }
+            cacheManager.cacheNames
+                .mapNotNull { cacheName -> cacheManager.getCache(cacheName) }
                 .forEach { cache -> cache.clear() }
         }
     }
@@ -67,15 +67,10 @@ abstract class IntegrationTest {
     private fun clearClientMocks() {
     }
 
-    protected fun localhost(path: String): String {
-        return "$LOCALHOST$port/$path"
-    }
+    protected fun localhost(path: String): String = "$LOCALHOST$port/$path"
 
-    protected fun onBehalfOfToken(
-        saksbehandler: String = "julenissen",
-    ): String {
-        return TokenUtil.onBehalfOfToken(mockOAuth2Server, "role1", saksbehandler)
-    }
+    protected fun onBehalfOfToken(saksbehandler: String = "julenissen"): String =
+        TokenUtil.onBehalfOfToken(mockOAuth2Server, "role1", saksbehandler)
 
     companion object {
         private const val LOCALHOST = "http://localhost:"

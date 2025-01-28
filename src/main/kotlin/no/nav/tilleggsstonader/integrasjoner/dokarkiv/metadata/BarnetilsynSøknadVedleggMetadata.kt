@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component
 
 @Component
 object BarnetilsynSøknadVedleggMetadata : Dokumentmetadata {
-
     override val journalpostType: JournalpostType = JournalpostType.INNGAAENDE
     override val fagsakSystem: Fagsystem = Fagsystem.TILLEGGSSTONADER
     override val tema: Tema = Tema.TSO

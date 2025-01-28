@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import java.util.UUID
 
-class SaksbehandlerControllerTest() : IntegrationTest() {
+class SaksbehandlerControllerTest : IntegrationTest() {
     @Autowired
     lateinit var azureGraphRestClient: AzureGraphRestClient
 

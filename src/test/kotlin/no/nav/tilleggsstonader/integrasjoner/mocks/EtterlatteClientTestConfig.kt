@@ -15,7 +15,6 @@ import java.time.LocalDate
 @Configuration
 @Profile("mock-etterlatte")
 class EtterlatteClientTestConfig {
-
     @Bean
     @Primary
     fun etterlatteClient(): EtterlatteClient {

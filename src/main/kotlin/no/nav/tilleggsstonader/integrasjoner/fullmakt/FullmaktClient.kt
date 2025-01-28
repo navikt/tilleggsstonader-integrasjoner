@@ -21,11 +21,13 @@ class FullmaktClient(
     @Value("\${clients.repr-api.uri}") private val baseUrl: URI,
     @Qualifier("azureClientCredential") restTemplate: RestTemplate,
 ) : AbstractRestClient(restTemplate) {
-
     fun hentFullmektige(fullmaktsgiversIdent: IdentRequest): List<FullmektigDto> {
-        val uri = UriComponentsBuilder.fromUri(baseUrl)
-            .pathSegment("api", "internbruker", "fullmakt", "fullmaktsgiver")
-            .encode().toUriString()
+        val uri =
+            UriComponentsBuilder
+                .fromUri(baseUrl)
+                .pathSegment("api", "internbruker", "fullmakt", "fullmaktsgiver")
+                .encode()
+                .toUriString()
 
         return try {
             postForEntity<List<FullmaktsgiverResponse>>(
@@ -49,9 +51,7 @@ private data class FullmaktIdentRequest private constructor(
     val ident: String, // Base64-encodet
 ) {
     companion object {
-        fun fra(identRequest: IdentRequest): FullmaktIdentRequest {
-            return FullmaktIdentRequest(identRequest.ident)
-        }
+        fun fra(identRequest: IdentRequest): FullmaktIdentRequest = FullmaktIdentRequest(identRequest.ident)
     }
 }
 
@@ -75,15 +75,14 @@ private data class FullmaktsgiverResponse(
     val fullmaktsgiverNavn: String,
     val fullmektigsNavn: String,
 ) {
-    fun tilFullmektigDto(): FullmektigDto {
-        return FullmektigDto(
+    fun tilFullmektigDto(): FullmektigDto =
+        FullmektigDto(
             fullmektigIdent = fullmektig,
             fullmektigNavn = fullmektigsNavn,
             gyldigFraOgMed = gyldigFraOgMed,
             gyldigTilOgMed = gyldigTilOgMed,
             temaer = omraade.map { it.tema },
         )
-    }
 }
 
 private data class OmrådeResponse(

@@ -20,9 +20,7 @@ import java.net.URI
 class DokdistRestClient(
     @Value("\${clients.dokdist.uri}") private val dokdistUri: URI,
     @Qualifier("azure") restTemplate: RestTemplate,
-) :
-    AbstractRestClient(restTemplate) {
-
+) : AbstractRestClient(restTemplate) {
     val distribuerUri = UriComponentsBuilder.fromUri(dokdistUri).path(PATH_DISTRIBUERJOURNALPOST).toUriString()
 
     fun distribuerJournalpost(req: DistribuerJournalpostRequestTo): DistribuerJournalpostResponseTo =

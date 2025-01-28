@@ -25,22 +25,19 @@ import java.time.format.DateTimeFormatter
 class OppgaveService(
     private val oppgaveClient: OppgaveClient,
 ) {
-
     private val logger = LoggerFactory.getLogger(OppgaveService::class.java)
 
-    fun finnOppgaver(finnOppgaveRequest: FinnOppgaveRequest): FinnOppgaveResponseDto {
-        return oppgaveClient.finnOppgaver(finnOppgaveRequest)
-    }
+    fun finnOppgaver(finnOppgaveRequest: FinnOppgaveRequest): FinnOppgaveResponseDto = oppgaveClient.finnOppgaver(finnOppgaveRequest)
 
-    fun hentOppgave(oppgaveId: Long): Oppgave {
-        return oppgaveClient.finnOppgaveMedId(oppgaveId)
-    }
+    fun hentOppgave(oppgaveId: Long): Oppgave = oppgaveClient.finnOppgaveMedId(oppgaveId)
 
-    fun patchOppgave(patchOppgave: Oppgave): Oppgave {
-        return oppgaveClient.oppdaterOppgave(patchOppgave)
-    }
+    fun patchOppgave(patchOppgave: Oppgave): Oppgave = oppgaveClient.oppdaterOppgave(patchOppgave)
 
-    fun fordelOppgave(oppgaveId: Long, saksbehandler: String?, versjon: Int?): Oppgave {
+    fun fordelOppgave(
+        oppgaveId: Long,
+        saksbehandler: String?,
+        versjon: Int?,
+    ): Oppgave {
         val oppgave = oppgaveClient.finnOppgaveMedId(oppgaveId)
         logger.info("Fordeler oppgave=$oppgaveId")
         secureLogger.info("Fordeler oppgave=$oppgaveId fra ${oppgave.tilordnetRessurs ?: "<ingen>"} til ${saksbehandler ?: "<ingen>"}")
@@ -63,16 +60,20 @@ class OppgaveService(
             )
         }
 
-        val oppdatertOppgaveDto = oppgave.copy(
-            id = oppgave.id,
-            versjon = versjon ?: oppgave.versjon,
-            tilordnetRessurs = saksbehandler ?: "",
-            beskrivelse = lagOppgaveBeskrivelseFordeling(oppgave = oppgave, nySaksbehandlerIdent = saksbehandler),
-        )
+        val oppdatertOppgaveDto =
+            oppgave.copy(
+                id = oppgave.id,
+                versjon = versjon ?: oppgave.versjon,
+                tilordnetRessurs = saksbehandler ?: "",
+                beskrivelse = lagOppgaveBeskrivelseFordeling(oppgave = oppgave, nySaksbehandlerIdent = saksbehandler),
+            )
         return oppgaveClient.oppdaterOppgave(oppdatertOppgaveDto)
     }
 
-    private fun lagOppgaveBeskrivelseFordeling(oppgave: Oppgave, nySaksbehandlerIdent: String? = null): String {
+    private fun lagOppgaveBeskrivelseFordeling(
+        oppgave: Oppgave,
+        nySaksbehandlerIdent: String? = null,
+    ): String {
         val innloggetSaksbehandlerIdent = SikkerhetsContext.hentSaksbehandlerEllerSystembruker()
         val saksbehandlerNavn = SikkerhetsContext.hentSaksbehandlerNavn(strict = false)
 
@@ -82,35 +83,37 @@ class OppgaveService(
         val endring =
             "Oppgave er flyttet fra ${oppgave.tilordnetRessurs ?: "<ingen>"} til ${nySaksbehandlerIdent ?: "<ingen>"}"
 
-        val nåværendeBeskrivelse = if (oppgave.beskrivelse != null) {
-            "\n\n${oppgave.beskrivelse}"
-        } else {
-            ""
-        }
+        val nåværendeBeskrivelse =
+            if (oppgave.beskrivelse != null) {
+                "\n\n${oppgave.beskrivelse}"
+            } else {
+                ""
+            }
 
         return prefix + endring + nåværendeBeskrivelse
     }
 
     fun opprettOppgave(request: OpprettOppgaveRequest): Long {
-        val oppgave = OpprettOppgaveRequestDto(
-            personident = identHvisGruppe(request, IdentGruppe.FOLKEREGISTERIDENT),
-            aktoerId = identHvisGruppe(request, IdentGruppe.AKTOERID),
-            orgnr = identHvisGruppe(request, IdentGruppe.ORGNR),
-            samhandlernr = identHvisGruppe(request, IdentGruppe.SAMHANDLERNR),
-            journalpostId = request.journalpostId,
-            prioritet = request.prioritet,
-            tema = request.tema,
-            tildeltEnhetsnr = request.enhetsnummer,
-            behandlingstema = request.behandlingstema,
-            fristFerdigstillelse = request.fristFerdigstillelse.format(DateTimeFormatter.ISO_DATE),
-            aktivDato = request.aktivFra.format(DateTimeFormatter.ISO_DATE),
-            oppgavetype = request.oppgavetype.value,
-            beskrivelse = request.beskrivelse,
-            behandlingstype = request.behandlingstype,
-            tilordnetRessurs = request.tilordnetRessurs?.let { validerNavIdent(it) },
-            behandlesAvApplikasjon = request.behandlesAvApplikasjon,
-            mappeId = request.mappeId,
-        )
+        val oppgave =
+            OpprettOppgaveRequestDto(
+                personident = identHvisGruppe(request, IdentGruppe.FOLKEREGISTERIDENT),
+                aktoerId = identHvisGruppe(request, IdentGruppe.AKTOERID),
+                orgnr = identHvisGruppe(request, IdentGruppe.ORGNR),
+                samhandlernr = identHvisGruppe(request, IdentGruppe.SAMHANDLERNR),
+                journalpostId = request.journalpostId,
+                prioritet = request.prioritet,
+                tema = request.tema,
+                tildeltEnhetsnr = request.enhetsnummer,
+                behandlingstema = request.behandlingstema,
+                fristFerdigstillelse = request.fristFerdigstillelse.format(DateTimeFormatter.ISO_DATE),
+                aktivDato = request.aktivFra.format(DateTimeFormatter.ISO_DATE),
+                oppgavetype = request.oppgavetype.value,
+                beskrivelse = request.beskrivelse,
+                behandlingstype = request.behandlingstype,
+                tilordnetRessurs = request.tilordnetRessurs?.let { validerNavIdent(it) },
+                behandlesAvApplikasjon = request.behandlesAvApplikasjon,
+                mappeId = request.mappeId,
+            )
 
         return oppgaveClient.opprettOppgave(oppgave)
     }
@@ -125,21 +128,27 @@ class OppgaveService(
         error("Ident=$id er ugyldig")
     }
 
-    private fun identHvisGruppe(request: OpprettOppgaveRequest, identGruppe: IdentGruppe) =
-        if (request.ident?.gruppe == identGruppe) request.ident!!.ident else null
+    private fun identHvisGruppe(
+        request: OpprettOppgaveRequest,
+        identGruppe: IdentGruppe,
+    ) = if (request.ident?.gruppe == identGruppe) request.ident!!.ident else null
 
-    fun ferdigstill(oppgaveId: Long, versjon: Int?) {
+    fun ferdigstill(
+        oppgaveId: Long,
+        versjon: Int?,
+    ) {
         val oppgave = oppgaveClient.finnOppgaveMedId(oppgaveId)
 
         validerVersjon(versjon, oppgave)
 
         when (oppgave.status) {
             StatusEnum.OPPRETTET, StatusEnum.AAPNET, StatusEnum.UNDER_BEHANDLING -> {
-                val patchOppgaveDto = oppgave.copy(
-                    id = oppgave.id,
-                    versjon = versjon ?: oppgave.versjon,
-                    status = StatusEnum.FERDIGSTILT,
-                )
+                val patchOppgaveDto =
+                    oppgave.copy(
+                        id = oppgave.id,
+                        versjon = versjon ?: oppgave.versjon,
+                        status = StatusEnum.FERDIGSTILT,
+                    )
                 oppgaveClient.oppdaterOppgave(patchOppgaveDto)
             }
 
@@ -193,7 +202,10 @@ class OppgaveService(
         return finnMapper(finnMappeRequest).mapper
     }
 
-    fun fjernBehandlesAvApplikasjon(oppgaveId: Long, versjon: Int) {
+    fun fjernBehandlesAvApplikasjon(
+        oppgaveId: Long,
+        versjon: Int,
+    ) {
         oppgaveClient.fjernBehandlesAvApplikasjon(OppgaveFjernBehandlesAvApplikasjon(oppgaveId, versjon))
     }
 }

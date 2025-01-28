@@ -17,18 +17,24 @@ class EnsligForsørgerClient(
     @Value("\${clients.enslig.uri}") private val baseUrl: URI,
     @Qualifier("azure") restTemplate: RestTemplate,
 ) : AbstractRestClient(restTemplate) {
+    val uriPerioder =
+        UriComponentsBuilder
+            .fromUri(baseUrl)
+            .pathSegment("api", "ekstern", "perioder", "perioder-for-ytelser")
+            .encode()
+            .toUriString()
 
-    val uriPerioder = UriComponentsBuilder.fromUri(baseUrl)
-        .pathSegment("api", "ekstern", "perioder", "perioder-for-ytelser")
-        .encode()
-        .toUriString()
-
-    fun hentPerioder(ident: String, fom: LocalDate, tom: LocalDate): EnsligForsørgerPerioderResponse {
-        val request = mapOf(
-            "personIdent" to ident,
-            "fomDato" to fom,
-            "tomDato" to tom,
-        )
+    fun hentPerioder(
+        ident: String,
+        fom: LocalDate,
+        tom: LocalDate,
+    ): EnsligForsørgerPerioderResponse {
+        val request =
+            mapOf(
+                "personIdent" to ident,
+                "fomDato" to fom,
+                "tomDato" to tom,
+            )
         return postForEntity<EnsligForsørgerPerioderResponse>(uriPerioder, request)
     }
 }

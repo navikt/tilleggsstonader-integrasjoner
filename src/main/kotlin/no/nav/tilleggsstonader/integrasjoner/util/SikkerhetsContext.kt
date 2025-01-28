@@ -4,7 +4,6 @@ import no.nav.security.token.support.core.context.TokenValidationContext
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
 
 object SikkerhetsContext {
-
     private const val SYSTEM_NAVN = "System"
     const val SYSTEM_FORKORTELSE = "VL"
 
@@ -18,7 +17,8 @@ object SikkerhetsContext {
     }
 
     fun hentSaksbehandlerEllerSystembruker() =
-        Result.runCatching { SpringTokenValidationContextHolder().getTokenValidationContext() }
+        Result
+            .runCatching { SpringTokenValidationContextHolder().getTokenValidationContext() }
             .fold(
                 onSuccess = {
                     it.getClaim("NAVident")?.toString() ?: SYSTEM_FORKORTELSE
@@ -26,8 +26,9 @@ object SikkerhetsContext {
                 onFailure = { SYSTEM_FORKORTELSE },
             )
 
-    fun hentSaksbehandlerNavn(strict: Boolean = false): String {
-        return Result.runCatching { SpringTokenValidationContextHolder().getTokenValidationContext() }
+    fun hentSaksbehandlerNavn(strict: Boolean = false): String =
+        Result
+            .runCatching { SpringTokenValidationContextHolder().getTokenValidationContext() }
             .fold(
                 onSuccess = {
                     it.getClaim("name")?.toString()
@@ -35,8 +36,6 @@ object SikkerhetsContext {
                 },
                 onFailure = { if (strict) error("Finner ikke navn på innlogget bruker") else SYSTEM_NAVN },
             )
-    }
 
-    private fun TokenValidationContext.getClaim(name: String) =
-        this.getJwtToken("azuread")?.jwtTokenClaims?.get(name)
+    private fun TokenValidationContext.getClaim(name: String) = this.getJwtToken("azuread")?.jwtTokenClaims?.get(name)
 }

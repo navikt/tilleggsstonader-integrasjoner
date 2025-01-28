@@ -28,19 +28,20 @@ class SafClient(
     @Value("\${clients.saf.uri}") safBaseUrl: URI,
     @Qualifier("azure") restTemplate: RestTemplate,
 ) : AbstractRestClient(restTemplate) {
-
     private val safUri = UriComponentsBuilder.fromUri(safBaseUrl).pathSegment(PATH_GRAPHQL).toUriString()
 
     fun hentJournalpost(journalpostId: String): Journalpost {
-        val safJournalpostRequest = SafJournalpostRequest(
-            SafRequestVariabler(journalpostId),
-            graphqlQuery("/saf/journalpostForId.graphql"),
-        )
-        val response = postForEntity<SafJournalpostResponse<SafJournalpostData>>(
-            safUri,
-            safJournalpostRequest,
-            httpHeaders(),
-        )
+        val safJournalpostRequest =
+            SafJournalpostRequest(
+                SafRequestVariabler(journalpostId),
+                graphqlQuery("/saf/journalpostForId.graphql"),
+            )
+        val response =
+            postForEntity<SafJournalpostResponse<SafJournalpostData>>(
+                safUri,
+                safJournalpostRequest,
+                httpHeaders(),
+            )
         if (!response.harFeil()) {
             return response.data?.journalpost ?: throw JournalpostRestClientException(
                 "Kan ikke hente journalpost",
@@ -63,10 +64,11 @@ class SafClient(
     }
 
     fun finnJournalposter(journalposterForBrukerRequest: JournalposterForBrukerRequest): List<Journalpost> {
-        val safJournalpostRequest = SafJournalpostRequest(
-            journalposterForBrukerRequest,
-            graphqlQuery("/saf/journalposterForBruker.graphql"),
-        )
+        val safJournalpostRequest =
+            SafJournalpostRequest(
+                journalposterForBrukerRequest,
+                graphqlQuery("/saf/journalposterForBruker.graphql"),
+            )
         return finnJournalposter(safJournalpostRequest)
     }
 
@@ -101,16 +103,14 @@ class SafClient(
         }
     }
 
-    private fun httpHeaders(): HttpHeaders {
-        return HttpHeaders().apply {
+    private fun httpHeaders(): HttpHeaders =
+        HttpHeaders().apply {
             contentType = MediaType.APPLICATION_JSON
             accept = listOf(MediaType.APPLICATION_JSON)
             add(NAV_CALL_ID, MDCOperations.getCallId())
         }
-    }
 
     companion object {
-
         private const val PATH_GRAPHQL = "graphql"
         private const val NAV_CALL_ID = "Nav-Callid"
     }

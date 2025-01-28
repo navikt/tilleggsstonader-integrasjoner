@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test
 import kotlin.reflect.KClass
 
 internal class DokarkivMetadataTest {
-
     @Test
     internal fun `brevkode må være under 50 tegn`() {
         val tittelOver50Tegn = hentAlleDokumentMedadataKlasser().filter { (it.brevkode?.length ?: 0) > 50 }
@@ -22,21 +21,25 @@ internal class DokarkivMetadataTest {
 
     @Test
     fun `Alle dokumenttyper mapper til metadata med samme dokumenttype i parameterene`() {
-        Dokumenttype.entries.filterNot {
-            // TODO: Fjern filtreringen når dokumenttypene har blitt implementert
-            it in setOf(
-                Dokumenttype.LÆREMIDLER_INTERNT_VEDTAK,
-                Dokumenttype.LÆREMIDLER_FRITTSTÅENDE_BREV,
-                Dokumenttype.LÆREMIDLER_VEDTAKSBREV,
-            )
-        }.forEach {
-            assertThat(it.tilMetadata().dokumenttype).isEqualTo(it)
-        }
+        Dokumenttype.entries
+            .filterNot {
+                // TODO: Fjern filtreringen når dokumenttypene har blitt implementert
+                it in
+                    setOf(
+                        Dokumenttype.LÆREMIDLER_INTERNT_VEDTAK,
+                        Dokumenttype.LÆREMIDLER_FRITTSTÅENDE_BREV,
+                        Dokumenttype.LÆREMIDLER_VEDTAKSBREV,
+                    )
+            }.forEach {
+                assertThat(it.tilMetadata().dokumenttype).isEqualTo(it)
+            }
     }
 
-    private fun hentAlleDokumentMedadataKlasser() = Dokumentmetadata::class.sealedSubclasses
-        .hentNøstedeKlasser()
-        .mapNotNull { it.objectInstance }
+    private fun hentAlleDokumentMedadataKlasser() =
+        Dokumentmetadata::class
+            .sealedSubclasses
+            .hentNøstedeKlasser()
+            .mapNotNull { it.objectInstance }
 
     private fun <T : Any> List<KClass<out T>>.hentNøstedeKlasser(): List<KClass<out T>> =
         flatMap {
