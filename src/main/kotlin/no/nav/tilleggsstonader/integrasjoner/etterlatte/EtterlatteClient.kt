@@ -25,9 +25,7 @@ class EtterlatteClient(
         .toUriString()
 
     fun hentPerioder(ident: String, fom: LocalDate): List<Samordningsvedtak> {
-        val body = mapOf(
-            "fnr" to ident,
-        )
+        val body = FoedselsnummerDTO(ident)
         val headers = HttpHeaders().apply {
             contentType = MediaType.APPLICATION_JSON
         }
@@ -40,3 +38,5 @@ class EtterlatteClient(
         )
     }
 }
+
+data class FoedselsnummerDTO(val foedselsnummer: String)
