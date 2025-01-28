@@ -22,10 +22,13 @@ class EtterlatteClient(
         .toUriString()
 
     fun hentPerioder(ident: String, fom: LocalDate): List<Samordningsvedtak> {
-        val requestBody = mapOf(
+        val body = mapOf(
             "fnr" to ident,
-            "fomDato" to fom,
         )
-        return postForEntity(uriPerioder, requestBody)
+        return postForEntity<List<Samordningsvedtak>>(
+            uriPerioder,
+            body,
+            uriVariables = mapOf("fomDato" to fom),
+        )
     }
 }
