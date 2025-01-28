@@ -9,7 +9,6 @@ import java.math.BigDecimal
 import java.time.LocalDate
 
 class AktivitetDtoMapperTest {
-
     @Test
     fun `mapping av felter`() {
         val dto = AktivitetDtoMapper.map(aktivitetArenaResponse())
@@ -41,15 +40,19 @@ class AktivitetDtoMapperTest {
 
     @Nested
     inner class ErStoenadsberettigetAktivitet {
-
+        /*
+         * skal overstyre erStoenadsberettigetAktivitet dersom vi har overstyrt den i kontrakter sånn at den vises i
+         * søknad og behandling
+         */
         @Test
-        fun `skal overstyre erStoenadsberettigetAktivitet dersom vi har overstyrt den i kontrakter sånn at den vises i søknad og behandling`() {
-            val dto = AktivitetDtoMapper.map(
-                aktivitetArenaResponse(
-                    aktivitetstype = TypeAktivitet.FORSFAGGRU.name,
-                    erStoenadsberettigetAktivitet = false,
-                ),
-            )
+        fun `skal overstyre erStoenadsberettigetAktivitet dersom vi har overstyrt den i kontrakter`() {
+            val dto =
+                AktivitetDtoMapper.map(
+                    aktivitetArenaResponse(
+                        aktivitetstype = TypeAktivitet.FORSFAGGRU.name,
+                        erStoenadsberettigetAktivitet = false,
+                    ),
+                )
 
             assertThat(dto.erStønadsberettiget).isTrue()
         }
@@ -59,10 +62,11 @@ class AktivitetDtoMapperTest {
         aktivitetId: String = "1",
         aktivitetstype: String = TypeAktivitet.ABOPPF.name,
         aktivitetsnavn: String = "aktivitetnavn",
-        periode: PeriodeArena = PeriodeArena(
-            fom = LocalDate.of(2023, 1, 1),
-            tom = LocalDate.of(2023, 1, 31),
-        ),
+        periode: PeriodeArena =
+            PeriodeArena(
+                fom = LocalDate.of(2023, 1, 1),
+                tom = LocalDate.of(2023, 1, 31),
+            ),
         antallDagerPerUke: Int? = 5,
         prosentAktivitetsdeltakelse: BigDecimal? = 100.toBigDecimal(),
         aktivitetsstatus: String? = StatusAktivitetArena.AKTUL.name,

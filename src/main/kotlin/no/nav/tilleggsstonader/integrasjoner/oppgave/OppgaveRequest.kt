@@ -7,14 +7,14 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import kotlin.math.min
 
-const val limitMotOppgave = 50L // TODO slett?
+const val LIMIT_MOT_OPPGAVE = 50L
 
 data class OppgaveRequest(
     val statuskategori: String = "AAPEN",
     val tema: String,
     val sorteringsfelt: Sorteringsfelt = Sorteringsfelt.OPPRETTET_TIDSPUNKT,
     val sorteringsrekkefolge: Sorteringsrekkefølge = Sorteringsrekkefølge.DESC,
-    val limit: Long = limitMotOppgave,
+    val limit: Long = LIMIT_MOT_OPPGAVE,
     val offset: Long = 0,
     val behandlingstema: String?,
     val behandlingstype: String?,
@@ -38,7 +38,7 @@ data class OppgaveRequest(
 fun FinnOppgaveRequest.toDto() =
     OppgaveRequest(
         offset = this.offset,
-        limit = min(this.limit, limitMotOppgave),
+        limit = min(this.limit, LIMIT_MOT_OPPGAVE),
         tema = this.tema.name,
         behandlingstema = this.behandlingstema?.value,
         behandlingstype = this.behandlingstype?.value,

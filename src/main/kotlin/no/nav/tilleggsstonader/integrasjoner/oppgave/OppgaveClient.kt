@@ -71,14 +71,14 @@ class OppgaveClient(
             } else {
                 oppgaveRequest.offset + finnOppgaveRequest.limit!!
             }
-        offset += limitMotOppgave
+        offset += LIMIT_MOT_OPPGAVE
 
         while (offset < grense) {
             queryParams =
-                toQueryParams(oppgaveRequest.copy(offset = offset, limit = min((grense - offset), limitMotOppgave)))
+                toQueryParams(oppgaveRequest.copy(offset = offset, limit = min((grense - offset), LIMIT_MOT_OPPGAVE)))
             val nyeOppgaver = finnOppgave(queryParams)
             oppgaver.addAll(nyeOppgaver.oppgaver)
-            offset += limitMotOppgave
+            offset += LIMIT_MOT_OPPGAVE
         }
 
         return FinnOppgaveResponseDto(oppgaverOgAntall.antallTreffTotalt, oppgaver)
