@@ -104,6 +104,7 @@ class YtelseService(
         val perioder = cacheManager.getValue("ytelser-etterlatte", data) {
             etterlatteClient.hentPerioder(data.ident, fom = data.fom)
         }
+        logger.info("perioder data : $perioder")
         return perioder.flatMap { it.perioder }.map {
             YtelsePeriode(
                 type = TypeYtelsePeriode.OMSTILLINGSSTØNAD,

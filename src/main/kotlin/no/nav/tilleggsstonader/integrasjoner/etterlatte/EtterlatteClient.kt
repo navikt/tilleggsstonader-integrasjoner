@@ -3,6 +3,9 @@ package no.nav.tilleggsstonader.integrasjoner.etterlatte
 import no.nav.tilleggsstonader.libs.http.client.AbstractRestClient
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.http.HttpEntity
+import org.springframework.http.HttpHeaders
+import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.util.UriComponentsBuilder
@@ -25,9 +28,14 @@ class EtterlatteClient(
         val body = mapOf(
             "fnr" to ident,
         )
+        val headers = HttpHeaders().apply {
+            contentType = MediaType.APPLICATION_JSON
+        }
+        val httpEntity = HttpEntity(body, headers)
+
         return postForEntity<List<Samordningsvedtak>>(
             uriPerioder,
-            body,
+            httpEntity,
             uriVariables = mapOf("fomDato" to fom),
         )
     }
