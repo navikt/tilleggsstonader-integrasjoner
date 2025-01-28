@@ -26,7 +26,7 @@ class EtterlatteClient(
         ident: String,
         fom: LocalDate,
     ): List<Samordningsvedtak> {
-        val requestBody = FødselsnummerDTO(fødselsnummer = ident)
+        val requestBody = FoedselsnummerDTO(foedselsnummer = ident)
         return postForEntity<List<Samordningsvedtak>>(
             uriPerioder,
             requestBody,
@@ -34,7 +34,7 @@ class EtterlatteClient(
         )
     }
 
-    data class FødselsnummerDTO(
-        val fødselsnummer: String,
+    data class FoedselsnummerDTO(
+        val foedselsnummer: String,
     )
 }
