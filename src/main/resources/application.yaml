@@ -187,8 +187,8 @@ clients:
     uri: http://familie-ef-sak.teamfamilie
     scope: api://${CLIENT_ENV}-gcp.teamfamilie.familie-ef-sak/.default
   etterlatte:
-    uri: http://etterlatte-api.etterlatte
-    scope: api://${CLIENT_ENV}-gcp.etterlatte.etterlatte-api/.default
+    uri: http://etterlatte-samordning-vedtak.etterlatte
+    scope: api://${CLIENT_ENV}-gcp.etterlatte.etterlatte-samordning-vedtak/.default
   repr-api:
     uri: http://repr-api.repr
     scope: api://${CLIENT_ENV}-gcp.repr.repr-api/.default
