@@ -73,6 +73,8 @@ spec:
           namespace: teamfamilie
         - application: etterlatte-samordning-vedtak
           namespace: etterlatte
+        - application: etterlatte-api
+          namespace: etterlatte
         - application: repr-api
           namespace: repr
       external:
