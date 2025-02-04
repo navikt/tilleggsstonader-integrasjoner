@@ -71,7 +71,7 @@ spec:
           namespace: aap
         - application: familie-ef-sak
           namespace: teamfamilie
-        - application: etterlatte-samordning-vedtak
+        - application: etterlatte-api
           namespace: etterlatte
         - application: repr-api
           namespace: repr
