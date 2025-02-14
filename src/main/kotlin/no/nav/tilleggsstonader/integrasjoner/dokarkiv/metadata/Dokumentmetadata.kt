@@ -53,4 +53,10 @@ fun Dokumenttype.tilMetadata(): Dokumentmetadata =
         Dokumenttype.LÆREMIDLER_INTERNT_VEDTAK -> LæremidlerInterntVedtakMetadata
         Dokumenttype.LÆREMIDLER_KLAGE_VEDTAKSBREV -> LæremidlerKlageVedtak
         Dokumenttype.LÆREMIDLER_KLAGE_INTERNT_VEDTAK -> LæremidlerKlageInterntVedtak
+
+        Dokumenttype.BOUTGIFTER_VEDTAKSBREV -> BoutgifterVedtaksbrevMetadata
+        Dokumenttype.BOUTGIFTER_FRITTSTÅENDE_BREV -> BoutgifterFrittståendeBrevMetadata
+        Dokumenttype.BOUTGIFTER_INTERNT_VEDTAK -> BoutgifterInterntVedtakMetadata
+        Dokumenttype.BOUTGIFTER_KLAGE_VEDTAKSBREV -> BoutgifterKlageVedtak
+        Dokumenttype.BOUTGIFTER_KLAGE_INTERNT_VEDTAK -> BoutgifterKlageInterntVedtak
     }

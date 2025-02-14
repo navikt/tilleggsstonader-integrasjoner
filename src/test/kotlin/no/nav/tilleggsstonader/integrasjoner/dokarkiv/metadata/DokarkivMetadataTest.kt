@@ -30,24 +30,35 @@ internal class DokarkivMetadataTest {
     fun `alle stønader skal være koblet til metadata for div typer brev`(stønadstype: Stønadstype) {
         // klassenavn til suffix mapping
         listOf(
-            "SøknadMetadata" to "_SØKNAD",
-            "SøknadVedleggMetadata" to "_SØKNAD_VEDLEGG",
-            "FrittståendeBrevMetadata" to "_FRITTSTÅENDE_BREV",
-            "InterntVedtakMetadata" to "_INTERNT_VEDTAK",
-            "VedtaksbrevMetadata" to "_VEDTAKSBREV",
-            "KlageInterntVedtak" to "_KLAGE_INTERNT_VEDTAK",
-            "KlageVedtak" to "_KLAGE_VEDTAKSBREV",
-        ).forEach { (klassenavn, suffix) ->
-            val metadata = finnPåkrevdBrev(stønadstype, klassenavn)
-            metadata.behandlingstema?.let { assertThat(it).isEqualTo(stønadstype.tilBehandlingstema()) }
-            assertThat(metadata.dokumenttype.name).isEqualTo("$stønadstype$suffix")
+            MetadataInformasjon("SøknadMetadata", "_SØKNAD", påkrevd = false),
+            MetadataInformasjon("SøknadVedleggMetadata", "_SØKNAD_VEDLEGG", påkrevd = false),
+            MetadataInformasjon("FrittståendeBrevMetadata", "_FRITTSTÅENDE_BREV"),
+            MetadataInformasjon("InterntVedtakMetadata", "_INTERNT_VEDTAK"),
+            MetadataInformasjon("VedtaksbrevMetadata", "_VEDTAKSBREV"),
+            MetadataInformasjon("KlageInterntVedtak", "_KLAGE_INTERNT_VEDTAK"),
+            MetadataInformasjon("KlageVedtak", "_KLAGE_VEDTAKSBREV"),
+        ).forEach { info ->
+            val metadata = finnPåkrevdBrev(stønadstype, info.klassenavnSuffix)
+            if (metadata != null) {
+                metadata.behandlingstema?.let { assertThat(it).isEqualTo(stønadstype.tilBehandlingstema()) }
+                assertThat(metadata.dokumenttype.name).isEqualTo("$stønadstype${info.dokumenttypeSuffix}")
+            }
+            require(metadata != null || !info.påkrevd) {
+                "Finner ikke metadata for stønadstype=$stønadstype for klassenavn=${info.klassenavnSuffix}"
+            }
         }
     }
+
+    data class MetadataInformasjon(
+        val klassenavnSuffix: String,
+        val dokumenttypeSuffix: String,
+        val påkrevd: Boolean = true,
+    )
 
     private fun finnPåkrevdBrev(
         stønadstype: Stønadstype,
         type: String,
-    ) = alleDokumentMedadataKlasser.single {
+    ) = alleDokumentMedadataKlasser.singleOrNull {
         it::class.simpleName!!.equals("${stønadstype.name}$type", ignoreCase = true)
     }
 

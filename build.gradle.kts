@@ -1,7 +1,7 @@
 val javaVersion = JavaLanguageVersion.of(21)
 val springdocVersion = "2.6.0"
 val tilleggsstønaderLibsVersion = "2024.12.11-15.08.d370f00e88e3"
-val tilleggsstønaderKontrakterVersion = "2025.02.14-11.48.9966a1c40cda"
+val tilleggsstønaderKontrakterVersion = "TODO"
 val tokenSupportVersion = "5.0.8"
 val springCloudVersion = "4.1.4"
 
