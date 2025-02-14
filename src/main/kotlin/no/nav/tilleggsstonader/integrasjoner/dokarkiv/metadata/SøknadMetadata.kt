@@ -16,3 +16,15 @@ sealed class SøknadMetadata(
     override val kanal: String = "NAV_NO"
     override val dokumentKategori: Dokumentkategori = Dokumentkategori.SOK
 }
+
+sealed class SøknadVedleggMetadata(
+    final override val tema: Tema,
+    override val dokumenttype: Dokumenttype,
+) : Dokumentmetadata {
+    override val journalpostType: JournalpostType = JournalpostType.INNGAAENDE
+    override val behandlingstema: Behandlingstema? = null
+    override val kanal: String? = null
+    override val tittel: String? = null
+    override val brevkode: String? = null
+    override val dokumentKategori: Dokumentkategori = Dokumentkategori.IS
+}

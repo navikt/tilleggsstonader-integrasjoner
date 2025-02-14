@@ -16,3 +16,15 @@ sealed class KlageVedtak(
     override val brevkode: String = "KLAGE_VEDTAKSBREV_${behandlingstema.name.uppercase()}"
     override val dokumentKategori: Dokumentkategori = Dokumentkategori.VB
 }
+
+sealed class KlageInterntVedtak(
+    final override val tema: Tema,
+    final override val behandlingstema: Behandlingstema,
+    override val dokumenttype: Dokumenttype,
+) : Dokumentmetadata {
+    override val journalpostType: JournalpostType = JournalpostType.NOTAT
+    override val kanal: String? = null
+    override val tittel: String? = null
+    override val brevkode: String = "KLAGE_INTERNT_VEDTAK_${behandlingstema.name.uppercase()}"
+    override val dokumentKategori: Dokumentkategori = Dokumentkategori.VB
+}
