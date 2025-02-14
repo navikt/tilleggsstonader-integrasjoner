@@ -8,7 +8,7 @@ import no.nav.tilleggsstonader.kontrakter.felles.Tema
 
 sealed class VedtaksbrevMetadata(
     final override val tema: Tema,
-    override val behandlingstema: Behandlingstema,
+    final override val behandlingstema: Behandlingstema,
     override val dokumenttype: Dokumenttype,
 ) : Dokumentmetadata {
     override val journalpostType: JournalpostType = JournalpostType.UTGAAENDE

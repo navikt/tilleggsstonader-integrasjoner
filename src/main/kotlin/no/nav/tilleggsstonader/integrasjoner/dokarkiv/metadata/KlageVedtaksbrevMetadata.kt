@@ -19,17 +19,3 @@ sealed class KlageVedtak(
     override val brevkode: String = "KLAGE_VEDTAKSBREV_${behandlingstema.name.uppercase()}"
     override val dokumentKategori: Dokumentkategori = Dokumentkategori.VB
 }
-
-@Component
-data object KlageVedtakTilsynBarn : KlageVedtak(
-    tema = Tema.TSO,
-    behandlingstema = Behandlingstema.TilsynBarn,
-    dokumenttype = Dokumenttype.BARNETILSYN_KLAGE_VEDTAKSBREV,
-)
-
-@Component
-data object KlageVedtakLæremidler : KlageVedtak(
-    tema = Tema.TSO,
-    behandlingstema = Behandlingstema.Læremidler,
-    dokumenttype = Dokumenttype.LÆREMIDLER_KLAGE_VEDTAKSBREV,
-)

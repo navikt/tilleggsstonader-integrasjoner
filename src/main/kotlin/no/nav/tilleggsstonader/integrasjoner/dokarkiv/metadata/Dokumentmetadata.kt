@@ -45,14 +45,14 @@ fun Dokumenttype.tilMetadata(): Dokumentmetadata =
         Dokumenttype.BARNETILSYN_VEDTAKSBREV -> BarnetilsynVedtaksbrevMetadata
         Dokumenttype.BARNETILSYN_FRITTSTÅENDE_BREV -> BarnetilsynFrittståendeBrevMetadata
         Dokumenttype.BARNETILSYN_INTERNT_VEDTAK -> BarnetilsynInterntVedtakMetadata
-        Dokumenttype.BARNETILSYN_KLAGE_VEDTAKSBREV -> KlageVedtakTilsynBarn
-        Dokumenttype.BARNETILSYN_KLAGE_INTERNT_VEDTAK -> KlageInterntVedtakTilsynBarn
+        Dokumenttype.BARNETILSYN_KLAGE_VEDTAKSBREV -> BarnetilsynKlageVedtak
+        Dokumenttype.BARNETILSYN_KLAGE_INTERNT_VEDTAK -> BarnetilsynKlageInterntVedtak
 
         Dokumenttype.LÆREMIDLER_SØKNAD -> LæremidlerSøknadMetadata
         Dokumenttype.LÆREMIDLER_SØKNAD_VEDLEGG -> LæremidlerSøknadVedleggMetadata
         Dokumenttype.LÆREMIDLER_VEDTAKSBREV -> LæremidlerVedtaksbrevMetadata
         Dokumenttype.LÆREMIDLER_FRITTSTÅENDE_BREV -> LæremidlerFrittståendeBrevMetadata
         Dokumenttype.LÆREMIDLER_INTERNT_VEDTAK -> LæremidlerInterntVedtakMetadata
-        Dokumenttype.LÆREMIDLER_KLAGE_VEDTAKSBREV -> KlageVedtakLæremidler
-        Dokumenttype.LÆREMIDLER_KLAGE_INTERNT_VEDTAK -> KlageInterntVedtakLæremidler
+        Dokumenttype.LÆREMIDLER_KLAGE_VEDTAKSBREV -> LæremidlerKlageVedtak
+        Dokumenttype.LÆREMIDLER_KLAGE_INTERNT_VEDTAK -> LæremidlerKlageInterntVedtak
     }
