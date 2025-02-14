@@ -11,7 +11,6 @@ sealed class KlageInterntVedtak(
     final override val behandlingstema: Behandlingstema,
     override val dokumenttype: Dokumenttype,
 ) : Dokumentmetadata {
-    override val fagsakSystem: Fagsystem = Fagsystem.TILLEGGSSTONADER
     override val journalpostType: JournalpostType = JournalpostType.NOTAT
     override val kanal: String? = null
     override val tittel: String? = null

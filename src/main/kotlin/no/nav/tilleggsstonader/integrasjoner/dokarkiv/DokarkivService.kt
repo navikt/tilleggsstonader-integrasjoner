@@ -20,6 +20,7 @@ import no.nav.tilleggsstonader.kontrakter.dokarkiv.OppdaterJournalpostRequest
 import no.nav.tilleggsstonader.kontrakter.dokarkiv.OppdaterJournalpostResponse
 import no.nav.tilleggsstonader.kontrakter.dokarkiv.Sak
 import no.nav.tilleggsstonader.kontrakter.felles.BrukerIdType
+import no.nav.tilleggsstonader.kontrakter.felles.Fagsystem
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
@@ -59,7 +60,7 @@ class DokarkivService(
         dokumenter.addAll(arkiverDokumentRequest.vedleggsdokumenter.map(this::mapTilArkivdokument))
         val sak =
             arkiverDokumentRequest.fagsakId?.let {
-                Sak(fagsakId = it, sakstype = "FAGSAK", fagsaksystem = metadata.fagsakSystem)
+                Sak(fagsakId = it, sakstype = "FAGSAK", fagsaksystem = Fagsystem.TILLEGGSSTONADER)
             }
 
         logger.info("Journalfører fagsak ${sak?.fagsakId} med tittel ${hoveddokument.tittel ?: metadata.tittel}")

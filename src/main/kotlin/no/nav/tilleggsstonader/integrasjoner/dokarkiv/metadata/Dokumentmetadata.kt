@@ -3,12 +3,10 @@ package no.nav.tilleggsstonader.integrasjoner.dokarkiv.metadata
 import no.nav.tilleggsstonader.integrasjoner.dokarkiv.client.domene.JournalpostType
 import no.nav.tilleggsstonader.kontrakter.dokarkiv.Dokumenttype
 import no.nav.tilleggsstonader.kontrakter.felles.Behandlingstema
-import no.nav.tilleggsstonader.kontrakter.felles.Fagsystem
 import no.nav.tilleggsstonader.kontrakter.felles.Tema
 
 sealed interface Dokumentmetadata {
     val journalpostType: JournalpostType
-    val fagsakSystem: Fagsystem?
     val tema: Tema
     val behandlingstema: Behandlingstema?
     val kanal: String?

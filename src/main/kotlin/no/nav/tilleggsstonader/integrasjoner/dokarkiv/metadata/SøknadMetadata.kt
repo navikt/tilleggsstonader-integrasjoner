@@ -3,7 +3,6 @@ package no.nav.tilleggsstonader.integrasjoner.dokarkiv.metadata
 import no.nav.tilleggsstonader.integrasjoner.dokarkiv.client.domene.JournalpostType
 import no.nav.tilleggsstonader.kontrakter.dokarkiv.Dokumenttype
 import no.nav.tilleggsstonader.kontrakter.felles.Behandlingstema
-import no.nav.tilleggsstonader.kontrakter.felles.Fagsystem
 import no.nav.tilleggsstonader.kontrakter.felles.Tema
 
 sealed class SøknadMetadata(
@@ -13,7 +12,6 @@ sealed class SøknadMetadata(
     override val tittel: String?,
     override val brevkode: String,
 ) : Dokumentmetadata {
-    override val fagsakSystem: Fagsystem = Fagsystem.TILLEGGSSTONADER
     override val journalpostType: JournalpostType = JournalpostType.INNGAAENDE
     override val kanal: String = "NAV_NO"
     override val dokumentKategori: Dokumentkategori = Dokumentkategori.SOK

@@ -3,7 +3,6 @@ package no.nav.tilleggsstonader.integrasjoner.dokarkiv.metadata
 import no.nav.tilleggsstonader.integrasjoner.dokarkiv.client.domene.JournalpostType
 import no.nav.tilleggsstonader.kontrakter.dokarkiv.Dokumenttype
 import no.nav.tilleggsstonader.kontrakter.felles.Behandlingstema
-import no.nav.tilleggsstonader.kontrakter.felles.Fagsystem
 import no.nav.tilleggsstonader.kontrakter.felles.Tema
 
 sealed class InterntVedtakBrevMetadata(
@@ -12,7 +11,6 @@ sealed class InterntVedtakBrevMetadata(
     override val dokumenttype: Dokumenttype,
     override val tittel: String?,
 ) : Dokumentmetadata {
-    override val fagsakSystem: Fagsystem = Fagsystem.TILLEGGSSTONADER
     override val journalpostType: JournalpostType = JournalpostType.NOTAT
     override val kanal: String? = null
     override val brevkode: String? = null
