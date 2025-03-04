@@ -117,7 +117,15 @@ class OppgaveClient(
                                 feilmelding,
                                 "Oppgave.oppdaterOppgave",
                                 OppslagException.Level.LAV,
-                                HttpStatus.CONFLICT,
+                                it.statusCode,
+                                it,
+                            )
+                        } else if (it.statusCode == HttpStatus.BAD_REQUEST) {
+                            throw OppslagException(
+                                feilmelding,
+                                "Oppgave.oppdaterOppgave",
+                                OppslagException.Level.MEDIUM,
+                                HttpStatus.BAD_REQUEST,
                                 it,
                             )
                         }
