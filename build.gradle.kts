@@ -1,3 +1,6 @@
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.gradle.api.tasks.testing.logging.TestLogEvent
+
 val javaVersion = JavaLanguageVersion.of(21)
 val springdocVersion = "2.6.0"
 val tilleggsstønaderLibsVersion = "2025.03.14-14.38.d650c79601e9"
@@ -99,6 +102,12 @@ if (project.hasProperty("skipLint")) {
 
 tasks.test {
     useJUnitPlatform()
+    testLogging {
+        events = setOf(TestLogEvent.FAILED)
+        exceptionFormat = TestExceptionFormat.FULL
+        showStackTraces = false
+        showCauses = false
+    }
 }
 
 tasks.bootJar {
