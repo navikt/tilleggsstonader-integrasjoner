@@ -12,7 +12,6 @@ import com.github.tomakehurst.wiremock.client.WireMock.serverError
 import com.github.tomakehurst.wiremock.client.WireMock.stubFor
 import no.nav.tilleggsstonader.integrasjoner.IntegrationTest
 import no.nav.tilleggsstonader.integrasjoner.util.FileUtil.readFile
-import no.nav.tilleggsstonader.integrasjoner.util.ProblemDetailUtil.catchProblemDetailException
 import no.nav.tilleggsstonader.integrasjoner.util.graphqlCompatible
 import no.nav.tilleggsstonader.kontrakter.felles.Arkivtema
 import no.nav.tilleggsstonader.kontrakter.felles.BrukerIdType
@@ -23,6 +22,7 @@ import no.nav.tilleggsstonader.kontrakter.journalpost.Journalposttype
 import no.nav.tilleggsstonader.kontrakter.journalpost.Journalstatus
 import no.nav.tilleggsstonader.kontrakter.journalpost.Utsendingsmåte
 import no.nav.tilleggsstonader.kontrakter.journalpost.VarselType
+import no.nav.tilleggsstonader.libs.test.httpclient.ProblemDetailUtil.catchProblemDetailException
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test

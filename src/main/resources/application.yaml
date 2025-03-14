@@ -9,6 +9,9 @@ server:
   port: 8080
 
 spring:
+  jackson:
+    deserialization:
+      FAIL_ON_NULL_FOR_PRIMITIVES: true
   autoconfigure.exclude: org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration
   main:
     allow-bean-definition-overriding: true
