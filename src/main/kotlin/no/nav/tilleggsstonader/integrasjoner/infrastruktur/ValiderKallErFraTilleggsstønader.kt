@@ -18,7 +18,7 @@ class ValiderKallErFraTilleggsstønader : HttpFilter() {
         response: HttpServletResponse,
         filterChain: FilterChain,
     ) {
-        if (!request.requestURI.contains("/ekstern")) {
+        if (!request.requestURI.contains("/ekstern") && !shouldNotFilter(request.requestURI)) {
             if (!erKallFraTilleggsstønader()) {
                 val problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, "Ikke tilgang til endepunkt")
                 response.writer.write(objectMapper.writeValueAsString(problemDetail))
@@ -28,4 +28,6 @@ class ValiderKallErFraTilleggsstønader : HttpFilter() {
         }
         filterChain.doFilter(request, response)
     }
+
+    private fun shouldNotFilter(uri: String): Boolean = uri.contains("/internal") || uri == "/api/ping"
 }

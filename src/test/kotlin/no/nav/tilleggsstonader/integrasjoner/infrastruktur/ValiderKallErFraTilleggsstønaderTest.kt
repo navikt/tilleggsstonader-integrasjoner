@@ -19,6 +19,18 @@ import org.springframework.web.client.exchange
 class ValiderKallErFraTilleggsstønaderTest : IntegrationTest() {
     private val applikasjon = "dev-gcp:namespace:annen-applikasjon"
 
+    @Test
+    fun `kall mot status går ok`() {
+        val response =
+            restTemplate.exchange<String>(
+                localhost("/internal/status/isAlive"),
+                HttpMethod.GET,
+                HttpEntity(null, headers),
+            )
+
+        assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+    }
+
     @Nested
     inner class IkkeEksternController {
         @Test
