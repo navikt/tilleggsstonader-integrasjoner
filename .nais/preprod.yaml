@@ -65,6 +65,8 @@ spec:
         - application: tilleggsstonader-sak
         - application: tilleggsstonader-soknad-api
         - application: tilleggsstonader-klage
+        - application: skjemautfylling
+          namespace: skjemadigitalisering
     outbound:
       rules:
         - application: api-intern
