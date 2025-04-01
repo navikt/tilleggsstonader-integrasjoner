@@ -6,9 +6,9 @@ import no.nav.tilleggsstonader.integrasjoner.IntegrationTest
 import no.nav.tilleggsstonader.libs.test.httpclient.ProblemDetailUtil.catchProblemDetailException
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchException
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpEntity
-import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType.APPLICATION_JSON
@@ -23,8 +23,6 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.client.HttpServerErrorException.InternalServerError
 import org.springframework.web.client.exchange
-import org.springframework.web.client.getForEntity
-import org.springframework.web.client.postForEntity
 import java.time.LocalDate
 import java.time.LocalDateTime
 
@@ -33,9 +31,14 @@ class TestControllerTest : IntegrationTest() {
     val feilJson =
         """{"type":"about:blank","title":"Internal Server Error","status":500,"detail":"Ukjent feil","instance":"/api/test/error"}"""
 
+    @BeforeEach
+    fun setUp() {
+        headers.setBearerAuth(onBehalfOfToken())
+    }
+
     @Test
     fun `skal kunne hente json fra endepunkt`() {
-        val response = restTemplate.getForEntity<String>(localhost("api/test"))
+        val response = restTemplate.exchange<String>(localhost("api/test"), HttpMethod.GET, HttpEntity(null, headers))
         assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         assertThat(response.body!!).isEqualTo(json)
     }
@@ -49,7 +52,7 @@ class TestControllerTest : IntegrationTest() {
                 tidspunkt = LocalDateTime.of(2023, 1, 1, 12, 0, 3),
             )
 
-        val response = restTemplate.postForEntity<TestObject>(localhost("api/test"), json)
+        val response = restTemplate.exchange<TestObject>(localhost("api/test"), HttpMethod.POST, HttpEntity(json, headers))
         assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         assertThat(response.body!!).isEqualTo(json)
     }
@@ -63,12 +66,13 @@ class TestControllerTest : IntegrationTest() {
                 tidspunkt = LocalDateTime.of(2023, 1, 1, 12, 0, 3),
             )
         val jsonHeaders =
-            HttpHeaders().apply {
+            headers.apply {
                 contentType = APPLICATION_JSON
                 accept = listOf(APPLICATION_JSON)
             }
 
-        val response = restTemplate.postForEntity<TestObject>(localhost("api/test"), HttpEntity(json, jsonHeaders))
+        val entity = HttpEntity(json, jsonHeaders)
+        val response = restTemplate.exchange<TestObject>(localhost("api/test"), HttpMethod.POST, entity)
         assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         assertThat(response.body!!).isEqualTo(json)
     }
@@ -78,7 +82,7 @@ class TestControllerTest : IntegrationTest() {
         val entity =
             HttpEntity(
                 "{}",
-                HttpHeaders().apply {
+                headers.apply {
                     contentType = APPLICATION_JSON
                     accept = listOf(APPLICATION_JSON)
                 },
@@ -86,28 +90,37 @@ class TestControllerTest : IntegrationTest() {
 
         val exception =
             catchProblemDetailException {
-                restTemplate.postForEntity<TestObjectBoolean>(localhost("api/test/boolean"), entity)
+                restTemplate.exchange<String>(localhost("api/test/boolean"), HttpMethod.POST, entity)
             }
         assertThat(exception.detail.detail).contains("Missing required creator property 'verdi'")
     }
 
     @Test
     fun `skal håndtere ukjent feil`() {
-        var response = catchException { restTemplate.getForEntity<String>(localhost("api/test/error")) }
+        var response =
+            catchException {
+                restTemplate.exchange<String>(localhost("api/test/error"), HttpMethod.GET, HttpEntity(null, headers))
+            }
         assertThat(response).isInstanceOf(InternalServerError::class.java)
         assertInternalServerError(response as InternalServerError)
     }
 
     @Test
     fun `skal håndtere ukjent feil med forventet responstype`() {
-        val response = catchException { restTemplate.getForEntity<TestObject>(localhost("api/test/error")) }
+        val response =
+            catchException {
+                restTemplate.exchange<TestObject>(localhost("api/test/error"), HttpMethod.GET, HttpEntity(null, headers))
+            }
         assertThat(response).isInstanceOf(InternalServerError::class.java)
         assertInternalServerError(response as InternalServerError)
     }
 
     @Test
     fun `skal håndtere ukjent feil med forventet responstype med exchange`() {
-        val response = catchException { restTemplate.exchange<TestObject>(localhost("api/test/error"), HttpMethod.GET) }
+        val response =
+            catchException {
+                restTemplate.exchange<TestObject>(localhost("api/test/error"), HttpMethod.GET, HttpEntity(null, headers))
+            }
         assertThat(response).isInstanceOf(InternalServerError::class.java)
         assertInternalServerError(response as InternalServerError)
     }

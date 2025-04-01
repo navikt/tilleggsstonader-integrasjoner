@@ -2,6 +2,7 @@ package no.nav.tilleggsstonader.integrasjoner.util
 
 import no.nav.security.token.support.core.context.TokenValidationContext
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
+import no.nav.tilleggsstonader.libs.log.SecureLogger.secureLogger
 
 object SikkerhetsContext {
     private const val SYSTEM_NAVN = "System"
@@ -14,6 +15,30 @@ object SikkerhetsContext {
             error("Finner ikke NAVident i token")
         }
         return result
+    }
+
+    fun kallKommerFra(vararg eksternApplikasjon: EksternApplikasjon): Boolean {
+        val applikasjonsnavn = applikasjonsnavnFraToken()
+        secureLogger.info("Applikasjonsnavn: $applikasjonsnavn")
+        return eksternApplikasjon.any { applikasjonsnavn.contains(it.namespaceAppNavn) }
+    }
+
+    fun erKallFraTilleggsstønader(): Boolean {
+        val applikasjonsnavn = applikasjonsnavnFraToken()
+        return applikasjonsnavn.contains("gcp:tilleggsstonader:tilleggsstonader-")
+    }
+
+    fun applikasjonsnavnFraToken(): String {
+        val tokenValidationContext = SpringTokenValidationContextHolder().getTokenValidationContext()
+        if (tokenValidationContext.hasTokenFor("azuread")) {
+            val claims = tokenValidationContext.getClaims("azuread")
+            return claims.get("azp_name")?.toString() ?: ""
+        } else if (tokenValidationContext.hasTokenFor("tokenx")) {
+            val claims = tokenValidationContext.getClaims("tokenx")
+            return claims.get("client_id")?.toString() ?: ""
+        } else {
+            error("Finner ikke gyldig token blant issues=${tokenValidationContext.issuers}")
+        }
     }
 
     fun hentSaksbehandlerEllerSystembruker() =

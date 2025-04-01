@@ -7,6 +7,6 @@
     <include resource="org/springframework/boot/logging/logback/base.xml"/>
 
 
-    <logger name="no" level="INFO"/>
+    <logger name="no" level="DEBUG"/>
     <logger name="no.nav.tilleggsstonader" level="DEBUG"/>
 </configuration>

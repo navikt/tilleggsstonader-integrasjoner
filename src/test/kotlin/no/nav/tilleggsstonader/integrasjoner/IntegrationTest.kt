@@ -69,8 +69,15 @@ abstract class IntegrationTest {
 
     protected fun localhost(path: String): String = "$LOCALHOST$port/$path"
 
-    protected fun onBehalfOfToken(saksbehandler: String = "julenissen"): String =
-        TokenUtil.onBehalfOfToken(mockOAuth2Server, "role1", saksbehandler)
+    protected fun onBehalfOfToken(
+        saksbehandler: String = "julenissen",
+        applikasjon: String = "dev-gcp:tilleggsstonader:tilleggsstonader-sak",
+    ): String = TokenUtil.onBehalfOfToken(mockOAuth2Server, "role1", saksbehandler = saksbehandler, applikasjon = applikasjon)
+
+    protected fun tokenX(
+        ident: String = "11111122222",
+        applikasjon: String = "dev-gcp:tilleggsstonader:tilleggsstonader-sak",
+    ): String = TokenUtil.tokenX(mockOAuth2Server, ident = ident, applikasjon = applikasjon)
 
     companion object {
         private const val LOCALHOST = "http://localhost:"
