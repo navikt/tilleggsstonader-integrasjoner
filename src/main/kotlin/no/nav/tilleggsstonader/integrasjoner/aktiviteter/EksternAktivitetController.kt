@@ -48,6 +48,6 @@ fun AktivitetArenaDto.tilDto(): AktivitetSøknadDto {
         } ?: ""
     return AktivitetSøknadDto(
         id = id,
-        tekst = "$typeNavn $dato",
+        tekst = "$typeNavn: $dato",
     )
 }
