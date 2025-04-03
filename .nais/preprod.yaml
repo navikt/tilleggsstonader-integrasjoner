@@ -67,6 +67,12 @@ spec:
         - application: tilleggsstonader-klage
         - application: skjemautfylling
           namespace: skjemadigitalisering
+        - application: skjemautfylling-preprod-alt
+          namespace: skjemadigitalisering
+        - application: skjemautfylling-preprod
+          namespace: skjemadigitalisering
+        - application: skjemautfylling-delingslenke
+          namespace: skjemadigitalisering
     outbound:
       rules:
         - application: api-intern
