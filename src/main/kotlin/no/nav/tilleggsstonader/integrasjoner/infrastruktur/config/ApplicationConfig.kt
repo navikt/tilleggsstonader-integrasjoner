@@ -23,7 +23,7 @@ class ApplicationConfig {
 
     @Bean
     fun requestTimeFilter(): FilterRegistrationBean<ValiderKallErFraTilleggsstønader> {
-        logger.info("Registering ValiderKallFilter filter")
+        logger.info("Registering ${ValiderKallErFraTilleggsstønader::class.simpleName} filter")
         val filterRegistration = FilterRegistrationBean<ValiderKallErFraTilleggsstønader>()
         filterRegistration.filter = ValiderKallErFraTilleggsstønader()
         filterRegistration.order = 3

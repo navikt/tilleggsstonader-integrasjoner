@@ -5,5 +5,5 @@ enum class EksternApplikasjon(
 ) {
     SOKNAD_API("gcp:tilleggsstonader:tilleggsstonader-soknad-api"),
 
-    FYLL_UT_SEND_INN_SØLNAD("gcp:skjemadigitalisering:skjemautfylling"),
+    FYLL_UT_SEND_INN_SØKNAD("gcp:skjemadigitalisering:skjemautfylling"),
 }

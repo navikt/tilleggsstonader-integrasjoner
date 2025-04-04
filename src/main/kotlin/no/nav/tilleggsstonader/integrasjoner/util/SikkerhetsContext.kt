@@ -2,11 +2,13 @@ package no.nav.tilleggsstonader.integrasjoner.util
 
 import no.nav.security.token.support.core.context.TokenValidationContext
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
-import no.nav.tilleggsstonader.libs.log.SecureLogger.secureLogger
+import org.slf4j.LoggerFactory
 
 object SikkerhetsContext {
     private const val SYSTEM_NAVN = "System"
     const val SYSTEM_FORKORTELSE = "VL"
+
+    private val logger = LoggerFactory.getLogger(javaClass)
 
     fun hentSaksbehandler(): String {
         val result = hentSaksbehandlerEllerSystembruker()
@@ -19,7 +21,7 @@ object SikkerhetsContext {
 
     fun kallKommerFra(vararg eksternApplikasjon: EksternApplikasjon): Boolean {
         val applikasjonsnavn = applikasjonsnavnFraToken()
-        secureLogger.info("Applikasjonsnavn: $applikasjonsnavn")
+        logger.info("Applikasjonsnavn: $applikasjonsnavn")
         return eksternApplikasjon.any { applikasjonsnavn.contains(it.namespaceAppNavn) }
     }
 

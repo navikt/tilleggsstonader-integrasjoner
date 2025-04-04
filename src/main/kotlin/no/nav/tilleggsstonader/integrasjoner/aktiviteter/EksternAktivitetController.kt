@@ -26,7 +26,7 @@ class EksternAktivitetController(
     fun hentAktiviteter(
         @RequestParam stønadstype: Stønadstype,
     ): List<AktivitetSøknadDto> {
-        require(SikkerhetsContext.kallKommerFra(EksternApplikasjon.FYLL_UT_SEND_INN_SØLNAD)) {
+        require(SikkerhetsContext.kallKommerFra(EksternApplikasjon.FYLL_UT_SEND_INN_SØKNAD)) {
             "Kall kommer fra ${SikkerhetsContext.applikasjonsnavnFraToken()} som ikke har tilgang til endepunkt"
         }
         return søknadAktiviteterService
