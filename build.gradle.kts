@@ -4,7 +4,7 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 val javaVersion = JavaLanguageVersion.of(21)
 val springdocVersion = "2.8.6"
 val tilleggsstønaderLibsVersion = "2025.03.28-12.05.78567a42f6ae"
-val tilleggsstønaderKontrakterVersion = "2025.03.24-08.34.c5f84c4f3794"
+val tilleggsstønaderKontrakterVersion = "2025.04.04-11.57.4d5d45684538"
 val tokenSupportVersion = "5.0.24"
 val springCloudVersion = "4.2.1"
 
@@ -62,7 +62,7 @@ dependencies {
     implementation("org.springdoc:springdoc-openapi-starter-common:$springdocVersion")
 
     // Logging
-    implementation("net.logstash.logback:logstash-logback-encoder:8.0")
+    implementation("net.logstash.logback:logstash-logback-encoder:8.1")
 
     implementation("io.micrometer:micrometer-registry-prometheus")
 
