@@ -42,7 +42,7 @@ class EksternAktivitetControllerTest : IntegrationTest() {
         val response = restTemplate.exchange<List<AktivitetSøknadDto>>(url, HttpMethod.GET, entity)
 
         assertThat(response.body!!).containsExactly(
-            AktivitetSøknadDto(id = "1", "aktivitetnavn: 01. januar 2023 - 31. januar 2023"),
+            AktivitetSøknadDto(id = "1", "aktivitetnavn: 01. januar 2023 - 31. januar 2023", AktivitetSøknadType.TILTAK),
         )
     }
 

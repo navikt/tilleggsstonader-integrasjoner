@@ -39,7 +39,13 @@ class EksternAktivitetController(
 data class AktivitetSøknadDto(
     val id: String,
     val tekst: String,
+    val type: AktivitetSøknadType,
 )
+
+enum class AktivitetSøknadType {
+    TILTAK,
+    UTDANNING,
+}
 
 fun AktivitetArenaDto.tilDto(): AktivitetSøknadDto {
     val dato =
@@ -49,5 +55,6 @@ fun AktivitetArenaDto.tilDto(): AktivitetSøknadDto {
     return AktivitetSøknadDto(
         id = id,
         tekst = "$typeNavn: $dato",
+        type = if (erUtdanning == true) AktivitetSøknadType.UTDANNING else AktivitetSøknadType.TILTAK,
     )
 }
