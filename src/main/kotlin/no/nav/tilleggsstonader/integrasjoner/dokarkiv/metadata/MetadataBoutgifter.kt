@@ -17,7 +17,7 @@ data object BoutgifterInterntVedtakMetadata : InterntVedtakBrevMetadata(
     tema = Tema.TSO,
     behandlingstema = Behandlingstema.Boutgifter,
     dokumenttype = Dokumenttype.BOUTGIFTER_INTERNT_VEDTAK,
-    tittel = "Internt vedtak læremidler",
+    tittel = "Internt vedtak bolig/overnatting",
 )
 
 @Component
