@@ -2,6 +2,7 @@ package no.nav.tilleggsstonader.integrasjoner.oppgave
 
 import DatoFormat
 import com.fasterxml.jackson.annotation.JsonInclude
+import no.nav.tilleggsstonader.integrasjoner.infrastruktur.config.getValue
 import no.nav.tilleggsstonader.integrasjoner.infrastruktur.exception.OppslagException
 import no.nav.tilleggsstonader.integrasjoner.infrastruktur.exception.OppslagException.Level
 import no.nav.tilleggsstonader.integrasjoner.util.SikkerhetsContext
@@ -12,11 +13,13 @@ import no.nav.tilleggsstonader.kontrakter.oppgave.FinnOppgaveResponseDto
 import no.nav.tilleggsstonader.kontrakter.oppgave.IdentGruppe
 import no.nav.tilleggsstonader.kontrakter.oppgave.MappeDto
 import no.nav.tilleggsstonader.kontrakter.oppgave.Oppgave
+import no.nav.tilleggsstonader.kontrakter.oppgave.OppgaveMappe
 import no.nav.tilleggsstonader.kontrakter.oppgave.OpprettOppgaveRequest
 import no.nav.tilleggsstonader.kontrakter.oppgave.StatusEnum
 import no.nav.tilleggsstonader.libs.log.SecureLogger.secureLogger
 import no.nav.tilleggsstonader.libs.utils.osloNow
 import org.slf4j.LoggerFactory
+import org.springframework.cache.CacheManager
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import java.time.format.DateTimeFormatter
@@ -24,6 +27,7 @@ import java.time.format.DateTimeFormatter
 @Service
 class OppgaveService(
     private val oppgaveClient: OppgaveClient,
+    private val cacheManager: CacheManager,
 ) {
     private val logger = LoggerFactory.getLogger(OppgaveService::class.java)
 
@@ -186,16 +190,37 @@ class OppgaveService(
         }
     }
 
-    fun finnMapper(finnMappeRequest: FinnMappeRequest): FinnMappeResponseDto {
-        val mappeRespons = oppgaveClient.finnMapper(finnMappeRequest)
-        if (mappeRespons.antallTreffTotalt > mappeRespons.mapper.size) {
-            logger.error(
-                "Det finnes flere mapper (${mappeRespons.antallTreffTotalt}) " +
-                    "enn vi har hentet ut (${mappeRespons.mapper.size}). Sjekk limit. ",
-            )
+    fun finnMappe(
+        enhet: String,
+        oppgaveMappe: OppgaveMappe,
+    ) = finnMapper(enhet)
+        .let { alleMapper ->
+            val aktuelleMapper =
+                alleMapper.filter { mappe ->
+                    oppgaveMappe.navn.any { mappe.navn.endsWith(it, ignoreCase = true) }
+                }
+            if (aktuelleMapper.size != 1) {
+                secureLogger.error("Finner ${aktuelleMapper.size} mapper for enhet=$enhet navn=$oppgaveMappe - mapper=$alleMapper")
+                error("Finner ikke mapper for enhet=$enhet navn=$oppgaveMappe. Se secure logs for mer info")
+            }
+            aktuelleMapper.single()
         }
-        return mappeRespons.mapperUtenTema()
-    }
+
+    fun finnMapper(finnMappeRequest: FinnMappeRequest): FinnMappeResponseDto =
+        cacheManager.getValue("oppgave-mappe", finnMappeRequest.enhetsnr) {
+            logger.info("Henter mapper på nytt")
+            val mappeRespons =
+                oppgaveClient
+                    .finnMapper(finnMappeRequest)
+                    .mapperUtenTema()
+            if (mappeRespons.antallTreffTotalt > mappeRespons.mapper.size) {
+                logger.error(
+                    "Det finnes flere mapper (${mappeRespons.antallTreffTotalt}) " +
+                        "enn vi har hentet ut (${mappeRespons.mapper.size}). Sjekk limit. ",
+                )
+            }
+            mappeRespons
+        }
 
     fun finnMapper(enhetNr: String): List<MappeDto> {
         val finnMappeRequest = FinnMappeRequest(enhetsnr = enhetNr, limit = 1000)

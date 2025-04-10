@@ -85,6 +85,17 @@ class ApiExceptionHandler {
         return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, "Finner ingen personer for valgt personident")
     }
 
+    @ExceptionHandler(ApiFeil::class)
+    fun handleThrowable(feil: ApiFeil): ProblemDetail {
+        val metodeSomFeiler = finnMetodeSomFeiler(feil)
+        secureLogger.info("En håndtert feil har oppstått(${feil.httpStatus}): ${feil.frontendFeilmelding}", feil)
+        logger.info(
+            "En håndtert feil har oppstått(${feil.httpStatus}) " +
+                "metode=$metodeSomFeiler exception=${rootCause(feil)}: ${feil.message} ",
+        )
+        return ProblemDetail.forStatusAndDetail(feil.httpStatus, feil.frontendFeilmelding)
+    }
+
     private fun lagTimeoutfeilRessurs(): ProblemDetail =
         ProblemDetail.forStatusAndDetail(
             HttpStatus.INTERNAL_SERVER_ERROR,

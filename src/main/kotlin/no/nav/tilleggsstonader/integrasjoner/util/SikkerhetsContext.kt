@@ -10,6 +10,8 @@ object SikkerhetsContext {
 
     private val logger = LoggerFactory.getLogger(javaClass)
 
+    fun erSaksbehandler(): Boolean = hentSaksbehandlerEllerSystembruker() != SYSTEM_FORKORTELSE
+
     fun hentSaksbehandler(): String {
         val result = hentSaksbehandlerEllerSystembruker()
 

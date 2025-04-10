@@ -3,13 +3,12 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 val javaVersion = JavaLanguageVersion.of(21)
 val springdocVersion = "2.8.6"
-val tilleggsstønaderLibsVersion = "2025.03.28-12.05.78567a42f6ae"
-val tilleggsstønaderKontrakterVersion = "2025.04.04-11.57.4d5d45684538"
+val tilleggsstønaderLibsVersion = "2025.04.10-08.25.0ca8cd61400e"
+val tilleggsstønaderKontrakterVersion = "2025.04.10-12.36.bba001bf0307"
 val tokenSupportVersion = "5.0.24"
 val springCloudVersion = "4.2.1"
 
 val mockkVersion = "1.13.17"
-val testcontainerVersion = "1.19.0"
 
 group = "no.nav.tilleggsstonader.integrasjoner"
 version = "1.0.0"
@@ -71,6 +70,7 @@ dependencies {
     implementation("no.nav.tilleggsstonader-libs:log:$tilleggsstønaderLibsVersion")
     implementation("no.nav.tilleggsstonader-libs:http-client:$tilleggsstønaderLibsVersion")
     implementation("no.nav.tilleggsstonader-libs:sikkerhet:$tilleggsstønaderLibsVersion")
+    implementation("no.nav.tilleggsstonader-libs:spring:$tilleggsstønaderLibsVersion")
 
     implementation("no.nav.tilleggsstonader.kontrakter:tilleggsstonader-kontrakter:$tilleggsstønaderKontrakterVersion")
 
