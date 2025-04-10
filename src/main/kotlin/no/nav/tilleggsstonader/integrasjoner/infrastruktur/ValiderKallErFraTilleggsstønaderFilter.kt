@@ -12,7 +12,7 @@ import org.springframework.http.ProblemDetail
 /**
  * Validerer at alle kall som går mot andre endepunkter enn ekstern er applikasjoner fra tilleggsstønader
  */
-class ValiderKallErFraTilleggsstønader : HttpFilter() {
+class ValiderKallErFraTilleggsstønaderFilter : HttpFilter() {
     override fun doFilter(
         request: HttpServletRequest,
         response: HttpServletResponse,
