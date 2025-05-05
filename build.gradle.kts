@@ -3,12 +3,12 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 val javaVersion = JavaLanguageVersion.of(21)
 val springdocVersion = "2.8.6"
-val tilleggsstønaderLibsVersion = "2025.04.22-12.35.62d0c031bca8"
-val tilleggsstønaderKontrakterVersion = "2025.04.24-13.44.e5fcab84c3fe"
+val tilleggsstønaderLibsVersion = "2025.04.28-12.53.f687c00288d5"
+val tilleggsstønaderKontrakterVersion = "2025.04.29-14.53.429d5d590bc7"
 val tokenSupportVersion = "5.0.25"
 val springCloudVersion = "4.2.1"
 
-val mockkVersion = "1.14.0"
+val mockkVersion = "1.14.2"
 
 group = "no.nav.tilleggsstonader.integrasjoner"
 version = "1.0.0"
@@ -25,7 +25,7 @@ plugins {
     id("io.spring.dependency-management") version "1.1.7"
     kotlin("plugin.spring") version "2.1.20"
 
-    id("org.cyclonedx.bom") version "2.2.0"
+    id("org.cyclonedx.bom") version "2.3.0"
 }
 
 repositories {
