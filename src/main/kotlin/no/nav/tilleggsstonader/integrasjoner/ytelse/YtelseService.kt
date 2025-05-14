@@ -6,7 +6,6 @@ import no.nav.tilleggsstonader.integrasjoner.etterlatte.EtterlatteClient
 import no.nav.tilleggsstonader.integrasjoner.infrastruktur.config.getValue
 import no.nav.tilleggsstonader.integrasjoner.util.VirtualThreadUtil.parallelt
 import no.nav.tilleggsstonader.kontrakter.ytelse.EnsligForsørgerStønadstype
-import no.nav.tilleggsstonader.kontrakter.ytelse.HentetInformasjon
 import no.nav.tilleggsstonader.kontrakter.ytelse.ResultatKilde
 import no.nav.tilleggsstonader.kontrakter.ytelse.TypeYtelsePeriode
 import no.nav.tilleggsstonader.kontrakter.ytelse.YtelsePeriode
@@ -45,7 +44,6 @@ class YtelseService(
 
         return YtelsePerioderDto(
             perioder = perioder.sortedByDescending { it.tom },
-            hentetInformasjon = kildeResultat.map { HentetInformasjon(type = it.type, status = it.resultat) },
             kildeResultat = kildeResultat,
         )
     }

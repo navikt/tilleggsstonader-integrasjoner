@@ -12,7 +12,7 @@ import no.nav.tilleggsstonader.integrasjoner.etterlatte.EtterlatteClient
 import no.nav.tilleggsstonader.integrasjoner.mocks.AAPClientTestConfig.Companion.resetMock
 import no.nav.tilleggsstonader.integrasjoner.mocks.EnsligForsørgerClientTestConfig.Companion.resetMock
 import no.nav.tilleggsstonader.integrasjoner.mocks.EtterlatteClientTestConfig.Companion.resetMock
-import no.nav.tilleggsstonader.kontrakter.ytelse.StatusHentetInformasjon
+import no.nav.tilleggsstonader.kontrakter.ytelse.ResultatKilde
 import no.nav.tilleggsstonader.kontrakter.ytelse.TypeYtelsePeriode
 import no.nav.tilleggsstonader.kontrakter.ytelse.YtelsePerioderRequest
 import org.assertj.core.api.Assertions.assertThat
@@ -116,9 +116,9 @@ class YtelseServiceTest : IntegrationTest() {
         val dto = ytelseService.hentYtelser(ytelsePerioderRequest(typer = typer))
 
         assertThat(dto.perioder.isEmpty())
-        with(dto.hentetInformasjon.single()) {
+        with(dto.kildeResultat.single()) {
             assertThat(type).isEqualTo(TypeYtelsePeriode.AAP)
-            assertThat(status).isEqualTo(StatusHentetInformasjon.FEILET)
+            assertThat(resultat).isEqualTo(ResultatKilde.FEILET)
         }
     }
 
