@@ -7,7 +7,7 @@ import no.nav.tilleggsstonader.integrasjoner.infrastruktur.config.getValue
 import no.nav.tilleggsstonader.integrasjoner.util.VirtualThreadUtil.parallelt
 import no.nav.tilleggsstonader.kontrakter.ytelse.EnsligForsørgerStønadstype
 import no.nav.tilleggsstonader.kontrakter.ytelse.HentetInformasjon
-import no.nav.tilleggsstonader.kontrakter.ytelse.StatusHentetInformasjon
+import no.nav.tilleggsstonader.kontrakter.ytelse.ResultatKilde
 import no.nav.tilleggsstonader.kontrakter.ytelse.TypeYtelsePeriode
 import no.nav.tilleggsstonader.kontrakter.ytelse.YtelsePeriode
 import no.nav.tilleggsstonader.kontrakter.ytelse.YtelsePerioderDto
@@ -31,7 +31,7 @@ class YtelseService(
     // TODO fjern filter når AAP har lagt til mulighet for å hente perioder i prod
     fun hentYtelser(request: YtelsePerioderRequest): YtelsePerioderDto {
         val perioder = mutableListOf<YtelsePeriode>()
-        val hentetInformasjon = mutableListOf<HentetInformasjon>()
+        val kildeResultat = mutableListOf<YtelsePerioderDto.KildeResultatYtelse>()
 
         val data = HentYtelserCacheData(ident = request.ident, fom = request.fom, tom = request.tom)
         request.typer
@@ -40,25 +40,32 @@ class YtelseService(
             .parallelt()
             .forEach {
                 perioder.addAll(it.first)
-                hentetInformasjon.add(it.second)
+                kildeResultat.add(it.second)
             }
 
         return YtelsePerioderDto(
             perioder = perioder.sortedByDescending { it.tom },
-            hentetInformasjon = hentetInformasjon,
+            hentetInformasjon = kildeResultat.map { HentetInformasjon(type = it.type, status = it.resultat) },
+            kildeResultat = kildeResultat,
         )
     }
 
     private fun hentPeriodeFn(
         it: TypeYtelsePeriode,
         data: HentYtelserCacheData,
-    ): () -> Pair<List<YtelsePeriode>, HentetInformasjon> =
+    ): () -> Pair<List<YtelsePeriode>, YtelsePerioderDto.KildeResultatYtelse> =
         {
             try {
-                Pair(hentPerioder(it, data), HentetInformasjon(type = it, status = StatusHentetInformasjon.OK))
+                Pair(
+                    hentPerioder(it, data),
+                    YtelsePerioderDto.KildeResultatYtelse(type = it, resultat = ResultatKilde.OK),
+                )
             } catch (e: Exception) {
                 logError(it, data, e)
-                Pair(emptyList(), HentetInformasjon(type = it, status = StatusHentetInformasjon.FEILET))
+                Pair(
+                    emptyList(),
+                    YtelsePerioderDto.KildeResultatYtelse(type = it, resultat = ResultatKilde.FEILET),
+                )
             }
         }
 
