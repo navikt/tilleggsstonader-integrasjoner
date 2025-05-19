@@ -2,13 +2,13 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 val javaVersion = JavaLanguageVersion.of(21)
-val springdocVersion = "2.8.6"
-val tilleggsstønaderLibsVersion = "2025.04.22-12.35.62d0c031bca8"
-val tilleggsstønaderKontrakterVersion = "2025.05.14-19.56.a0c24fafc810"
-val tokenSupportVersion = "5.0.25"
+val springdocVersion = "2.8.8"
+val tilleggsstønaderLibsVersion = "2025.04.28-12.53.f687c00288d5"
+val tilleggsstønaderKontrakterVersion = "2025.05.19-16.09.454035001955"
+val tokenSupportVersion = "5.0.27"
 val springCloudVersion = "4.2.1"
 
-val mockkVersion = "1.14.0"
+val mockkVersion = "1.14.2"
 
 group = "no.nav.tilleggsstonader.integrasjoner"
 version = "1.0.0"
@@ -16,16 +16,16 @@ version = "1.0.0"
 plugins {
     application
 
-    kotlin("jvm") version "2.1.20"
+    kotlin("jvm") version "2.1.21"
     id("com.diffplug.spotless") version "7.0.3"
     id("com.github.ben-manes.versions") version "0.52.0"
     id("se.patrikerdes.use-latest-versions") version "0.2.18"
 
     id("org.springframework.boot") version "3.4.5"
     id("io.spring.dependency-management") version "1.1.7"
-    kotlin("plugin.spring") version "2.1.20"
+    kotlin("plugin.spring") version "2.1.21"
 
-    id("org.cyclonedx.bom") version "2.2.0"
+    id("org.cyclonedx.bom") version "2.3.0"
 }
 
 repositories {
