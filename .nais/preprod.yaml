@@ -83,6 +83,8 @@ spec:
           namespace: etterlatte
         - application: repr-api
           namespace: repr
+        - application: logging
+          namespace: nais-system
       external:
         - host: saf-q2.dev-fss-pub.nais.io
         - host: oppgave.dev-fss-pub.nais.io

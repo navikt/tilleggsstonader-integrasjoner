@@ -77,6 +77,8 @@ spec:
           namespace: etterlatte
         - application: repr-api
           namespace: repr
+        - application: logging
+          namespace: nais-system
       external:
         - host: oppgave.prod-fss-pub.nais.io
         - host: arena-api.prod-fss-pub.nais.io
