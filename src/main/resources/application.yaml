@@ -202,3 +202,6 @@ clients:
   azure-graph:
     uri: https://graph.microsoft.com/v1.0/
     scope: https://graph.microsoft.com/.default
+  dp:
+    uri: https://www.nav.no/dagpenger/datadeling
+    scope: api://${CLIENT_ENV}-fss.teamdagpenger.dp-proxy/.default
