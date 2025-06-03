@@ -6,10 +6,14 @@ import io.mockk.verify
 import no.nav.tilleggsstonader.integrasjoner.IntegrationTest
 import no.nav.tilleggsstonader.integrasjoner.aap.AAPClient
 import no.nav.tilleggsstonader.integrasjoner.aap.AAPPerioderResponse
+import no.nav.tilleggsstonader.integrasjoner.dagpenger.DagpengerClient
+import no.nav.tilleggsstonader.integrasjoner.dagpenger.DagpengerPerioderResponse
 import no.nav.tilleggsstonader.integrasjoner.ensligforsørger.EnsligForsørgerClient
 import no.nav.tilleggsstonader.integrasjoner.ensligforsørger.EnsligForsørgerPerioderResponse
 import no.nav.tilleggsstonader.integrasjoner.etterlatte.EtterlatteClient
+import no.nav.tilleggsstonader.integrasjoner.etterlatte.Samordningsvedtak
 import no.nav.tilleggsstonader.integrasjoner.mocks.AAPClientTestConfig.Companion.resetMock
+import no.nav.tilleggsstonader.integrasjoner.mocks.DagpengerClientTestConfig.Companion.resetMock
 import no.nav.tilleggsstonader.integrasjoner.mocks.EnsligForsørgerClientTestConfig.Companion.resetMock
 import no.nav.tilleggsstonader.integrasjoner.mocks.EtterlatteClientTestConfig.Companion.resetMock
 import no.nav.tilleggsstonader.kontrakter.ytelse.ResultatKilde
@@ -30,6 +34,9 @@ class YtelseServiceTest : IntegrationTest() {
     lateinit var aapClient: AAPClient
 
     @Autowired
+    lateinit var dagpengerClient: DagpengerClient
+
+    @Autowired
     lateinit var ensligForsørgerClient: EnsligForsørgerClient
 
     @Autowired
@@ -39,6 +46,7 @@ class YtelseServiceTest : IntegrationTest() {
     override fun tearDown() {
         super.tearDown()
         resetMock(aapClient)
+        resetMock(dagpengerClient)
         resetMock(ensligForsørgerClient)
         resetMock(etterlatteClient)
     }
@@ -49,6 +57,7 @@ class YtelseServiceTest : IntegrationTest() {
         ytelseService.hentYtelser(ytelsePerioderRequest())
 
         verify(exactly = 1) { aapClient.hentPerioder(any(), any(), any()) }
+        verify(exactly = 1) { dagpengerClient.hentPerioder(any(), any(), any()) }
         verify(exactly = 1) { ensligForsørgerClient.hentPerioder(any(), any(), any()) }
         verify(exactly = 1) { etterlatteClient.hentPerioder(any(), any()) }
     }
@@ -61,6 +70,7 @@ class YtelseServiceTest : IntegrationTest() {
         ytelseService.hentYtelser(ytelsePerioderRequest(tom = LocalDate.now().plusDays(1)))
 
         verify(exactly = 4) { aapClient.hentPerioder(any(), any(), any()) }
+        verify(exactly = 4) { dagpengerClient.hentPerioder(any(), any(), any()) }
         verify(exactly = 4) { ensligForsørgerClient.hentPerioder(any(), any(), any()) }
         verify(exactly = 4) { etterlatteClient.hentPerioder(any(), any()) }
     }
@@ -72,6 +82,7 @@ class YtelseServiceTest : IntegrationTest() {
         assertThat(dto.perioder.map { it.type }).containsOnly(TypeYtelsePeriode.AAP)
 
         verify(exactly = 1) { aapClient.hentPerioder(any(), any(), any()) }
+        verify { dagpengerClient wasNot called }
         verify { ensligForsørgerClient wasNot called }
         verify { etterlatteClient wasNot called }
     }
@@ -84,6 +95,7 @@ class YtelseServiceTest : IntegrationTest() {
 
         verify(exactly = 1) { ensligForsørgerClient.hentPerioder(any(), any(), any()) }
         verify { aapClient wasNot called }
+        verify { dagpengerClient wasNot called }
         verify { etterlatteClient wasNot called }
     }
 
@@ -95,7 +107,20 @@ class YtelseServiceTest : IntegrationTest() {
 
         verify(exactly = 1) { etterlatteClient.hentPerioder(any(), any()) }
         verify { aapClient wasNot called }
+        verify { dagpengerClient wasNot called }
         verify { ensligForsørgerClient wasNot called }
+    }
+
+    @Test
+    fun `skal kun hente perioder fra dagpenger hvis det er ønskelig`() {
+        val dto = ytelseService.hentYtelser(ytelsePerioderRequest(typer = listOf(TypeYtelsePeriode.DAGPENGER)))
+
+        assertThat(dto.perioder.map { it.type }).containsOnly(TypeYtelsePeriode.DAGPENGER)
+
+        verify(exactly = 1) { dagpengerClient.hentPerioder(any(), any(), any()) }
+        verify { aapClient wasNot called }
+        verify { ensligForsørgerClient wasNot called }
+        verify { etterlatteClient wasNot called }
     }
 
     @Test
@@ -106,19 +131,41 @@ class YtelseServiceTest : IntegrationTest() {
                 .body!!
         }
 
+        every { dagpengerClient.hentPerioder(any(), any(), any()) } answers {
+            restTemplate
+                .postForEntity<DagpengerPerioderResponse>("http://localhost:1234", null)
+                .body!!
+        }
+
         every { ensligForsørgerClient.hentPerioder(any(), any(), any()) } answers {
             restTemplate
                 .postForEntity<EnsligForsørgerPerioderResponse>("http://localhost:1234", null)
                 .body!!
         }
 
-        val typer = listOf(TypeYtelsePeriode.AAP)
+        every { etterlatteClient.hentPerioder(any(), any()) } answers {
+            restTemplate
+                .postForEntity<List<Samordningsvedtak>>("http://localhost:1234", null)
+                .body!!
+        }
+
+        val typer =
+            listOf(
+                TypeYtelsePeriode.AAP,
+                TypeYtelsePeriode.DAGPENGER,
+                TypeYtelsePeriode.ENSLIG_FORSØRGER,
+                TypeYtelsePeriode.OMSTILLINGSSTØNAD,
+            )
         val dto = ytelseService.hentYtelser(ytelsePerioderRequest(typer = typer))
 
         assertThat(dto.perioder.isEmpty())
-        with(dto.kildeResultat.single()) {
-            assertThat(type).isEqualTo(TypeYtelsePeriode.AAP)
-            assertThat(resultat).isEqualTo(ResultatKilde.FEILET)
+        assertThat(dto.kildeResultat).hasSize(4)
+
+        val typeYtelsePeriode = dto.kildeResultat.map { it.type }
+        assertThat(typeYtelsePeriode).containsExactlyInAnyOrderElementsOf(typer)
+
+        dto.kildeResultat.forEach {
+            assertThat(it.resultat).isEqualTo(ResultatKilde.FEILET)
         }
     }
 

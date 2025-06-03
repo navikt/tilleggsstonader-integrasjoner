@@ -23,6 +23,7 @@ import org.springframework.web.client.RestTemplate
     "integrasjonstest",
     "mock-oauth",
     "mock-aap",
+    "mock-dagpenger",
     "mock-enslig",
     "mock-etterlatte",
     "mock-az-ad",
