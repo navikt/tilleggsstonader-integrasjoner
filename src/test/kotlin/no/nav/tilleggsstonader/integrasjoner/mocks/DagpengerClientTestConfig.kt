@@ -5,7 +5,6 @@ import io.mockk.every
 import io.mockk.mockk
 import no.nav.tilleggsstonader.integrasjoner.dagpenger.DagpengerClient
 import no.nav.tilleggsstonader.integrasjoner.dagpenger.DagpengerPerioderResponse
-import no.nav.tilleggsstonader.integrasjoner.dagpenger.DagpengerYtelseType
 import no.nav.tilleggsstonader.integrasjoner.dagpenger.Periode
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -33,7 +32,6 @@ class DagpengerClientTestConfig {
                         Periode(
                             fraOgMedDato = LocalDate.now(),
                             tilOgMedDato = LocalDate.now().plusDays(1),
-                            ytelseType = DagpengerYtelseType.DAGPENGER_ARBEIDSSOKER_ORDINAER,
                         ),
                     ),
             )

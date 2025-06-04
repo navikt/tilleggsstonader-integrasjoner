@@ -17,14 +17,14 @@ class DagpengerClient(
     val dagpengerUri =
         UriComponentsBuilder
             .fromUri(baseUrl)
-            .pathSegment("dagpenger", "v1", "perioder")
+            .pathSegment("dagpenger","datadeling","v1", "perioder")
             .encode()
             .toUriString()
 
     fun hentPerioder(
         ident: String,
         fom: LocalDate,
-        tom: LocalDate,
+        tom: LocalDate? = null,
     ): DagpengerPerioderResponse {
         val request =
             mapOf(

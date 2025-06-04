@@ -10,11 +10,4 @@ data class DagpengerPerioderResponse(
 data class Periode(
     val fraOgMedDato: LocalDate,
     val tilOgMedDato: LocalDate,
-    val ytelseType: DagpengerYtelseType,
 )
-
-enum class DagpengerYtelseType {
-    DAGPENGER_ARBEIDSSOKER_ORDINAER,
-    DAGPENGER_PERMITTERING_ORDINAER,
-    DAGPENGER_PERMITTERING_FISKEINDUSTRI,
-}
