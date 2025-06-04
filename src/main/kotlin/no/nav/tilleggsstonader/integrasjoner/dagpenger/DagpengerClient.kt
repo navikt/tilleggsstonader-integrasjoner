@@ -17,7 +17,7 @@ class DagpengerClient(
     val dagpengerUri =
         UriComponentsBuilder
             .fromUri(baseUrl)
-            .pathSegment("dagpenger","datadeling","v1", "perioder")
+            .pathSegment("dagpenger", "datadeling", "v1", "perioder")
             .encode()
             .toUriString()
 
