@@ -27,7 +27,7 @@ class DagpengerClientTestConfig {
     companion object {
         private val dagpengerPeriode =
             DagpengerPerioderResponse(
-                personIdent = "12345678910",
+                personIdent = "12345678911",
                 perioder =
                     listOf(
                         Periode(
