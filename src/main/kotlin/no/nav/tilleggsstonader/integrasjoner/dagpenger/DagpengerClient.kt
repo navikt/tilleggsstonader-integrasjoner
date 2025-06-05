@@ -11,7 +11,7 @@ import java.time.LocalDate
 
 @Component
 class DagpengerClient(
-    @Value("\${clients.dp.uri}") private val baseUrl: URI,
+    @Value("\${clients.dagpenger.uri}") private val baseUrl: URI,
     @Qualifier("azure") restTemplate: RestTemplate,
 ) : AbstractRestClient(restTemplate) {
     val dagpengerUri =
