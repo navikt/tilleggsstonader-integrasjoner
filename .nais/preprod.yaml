@@ -77,6 +77,8 @@ spec:
       rules:
         - application: api-intern
           namespace: aap
+        - application: dp-datadeling
+          namespace: teamdagpenger
         - application: familie-ef-sak
           namespace: teamfamilie
         - application: etterlatte-api

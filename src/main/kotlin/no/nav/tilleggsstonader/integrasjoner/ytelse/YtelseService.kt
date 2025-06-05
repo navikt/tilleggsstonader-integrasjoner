@@ -1,6 +1,7 @@
 package no.nav.tilleggsstonader.integrasjoner.ytelse
 
 import no.nav.tilleggsstonader.integrasjoner.aap.AAPClient
+import no.nav.tilleggsstonader.integrasjoner.dagpenger.DagpengerClient
 import no.nav.tilleggsstonader.integrasjoner.ensligforsørger.EnsligForsørgerClient
 import no.nav.tilleggsstonader.integrasjoner.etterlatte.EtterlatteClient
 import no.nav.tilleggsstonader.integrasjoner.infrastruktur.config.getValue
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service
 @Service
 class YtelseService(
     private val aapClient: AAPClient,
+    private val dagpengerClient: DagpengerClient,
     private val ensligForsørgerClient: EnsligForsørgerClient,
     private val etterlatteClient: EtterlatteClient,
     @Qualifier("shortCache")
@@ -72,6 +74,7 @@ class YtelseService(
     ): List<YtelsePeriode> =
         when (it) {
             TypeYtelsePeriode.AAP -> hentAap(data)
+            TypeYtelsePeriode.DAGPENGER -> hentDagpenger(data)
             TypeYtelsePeriode.ENSLIG_FORSØRGER -> hentEnslig(data)
             TypeYtelsePeriode.OMSTILLINGSSTØNAD -> hentOmstillingsstønad(data)
         }
@@ -102,6 +105,20 @@ class YtelseService(
                 fom = it.fomDato,
                 tom = it.tomDato,
                 ensligForsørgerStønadstype = EnsligForsørgerStønadstype.valueOf(it.stønadstype.name),
+            )
+        }
+    }
+
+    private fun hentDagpenger(data: HentYtelserCacheData): List<YtelsePeriode> {
+        val dagpengerResponse =
+            cacheManager.getValue("ytelser-dagpenger", data) {
+                dagpengerClient.hentPerioder(data.ident, fom = data.fom, tom = data.tom)
+            }
+        return dagpengerResponse.perioder.map { periode ->
+            YtelsePeriode(
+                type = TypeYtelsePeriode.DAGPENGER,
+                fom = periode.fraOgMedDato,
+                tom = periode.tilOgMedDato,
             )
         }
     }
