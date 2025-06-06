@@ -225,5 +225,5 @@ clients:
     uri: http://dp-datadeling.teamdagpenger
     scope: api://${CLIENT_ENV}-gcp.teamdagpenger.dp-datadeling/.default
   tiltakspenger:
-    uri: http://tiltak-datadeling.team-tiltak/graphql
+    uri: http://tiltakspenger-datadeling.tpts
     scope: api://${CLIENT_ENV}-gcp.tpts.tiltakspenger-datadeling/.default
