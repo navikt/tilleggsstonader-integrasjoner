@@ -28,7 +28,7 @@ class DagpengerClient(
     ): DagpengerPerioderResponse {
         val request =
             mapOf(
-                "personidentifikator" to ident,
+                "personIdent" to ident,
                 "fraOgMedDato" to fom.toString(),
                 "tilOgMedDato" to tom?.toString(),
             )
