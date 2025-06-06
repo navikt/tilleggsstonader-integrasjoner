@@ -29,8 +29,8 @@ class DagpengerClient(
         val request =
             mapOf(
                 "personidentifikator" to ident,
-                "fraOgMedDato" to fom,
-                "tilOgMedDato" to tom,
+                "fraOgMedDato" to fom.toString(),
+                "tilOgMedDato" to tom?.toString(),
             )
         return postForEntity<DagpengerPerioderResponse>(dagpengerUri, request)
     }
