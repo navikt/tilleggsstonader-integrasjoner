@@ -5,6 +5,7 @@ import no.nav.tilleggsstonader.integrasjoner.dagpenger.DagpengerClient
 import no.nav.tilleggsstonader.integrasjoner.ensligforsørger.EnsligForsørgerClient
 import no.nav.tilleggsstonader.integrasjoner.etterlatte.EtterlatteClient
 import no.nav.tilleggsstonader.integrasjoner.infrastruktur.config.getValue
+import no.nav.tilleggsstonader.integrasjoner.tiltakspenger.TiltakspengerClient
 import no.nav.tilleggsstonader.integrasjoner.util.VirtualThreadUtil.parallelt
 import no.nav.tilleggsstonader.kontrakter.ytelse.EnsligForsørgerStønadstype
 import no.nav.tilleggsstonader.kontrakter.ytelse.ResultatKilde
@@ -24,6 +25,7 @@ class YtelseService(
     private val dagpengerClient: DagpengerClient,
     private val ensligForsørgerClient: EnsligForsørgerClient,
     private val etterlatteClient: EtterlatteClient,
+    private val tiltakspengerClient: TiltakspengerClient,
     @Qualifier("shortCache")
     private val cacheManager: CacheManager,
 ) {
@@ -77,6 +79,7 @@ class YtelseService(
             TypeYtelsePeriode.DAGPENGER -> hentDagpenger(data)
             TypeYtelsePeriode.ENSLIG_FORSØRGER -> hentEnslig(data)
             TypeYtelsePeriode.OMSTILLINGSSTØNAD -> hentOmstillingsstønad(data)
+            TypeYtelsePeriode.TILTAKSPENGER -> hentTiltakspenger(data)
         }
 
     private fun hentAap(data: HentYtelserCacheData): List<YtelsePeriode> {
@@ -117,6 +120,19 @@ class YtelseService(
         return dagpengerResponse.perioder.map { periode ->
             YtelsePeriode(
                 type = TypeYtelsePeriode.DAGPENGER,
+                fom = periode.fraOgMedDato,
+                tom = periode.tilOgMedDato,
+            )
+        }
+    }
+    private fun hentTiltakspenger(data: HentYtelserCacheData): List<YtelsePeriode> {
+        val tiltakspengerResponse =
+            cacheManager.getValue("ytelser-tiltakspenger", data) {
+                tiltakspengerClient.hentPerioder(data.ident, fom = data.fom, tom = data.tom)
+            }
+        return tiltakspengerResponse.perioder.map { periode ->
+            YtelsePeriode(
+                type = TypeYtelsePeriode.TILTAKSPENGER,
                 fom = periode.fraOgMedDato,
                 tom = periode.tilOgMedDato,
             )
