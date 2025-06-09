@@ -335,9 +335,22 @@ class DokarkivControllerTest : IntegrationTest() {
 
     @Test
     fun `ferdigstill returnerer 400 hvis ikke mulig ferdigstill`() {
+        val response =
+            """
+            {
+            "type":"about:blank",
+            "title":"Bad Request",
+            "status":400,
+            "detail":"Kunne ikke ferdigstille journalpost med journalpostId=123. Journalposten mangler følgende felter: avsenderMottaker.navn",
+            "instance":"/rest/journalpostapi/v1/journalpost/123/ferdigstill",
+            "timestamp":"2025-06-09T09:50:54.901512682+02:00",
+            "message":"Kunne ikke ferdigstille journalpost med journalpostId=123. Journalposten mangler følgende felter: avsenderMottaker.navn",
+            "error":"Bad Request",
+            "path":"/rest/journalpostapi/v1/journalpost/123/ferdigstill"}
+            """.trimIndent()
         stubFor(
             patch(urlEqualTo("/rest/journalpostapi/v1/journalpost/123/ferdigstill"))
-                .willReturn(aResponse().withStatus(400)),
+                .willReturn(aResponse().withStatus(400).withBody(response)),
         )
 
         val exception =
@@ -350,7 +363,10 @@ class DokarkivControllerTest : IntegrationTest() {
             }
 
         assertThat(exception.httpStatus).isEqualTo(HttpStatus.BAD_REQUEST)
-        assertThat(exception.detail.detail).contains("Kan ikke ferdigstille journalpost 123")
+        assertThat(exception.detail.detail)
+            .isEqualTo(
+                "Kunne ikke ferdigstille journalpost med journalpostId=123. Journalposten mangler følgende felter: avsenderMottaker.navn",
+            )
     }
 
     @Test

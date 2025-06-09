@@ -11,6 +11,7 @@ import no.nav.tilleggsstonader.kontrakter.dokarkiv.OppdaterJournalpostRequest
 import no.nav.tilleggsstonader.kontrakter.dokarkiv.OppdaterJournalpostResponse
 import no.nav.tilleggsstonader.kontrakter.felles.ObjectMapperProvider.objectMapper
 import no.nav.tilleggsstonader.libs.http.client.AbstractRestClient
+import no.nav.tilleggsstonader.libs.http.client.ProblemDetailException
 import no.nav.tilleggsstonader.libs.log.NavHttpHeaders
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Qualifier
@@ -20,7 +21,6 @@ import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Component
 import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.client.HttpStatusCodeException
-import org.springframework.web.client.RestClientResponseException
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.util.UriComponentsBuilder
 import java.net.URI
@@ -128,12 +128,9 @@ class DokarkivRestClient(
                 headers(navIdent),
                 mapOf("journalpostId" to journalpostId),
             )
-        } catch (e: RestClientResponseException) {
-            if (e.statusCode == HttpStatus.BAD_REQUEST) {
-                throw KanIkkeFerdigstilleJournalpostException(
-                    "Kan ikke ferdigstille journalpost " +
-                        "$journalpostId body ${e.responseBodyAsString}",
-                )
+        } catch (e: ProblemDetailException) {
+            if (e.httpStatus == HttpStatus.BAD_REQUEST) {
+                throw KanIkkeFerdigstilleJournalpostException(e.detail.detail ?: "Ukjent feil ved ferdigstilling av journalpost")
             }
             throw e
         }
