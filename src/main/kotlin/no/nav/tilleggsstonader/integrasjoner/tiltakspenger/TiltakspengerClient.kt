@@ -30,8 +30,8 @@ class TiltakspengerClient(
         val request =
             mapOf(
                 "ident" to ident,
-                "fom" to fom,
-                "tom" to tom,
+                "fom" to fom.toString(),
+                "tom" to tom.toString(),
             )
         return postForEntity<TiltakspengerPerioderResponse>(uriPerioder, request)
     }
