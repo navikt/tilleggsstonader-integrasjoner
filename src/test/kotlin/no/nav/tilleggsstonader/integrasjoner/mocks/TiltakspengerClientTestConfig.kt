@@ -27,12 +27,11 @@ class TiltakspengerClientTestConfig {
     companion object {
         private val tiltakspengerPeriode =
             TiltakspengerPerioderResponse(
-                personIdent = "12345678911",
                 perioder =
                     listOf(
                         Periode(
-                            fraOgMedDato = LocalDate.now(),
-                            tilOgMedDato = LocalDate.now().plusDays(1),
+                            fraOgMed = LocalDate.now(),
+                            tilOgMed = LocalDate.now().plusDays(1),
                         ),
                     ),
             )

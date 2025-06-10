@@ -133,8 +133,8 @@ class YtelseService(
         return tiltakspengerResponse.perioder.map { periode ->
             YtelsePeriode(
                 type = TypeYtelsePeriode.TILTAKSPENGER,
-                fom = periode.fraOgMedDato,
-                tom = periode.tilOgMedDato,
+                fom = periode.fraOgMed,
+                tom = periode.tilOgMed,
             )
         }
     }
