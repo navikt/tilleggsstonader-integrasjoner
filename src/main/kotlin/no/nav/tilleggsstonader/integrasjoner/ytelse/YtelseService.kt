@@ -46,6 +46,8 @@ class YtelseService(
         return YtelsePerioderDto(
             perioder = perioder.sortedByDescending { it.tom },
             kildeResultat = kildeResultat,
+            perioderHentetFom = request.fom,
+            perioderHentetTom = request.tom,
         )
     }
 
@@ -77,6 +79,7 @@ class YtelseService(
             TypeYtelsePeriode.DAGPENGER -> hentDagpenger(data)
             TypeYtelsePeriode.ENSLIG_FORSØRGER -> hentEnslig(data)
             TypeYtelsePeriode.OMSTILLINGSSTØNAD -> hentOmstillingsstønad(data)
+            TypeYtelsePeriode.TILTAKSPENGER -> TODO()
         }
 
     private fun hentAap(data: HentYtelserCacheData): List<YtelsePeriode> {
