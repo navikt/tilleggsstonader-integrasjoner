@@ -126,6 +126,7 @@ class YtelseService(
         }
     }
     private fun hentTiltakspenger(data: HentYtelserCacheData): List<YtelsePeriode> {
+        logger.info("Hello testing" ,tiltakspengerClient.hentPerioder(data.ident, fom = data.fom, tom = data.tom))
         val tiltakspengerResponse =
             cacheManager.getValue("ytelser-tiltakspenger", data) {
                 tiltakspengerClient.hentPerioder(data.ident, fom = data.fom, tom = data.tom)
