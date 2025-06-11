@@ -4,7 +4,6 @@ import io.mockk.clearMocks
 import io.mockk.every
 import io.mockk.mockk
 import no.nav.tilleggsstonader.integrasjoner.tiltakspenger.Periode
-
 import no.nav.tilleggsstonader.integrasjoner.tiltakspenger.TiltakspengerClient
 import no.nav.tilleggsstonader.integrasjoner.tiltakspenger.TiltakspengerPerioderResponse
 import org.springframework.context.annotation.Bean
@@ -28,17 +27,15 @@ class TiltakspengerClientTestConfig {
         private val tiltakspengerPeriode =
             TiltakspengerPerioderResponse(
                 perioder =
-                    listOf(
-                        Periode(
-                            fraOgMed = LocalDate.now(),
-                            tilOgMed = LocalDate.now().plusDays(1),
-                        ),
+                    Periode(
+                        fraOgMed = LocalDate.now(),
+                        tilOgMed = LocalDate.now().plusDays(1),
                     ),
             )
 
         fun resetMock(client: TiltakspengerClient) {
             clearMocks(client)
-            every { client.hentPerioder(any(), any(), any()) } returns tiltakspengerPeriode
+            every { client.hentPerioder(any(), any(), any()) } returns listOf(tiltakspengerPeriode)
         }
     }
 }

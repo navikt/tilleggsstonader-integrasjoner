@@ -125,6 +125,7 @@ class YtelseService(
             )
         }
     }
+
     private fun hentTiltakspenger(data: HentYtelserCacheData): List<YtelsePeriode> {
         val tiltakspengerResponse =
             cacheManager.getValue("ytelser-tiltakspenger", data) {
@@ -132,11 +133,11 @@ class YtelseService(
                 tiltakspengerClient.hentPerioder(data.ident, fom = data.fom, tom = data.tom)
             }
         logger.info("testing 2")
-        return tiltakspengerResponse.perioder.map { periode ->
+        return tiltakspengerResponse.map { it ->
             YtelsePeriode(
                 type = TypeYtelsePeriode.TILTAKSPENGER,
-                fom = periode.fraOgMed,
-                tom = periode.tilOgMed,
+                fom = it.perioder.fraOgMed,
+                tom = it.perioder.tilOgMed,
             )
         }
     }

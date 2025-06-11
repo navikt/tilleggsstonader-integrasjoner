@@ -1,6 +1,5 @@
 package no.nav.tilleggsstonader.integrasjoner.tiltakspenger
 
-import no.nav.tilleggsstonader.integrasjoner.ensligforsørger.EnsligForsørgerPerioderResponse
 import no.nav.tilleggsstonader.libs.http.client.AbstractRestClient
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
@@ -26,13 +25,13 @@ class TiltakspengerClient(
         ident: String,
         fom: LocalDate,
         tom: LocalDate,
-    ): TiltakspengerPerioderResponse{
+    ): List<TiltakspengerPerioderResponse> {
         val request =
             mapOf(
                 "ident" to ident,
                 "fom" to fom.toString(),
                 "tom" to tom.toString(),
             )
-        return postForEntity<TiltakspengerPerioderResponse>(uriPerioder, request)
+        return postForEntity<List<TiltakspengerPerioderResponse>>(uriPerioder, request)
     }
 }

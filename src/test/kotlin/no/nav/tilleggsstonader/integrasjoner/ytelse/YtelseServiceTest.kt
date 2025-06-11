@@ -94,7 +94,7 @@ class YtelseServiceTest : IntegrationTest() {
         verify { dagpengerClient wasNot called }
         verify { ensligForsørgerClient wasNot called }
         verify { etterlatteClient wasNot called }
-        verify {tiltakspengerClient wasNot called }
+        verify { tiltakspengerClient wasNot called }
     }
 
     @Test
@@ -107,7 +107,7 @@ class YtelseServiceTest : IntegrationTest() {
         verify { aapClient wasNot called }
         verify { dagpengerClient wasNot called }
         verify { etterlatteClient wasNot called }
-        verify {tiltakspengerClient wasNot called }
+        verify { tiltakspengerClient wasNot called }
     }
 
     @Test
@@ -120,7 +120,7 @@ class YtelseServiceTest : IntegrationTest() {
         verify { aapClient wasNot called }
         verify { dagpengerClient wasNot called }
         verify { ensligForsørgerClient wasNot called }
-        verify {tiltakspengerClient wasNot called }
+        verify { tiltakspengerClient wasNot called }
     }
 
     @Test
@@ -133,18 +133,18 @@ class YtelseServiceTest : IntegrationTest() {
         verify { aapClient wasNot called }
         verify { ensligForsørgerClient wasNot called }
         verify { etterlatteClient wasNot called }
-        verify {tiltakspengerClient wasNot called }
+        verify { tiltakspengerClient wasNot called }
     }
 
     @Test
-    fun  `skal kun hente perioder fra tiltakspenger hvis det er ønskelig`(){
+    fun `skal kun hente perioder fra tiltakspenger hvis det er ønskelig`() {
         val dto = ytelseService.hentYtelser(ytelsePerioderRequest(typer = listOf(TypeYtelsePeriode.TILTAKSPENGER)))
         assertThat(dto.perioder.map { it.type }).containsOnly(TypeYtelsePeriode.TILTAKSPENGER)
         verify(exactly = 1) { tiltakspengerClient.hentPerioder(any(), any(), any()) }
         verify { aapClient wasNot called }
         verify { ensligForsørgerClient wasNot called }
         verify { etterlatteClient wasNot called }
-        verify {dagpengerClient wasNot called }
+        verify { dagpengerClient wasNot called }
     }
 
     @Test
@@ -172,8 +172,8 @@ class YtelseServiceTest : IntegrationTest() {
                 .postForEntity<List<Samordningsvedtak>>("http://localhost:1234", null)
                 .body!!
         }
-        every { tiltakspengerClient.hentPerioder(any(),any(),any()) } answers {
-            restTemplate.postForEntity<TiltakspengerPerioderResponse>("http://localhost:1234", null).body!!
+        every { tiltakspengerClient.hentPerioder(any(), any(), any()) } answers {
+            restTemplate.postForEntity<List<TiltakspengerPerioderResponse>>("http://localhost:1234", null).body!!
         }
 
         val typer =
@@ -182,7 +182,7 @@ class YtelseServiceTest : IntegrationTest() {
                 TypeYtelsePeriode.DAGPENGER,
                 TypeYtelsePeriode.ENSLIG_FORSØRGER,
                 TypeYtelsePeriode.OMSTILLINGSSTØNAD,
-                TypeYtelsePeriode.TILTAKSPENGER
+                TypeYtelsePeriode.TILTAKSPENGER,
             )
         val dto = ytelseService.hentYtelser(ytelsePerioderRequest(typer = typer))
 

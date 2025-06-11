@@ -1,8 +1,9 @@
 package no.nav.tilleggsstonader.integrasjoner.tiltakspenger
 
 import java.time.LocalDate
+
 data class TiltakspengerPerioderResponse(
-    val perioder: List<Periode>,
+    val perioder: Periode,
 )
 
 data class Periode(
