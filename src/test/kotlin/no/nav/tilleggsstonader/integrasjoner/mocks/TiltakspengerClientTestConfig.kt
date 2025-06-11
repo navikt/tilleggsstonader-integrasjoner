@@ -26,7 +26,7 @@ class TiltakspengerClientTestConfig {
     companion object {
         private val tiltakspengerPeriode =
             TiltakspengerPerioderResponse(
-                perioder =
+                periode =
                     Periode(
                         fraOgMed = LocalDate.now(),
                         tilOgMed = LocalDate.now().plusDays(1),
