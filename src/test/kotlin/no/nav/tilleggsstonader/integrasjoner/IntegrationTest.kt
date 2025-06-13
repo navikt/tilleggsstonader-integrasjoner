@@ -26,6 +26,7 @@ import org.springframework.web.client.RestTemplate
     "mock-dagpenger",
     "mock-enslig",
     "mock-etterlatte",
+    "mock-tiltakspenger",
     "mock-az-ad",
 )
 @EnableMockOAuth2Server

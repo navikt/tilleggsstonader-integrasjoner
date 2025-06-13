@@ -87,6 +87,8 @@ spec:
           namespace: repr
         - application: logging
           namespace: nais-system
+        - application: tiltakspenger-datadeling
+          namespace: tpts
       external:
         - host: saf-q2.dev-fss-pub.nais.io
         - host: oppgave.dev-fss-pub.nais.io
