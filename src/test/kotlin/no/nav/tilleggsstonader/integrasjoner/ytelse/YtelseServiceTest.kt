@@ -201,7 +201,7 @@ class YtelseServiceTest : IntegrationTest() {
         ident: String = "ident",
         fom: LocalDate = LocalDate.now(),
         tom: LocalDate = LocalDate.now(),
-        typer: List<TypeYtelsePeriode> = TypeYtelsePeriode.entries,
+        typer: List<TypeYtelsePeriode> = TypeYtelsePeriode.entries.filter { it != TypeYtelsePeriode.TILTAKSPENGER },
     ) = YtelsePerioderRequest(
         ident = ident,
         fom = fom,

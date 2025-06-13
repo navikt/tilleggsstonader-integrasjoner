@@ -48,6 +48,8 @@ class YtelseService(
         return YtelsePerioderDto(
             perioder = perioder.sortedByDescending { it.tom },
             kildeResultat = kildeResultat,
+            perioderHentetFom = request.fom,
+            perioderHentetTom = request.tom,
         )
     }
 
