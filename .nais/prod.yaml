@@ -81,6 +81,8 @@ spec:
           namespace: repr
         - application: logging
           namespace: nais-system
+        - application: tiltakspenger-datadeling
+          namespace: tpts
       external:
         - host: oppgave.prod-fss-pub.nais.io
         - host: arena-api.prod-fss-pub.nais.io
