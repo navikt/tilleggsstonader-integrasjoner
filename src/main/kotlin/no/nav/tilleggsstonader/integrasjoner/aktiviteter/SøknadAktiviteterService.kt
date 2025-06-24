@@ -5,8 +5,8 @@ import no.nav.tilleggsstonader.kontrakter.aktivitet.AktivitetArenaDto
 import no.nav.tilleggsstonader.kontrakter.aktivitet.GruppeAktivitet
 import no.nav.tilleggsstonader.kontrakter.aktivitet.TypeAktivitet
 import no.nav.tilleggsstonader.kontrakter.felles.Stønadstype
-import no.nav.tilleggsstonader.libs.utils.osloDateNow
 import org.springframework.stereotype.Service
+import java.time.LocalDate
 import kotlin.collections.filter
 
 @Service
@@ -17,8 +17,8 @@ class SøknadAktiviteterService(
         ident: String,
         stønadstype: Stønadstype,
     ): List<AktivitetArenaDto> {
-        val fom = osloDateNow().minusMonths(stønadstype.grunnlagAntallMånederBakITiden.toLong())
-        val tom = osloDateNow().plusMonths(3)
+        val fom = LocalDate.now().minusMonths(stønadstype.grunnlagAntallMånederBakITiden.toLong())
+        val tom = LocalDate.now().plusMonths(3)
         return arenaService
             .hentAktiviteter(ident, fom, tom)
             .filter {

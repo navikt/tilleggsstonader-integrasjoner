@@ -14,7 +14,6 @@ import no.nav.tilleggsstonader.kontrakter.oppgave.OpprettOppgaveRequest
 import no.nav.tilleggsstonader.kontrakter.oppgave.vent.OppdaterPåVentRequest
 import no.nav.tilleggsstonader.kontrakter.oppgave.vent.SettPåVentRequest
 import no.nav.tilleggsstonader.kontrakter.oppgave.vent.TaAvVentRequest
-import no.nav.tilleggsstonader.libs.utils.osloDateNow
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.BeforeEach
@@ -228,7 +227,7 @@ class SettPåVentServiceTest {
             with(oppgaveService.hentOppgave(oppgaveId)) {
                 assertThat(tilordnetRessurs).isEqualTo(tilordnetRessurs)
                 assertThat(beskrivelse).contains("Tatt av vent")
-                assertThat(fristFerdigstillelse).isEqualTo(osloDateNow())
+                assertThat(fristFerdigstillelse).isEqualTo(LocalDate.now())
                 assertThat(mappeId).isEqualTo(Optional.of(MAPPE_ID_KLAR))
             }
         }

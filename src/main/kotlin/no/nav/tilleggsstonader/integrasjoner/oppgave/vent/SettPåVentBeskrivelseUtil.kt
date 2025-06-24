@@ -7,7 +7,6 @@ import no.nav.tilleggsstonader.kontrakter.oppgave.vent.SettPåVentRequest
 import no.nav.tilleggsstonader.kontrakter.oppgave.vent.TaAvVentRequest
 import no.nav.tilleggsstonader.libs.utils.medGosysTid
 import no.nav.tilleggsstonader.libs.utils.norskFormat
-import no.nav.tilleggsstonader.libs.utils.osloNow
 import java.time.LocalDate
 import java.time.LocalDateTime
 
@@ -15,7 +14,7 @@ object SettPåVentBeskrivelseUtil {
     fun settPåVent(
         oppgave: Oppgave,
         settPåVent: SettPåVentRequest,
-        tidspunkt: LocalDateTime = osloNow(),
+        tidspunkt: LocalDateTime = LocalDateTime.now(),
     ): String {
         val tilordnetSaksbehandlerBeskrivelse =
             utledTilordnetSaksbehandlerBeskrivelse(oppgave, "")
@@ -30,7 +29,7 @@ object SettPåVentBeskrivelseUtil {
     fun oppdaterSettPåVent(
         oppgave: Oppgave,
         oppdaterPåVent: OppdaterPåVentRequest,
-        tidspunkt: LocalDateTime = osloNow(),
+        tidspunkt: LocalDateTime = LocalDateTime.now(),
     ): String {
         val fristBeskrivelse = utledOppgavefristBeskrivelse(oppgave, oppdaterPåVent.frist)
         val kommentarRad = "Kommentar: ${oppdaterPåVent.kommentar}"
@@ -49,7 +48,7 @@ object SettPåVentBeskrivelseUtil {
     fun taAvVent(
         oppgave: Oppgave,
         settPåVent: TaAvVentRequest,
-        tidspunkt: LocalDateTime = osloNow(),
+        tidspunkt: LocalDateTime = LocalDateTime.now(),
     ): String {
         val tilordnetSaksbehandlerBeskrivelse =
             utledTilordnetSaksbehandlerBeskrivelse(oppgave, SikkerhetsContext.hentSaksbehandlerEllerSystembruker())

@@ -31,7 +31,6 @@ import no.nav.tilleggsstonader.kontrakter.oppgave.OpprettOppgaveRequest
 import no.nav.tilleggsstonader.kontrakter.oppgave.StatusEnum
 import no.nav.tilleggsstonader.libs.log.SecureLogger.secureLogger
 import no.nav.tilleggsstonader.libs.test.httpclient.ProblemDetailUtil.catchProblemDetailException
-import no.nav.tilleggsstonader.libs.utils.osloDateNow
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
@@ -44,6 +43,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.test.context.TestPropertySource
 import org.springframework.web.client.exchange
+import java.time.LocalDate
 import java.util.Optional
 
 @TestPropertySource(properties = ["clients.oppgave.uri=http://localhost:28085"])
@@ -126,7 +126,7 @@ class OppgaveControllerTest : IntegrationTest() {
         val opprettOppgave =
             OpprettOppgaveRequest(
                 ident = OppgaveIdentV2(ident = "123456789012", gruppe = IdentGruppe.AKTOERID),
-                fristFerdigstillelse = osloDateNow().plusDays(3),
+                fristFerdigstillelse = LocalDate.now().plusDays(3),
                 behandlingstema = "behandlingstema",
                 enhetsnummer = "enhetsnummer",
                 tema = Tema.TSO,
@@ -147,7 +147,7 @@ class OppgaveControllerTest : IntegrationTest() {
         val opprettOppgave =
             OpprettOppgaveRequest(
                 ident = null,
-                fristFerdigstillelse = osloDateNow().plusDays(3),
+                fristFerdigstillelse = LocalDate.now().plusDays(3),
                 behandlingstema = "behandlingstema",
                 enhetsnummer = "enhetsnummer",
                 tema = Tema.TSO,
@@ -170,7 +170,7 @@ class OppgaveControllerTest : IntegrationTest() {
         val opprettOppgave =
             OpprettOppgaveRequest(
                 ident = OppgaveIdentV2(ident = "123456789012", gruppe = IdentGruppe.AKTOERID),
-                fristFerdigstillelse = osloDateNow().plusDays(3),
+                fristFerdigstillelse = LocalDate.now().plusDays(3),
                 behandlingstema = "behandlingstema",
                 enhetsnummer = "enhetsnummer",
                 tema = Tema.TSO,
