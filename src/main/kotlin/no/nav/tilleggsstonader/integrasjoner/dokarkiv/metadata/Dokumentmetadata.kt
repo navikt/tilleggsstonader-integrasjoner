@@ -60,15 +60,15 @@ fun Dokumenttype.tilMetadata(): Dokumentmetadata =
         Dokumenttype.BOUTGIFTER_KLAGE_VEDTAKSBREV -> BoutgifterKlageVedtak
         Dokumenttype.BOUTGIFTER_KLAGE_INTERNT_VEDTAK -> BoutgifterKlageInterntVedtak
 
-        Dokumenttype.DAGLIG_REISE_TSO_VEDTAKSBREV -> DagligReiseTSOVedtaksbrevMetadata
-        Dokumenttype.DAGLIG_REISE_TSO_FRITTSTÅENDE_BREV -> DagligReiseTSOFrittståendeBrevMetadata
-        Dokumenttype.DAGLIG_REISE_TSO_INTERNT_VEDTAK -> DagligReiseTSOInterntVedtakMetadata
-        Dokumenttype.DAGLIG_REISE_TSO_KLAGE_VEDTAKSBREV -> DagligReiseTSOKlageVedtak
-        Dokumenttype.DAGLIG_REISE_TSO_KLAGE_INTERNT_VEDTAK -> DagligReiseTSOKlageInterntVedtak
+        Dokumenttype.DAGLIG_REISE_TSO_VEDTAKSBREV -> DagligReiseTsoVedtaksbrevMetadata
+        Dokumenttype.DAGLIG_REISE_TSO_FRITTSTÅENDE_BREV -> DagligReiseTsoFrittståendeBrevMetadata
+        Dokumenttype.DAGLIG_REISE_TSO_INTERNT_VEDTAK -> DagligReiseTsoInterntVedtakMetadata
+        Dokumenttype.DAGLIG_REISE_TSO_KLAGE_VEDTAKSBREV -> DagligReiseTsoKlageVedtak
+        Dokumenttype.DAGLIG_REISE_TSO_KLAGE_INTERNT_VEDTAK -> DagligReiseTsoKlageInterntVedtak
 
-        Dokumenttype.DAGLIG_REISE_TSR_VEDTAKSBREV -> DagligReiseTSRVedtaksbrevMetadata
-        Dokumenttype.DAGLIG_REISE_TSR_FRITTSTÅENDE_BREV -> DagligReiseTSRFrittståendeBrevMetadata
-        Dokumenttype.DAGLIG_REISE_TSR_INTERNT_VEDTAK -> DagligReiseTSRInterntVedtakMetadata
-        Dokumenttype.DAGLIG_REISE_TSR_KLAGE_VEDTAKSBREV -> DagligReiseTSRKlageVedtak
-        Dokumenttype.DAGLIG_REISE_TSR_KLAGE_INTERNT_VEDTAK -> DagligReiseTSRKlageInterntVedtak
+        Dokumenttype.DAGLIG_REISE_TSR_VEDTAKSBREV -> DagligReiseTsrVedtaksbrevMetadata
+        Dokumenttype.DAGLIG_REISE_TSR_FRITTSTÅENDE_BREV -> DagligReiseTsrFrittståendeBrevMetadata
+        Dokumenttype.DAGLIG_REISE_TSR_INTERNT_VEDTAK -> DagligReiseTsrInterntVedtakMetadata
+        Dokumenttype.DAGLIG_REISE_TSR_KLAGE_VEDTAKSBREV -> DagligReiseTsrKlageVedtak
+        Dokumenttype.DAGLIG_REISE_TSR_KLAGE_INTERNT_VEDTAK -> DagligReiseTsrKlageInterntVedtak
     }

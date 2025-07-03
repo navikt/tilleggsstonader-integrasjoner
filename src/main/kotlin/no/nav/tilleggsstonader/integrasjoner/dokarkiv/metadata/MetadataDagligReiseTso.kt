@@ -6,14 +6,14 @@ import no.nav.tilleggsstonader.kontrakter.felles.Tema
 import org.springframework.stereotype.Component
 
 @Component
-data object DagligReiseTSOFrittståendeBrevMetadata : FrittståendeBrevMetadata(
+data object DagligReiseTsoFrittståendeBrevMetadata : FrittståendeBrevMetadata(
     tema = Tema.TSO,
     behandlingstema = Behandlingstema.DagligReiseTSO,
     dokumenttype = Dokumenttype.DAGLIG_REISE_TSO_FRITTSTÅENDE_BREV,
 )
 
 @Component
-data object DagligReiseTSOInterntVedtakMetadata : InterntVedtakBrevMetadata(
+data object DagligReiseTsoInterntVedtakMetadata : InterntVedtakBrevMetadata(
     tema = Tema.TSO,
     behandlingstema = Behandlingstema.DagligReiseTSO,
     dokumenttype = Dokumenttype.DAGLIG_REISE_TSO_INTERNT_VEDTAK,
@@ -21,21 +21,21 @@ data object DagligReiseTSOInterntVedtakMetadata : InterntVedtakBrevMetadata(
 )
 
 @Component
-data object DagligReiseTSOVedtaksbrevMetadata : VedtaksbrevMetadata(
+data object DagligReiseTsoVedtaksbrevMetadata : VedtaksbrevMetadata(
     tema = Tema.TSO,
     behandlingstema = Behandlingstema.DagligReiseTSO,
     dokumenttype = Dokumenttype.DAGLIG_REISE_TSO_VEDTAKSBREV,
 )
 
 @Component
-data object DagligReiseTSOKlageInterntVedtak : KlageInterntVedtak(
+data object DagligReiseTsoKlageInterntVedtak : KlageInterntVedtak(
     tema = Tema.TSO,
     behandlingstema = Behandlingstema.DagligReiseTSO,
     dokumenttype = Dokumenttype.DAGLIG_REISE_TSO_KLAGE_INTERNT_VEDTAK,
 )
 
 @Component
-data object DagligReiseTSOKlageVedtak : KlageVedtak(
+data object DagligReiseTsoKlageVedtak : KlageVedtak(
     tema = Tema.TSO,
     behandlingstema = Behandlingstema.DagligReiseTSO,
     dokumenttype = Dokumenttype.DAGLIG_REISE_TSO_KLAGE_VEDTAKSBREV,
