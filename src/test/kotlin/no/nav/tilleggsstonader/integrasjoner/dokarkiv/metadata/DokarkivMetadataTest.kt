@@ -82,6 +82,6 @@ internal class DokarkivMetadataTest {
                 listOf(it)
             }
         }
-private fun String.tilPascalCase(): String = replace("_", "")
 
+    private fun String.tilPascalCase(): String = replace("_", "")
 }
