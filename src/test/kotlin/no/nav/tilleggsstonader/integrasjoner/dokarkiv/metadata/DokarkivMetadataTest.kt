@@ -59,7 +59,7 @@ internal class DokarkivMetadataTest {
         stønadstype: Stønadstype,
         type: String,
     ) = alleDokumentMedadataKlasser.singleOrNull {
-        it::class.simpleName!!.equals("${stønadstype.name}$type", ignoreCase = true)
+        it::class.simpleName!!.equals("${stønadstype.name.tilPascalCase()}$type", ignoreCase = true)
     }
 
     @ParameterizedTest
@@ -82,4 +82,6 @@ internal class DokarkivMetadataTest {
                 listOf(it)
             }
         }
+
+    private fun String.tilPascalCase(): String = replace("_", "")
 }
