@@ -6,6 +6,7 @@ import com.github.tomakehurst.wiremock.client.WireMock.stubFor
 import com.github.tomakehurst.wiremock.client.WireMock.urlMatching
 import no.nav.security.mock.oauth2.http.objectMapper
 import no.nav.tilleggsstonader.integrasjoner.IntegrationTest
+import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -35,7 +36,9 @@ class ArenaClientTest : IntegrationTest() {
             """.trimIndent()
         stubAktiviteter(response)
 
-        arenaClient.hentAktiviteter(ident = "1", fom = LocalDate.now(), tom = LocalDate.now())
+        val resultat = arenaClient.hentAktiviteter(ident = "1", fom = LocalDate.now(), tom = LocalDate.now())
+
+        assertThat(resultat).isEmpty()
     }
 
     @Test
