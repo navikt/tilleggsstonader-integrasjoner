@@ -11,7 +11,6 @@ import no.nav.tilleggsstonader.kontrakter.oppgave.vent.SettPåVentResponse
 import no.nav.tilleggsstonader.kontrakter.oppgave.vent.TaAvVentRequest
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
-import java.time.LocalDate
 import java.util.Optional.of
 import java.util.Optional.ofNullable
 
@@ -72,7 +71,7 @@ class SettPåVentService(
                     id = oppgave.id,
                     versjon = oppgave.versjon,
                     tilordnetRessurs = tilordnetRessurs,
-                    fristFerdigstillelse = LocalDate.now(),
+                    fristFerdigstillelse = request.frist,
                     beskrivelse = SettPåVentBeskrivelseUtil.taAvVent(oppgave, request),
                     mappeId = ofNullable(mappeId),
                 ),
