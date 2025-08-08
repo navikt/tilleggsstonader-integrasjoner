@@ -26,6 +26,10 @@ management:
       info: "status/isAlive"
   prometheus.metrics.export.enabled: true
 
+tilleggsstonader:
+  http-client:
+    read-timeout: PT20S  # 20 sekunder, lavere enn default i libs slik at integrasjoner timer ut først
+
 no.nav.security.jwt:
   issuer:
     azuread:
