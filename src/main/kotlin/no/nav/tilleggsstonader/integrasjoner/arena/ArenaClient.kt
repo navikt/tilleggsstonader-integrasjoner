@@ -31,15 +31,6 @@ class ArenaClient(
             .encode()
             .toUriString()
 
-    val uriMålgrupper =
-        UriComponentsBuilder
-            .fromUri(baseUrl)
-            .pathSegment("api", "v1", "maalgrupper")
-            .queryParam("fom", "{fom}")
-            .queryParam("tom", "{tom}")
-            .encode()
-            .toUriString()
-
     /**
      * @param tom Default: 60 dager frem i tid.
      */
@@ -54,23 +45,6 @@ class ArenaClient(
 
         try {
             return getForEntity<List<AktivitetArenaResponse>>(uriAktiviteter, headers, uriVariables)
-        } catch (e: BadRequest) {
-            if (manglerFødselsnummer(e)) return emptyList()
-            throw e
-        }
-    }
-
-    fun hentMålgrupper(
-        ident: String,
-        fom: LocalDate,
-        tom: LocalDate,
-    ): List<MålgruppeArenaResponse> {
-        val uriVariables = mutableMapOf<String, Any>("fom" to fom, "tom" to tom)
-
-        val headers = hentAktivitetHeaders(ident)
-
-        try {
-            return getForEntity<List<MålgruppeArenaResponse>>(uriMålgrupper, headers, uriVariables)
         } catch (e: BadRequest) {
             if (manglerFødselsnummer(e)) return emptyList()
             throw e
