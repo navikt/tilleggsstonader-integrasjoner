@@ -30,9 +30,9 @@ spec:
     max: 4
   resources:
     limits:
-      memory: 2Gi # Lik requests som beste praksis
+      memory: 1Gi # Lik requests som beste praksis
     requests:
-      memory: 2Gi
+      memory: 1Gi
       cpu: 100m
   observability:
     logging:
