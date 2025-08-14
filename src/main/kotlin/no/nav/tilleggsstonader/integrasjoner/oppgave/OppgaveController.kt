@@ -37,12 +37,6 @@ class OppgaveController(
         @RequestBody finnOppgaveRequest: FinnOppgaveRequest,
     ): FinnOppgaveResponseDto = oppgaveService.finnOppgaver(finnOppgaveRequest)
 
-    @PostMapping("/mappe/sok")
-    @Deprecated(message = "Bruk get under") // Hvilken burde vi bruke?
-    fun finnMapperV1Deprecated(
-        @RequestBody finnMappeRequest: FinnMappeRequest,
-    ): FinnMappeResponseDto = oppgaveService.finnMapper(finnMappeRequest)
-
     @GetMapping("/mappe/sok")
     fun finnMapperV1(finnMappeRequest: FinnMappeRequest): FinnMappeResponseDto = oppgaveService.finnMapper(finnMappeRequest)
 
