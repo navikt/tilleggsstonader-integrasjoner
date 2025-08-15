@@ -133,6 +133,7 @@ class SettPåVentBeskrivelseUtilTest {
                 oppgaveId = 1L,
                 kommentar = "Tatt av vent-kommentar",
                 beholdOppgave = true,
+                frist = LocalDate.now(),
             )
 
         @Test

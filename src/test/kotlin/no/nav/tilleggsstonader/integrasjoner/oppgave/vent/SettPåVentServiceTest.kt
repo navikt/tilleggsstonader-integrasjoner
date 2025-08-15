@@ -154,7 +154,13 @@ class SettPåVentServiceTest {
 
     @Nested
     inner class TaAvVent {
-        fun taAvVent(oppgaveId: Long) = TaAvVentRequest(oppgaveId = oppgaveId, kommentar = null, beholdOppgave = true)
+        fun taAvVent(oppgaveId: Long) =
+            TaAvVentRequest(
+                oppgaveId = oppgaveId,
+                kommentar = null,
+                beholdOppgave = true,
+                frist = LocalDate.now(),
+            )
 
         @BeforeEach
         fun setUp() {
