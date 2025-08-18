@@ -11,7 +11,7 @@ const val LIMIT_MOT_OPPGAVE = 50L
 
 data class OppgaveRequest(
     val statuskategori: String = "AAPEN",
-    val tema: String,
+    val tema: List<String>,
     val sorteringsfelt: Sorteringsfelt = Sorteringsfelt.OPPRETTET_TIDSPUNKT,
     val sorteringsrekkefolge: Sorteringsrekkefølge = Sorteringsrekkefølge.DESC,
     val limit: Long = LIMIT_MOT_OPPGAVE,
@@ -39,7 +39,7 @@ fun FinnOppgaveRequest.toDto() =
     OppgaveRequest(
         offset = this.offset,
         limit = min(this.limit, LIMIT_MOT_OPPGAVE),
-        tema = this.tema.name,
+        tema = this.tema.map { it.name },
         behandlingstema = this.behandlingstema?.value,
         behandlingstype = this.behandlingstype?.value,
         oppgavetype = this.oppgavetype?.value,
