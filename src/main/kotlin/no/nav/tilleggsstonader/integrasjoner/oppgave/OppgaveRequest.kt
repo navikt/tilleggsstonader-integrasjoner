@@ -1,6 +1,7 @@
 package no.nav.tilleggsstonader.integrasjoner.oppgave
 
 import no.nav.tilleggsstonader.kontrakter.oppgave.FinnOppgaveRequest
+import no.nav.tilleggsstonader.kontrakter.oppgave.FinnOppgaveRequestV2
 import no.nav.tilleggsstonader.kontrakter.oppgave.Sorteringsfelt
 import no.nav.tilleggsstonader.kontrakter.oppgave.Sorteringsrekkefølge
 import java.time.LocalDate
@@ -36,6 +37,32 @@ data class OppgaveRequest(
 )
 
 fun FinnOppgaveRequest.toDto() =
+    OppgaveRequest(
+        offset = this.offset,
+        limit = min(this.limit, LIMIT_MOT_OPPGAVE),
+        tema = listOf(this.tema.name),
+        behandlingstema = this.behandlingstema?.value,
+        behandlingstype = this.behandlingstype?.value,
+        oppgavetype = this.oppgavetype?.value,
+        erUtenMappe = this.erUtenMappe,
+        tildeltEnhetsnr = this.enhet,
+        tildeltRessurs = this.tildeltRessurs,
+        tilordnetRessurs = this.tilordnetRessurs ?: this.saksbehandler,
+        journalpostId = this.journalpostId,
+        opprettetFom = this.opprettetFomTidspunkt,
+        opprettetTom = this.opprettetTomTidspunkt,
+        fristFom = this.fristFomDato,
+        fristTom = this.fristTomDato,
+        aktivDatoFom = this.aktivFomDato,
+        aktivDatoTom = this.aktivTomDato,
+        mappeId = this.mappeId,
+        aktoerId = this.aktørId,
+        saksreferanse = this.saksreferanse,
+        sorteringsfelt = this.sorteringsfelt,
+        sorteringsrekkefolge = this.sorteringsrekkefolge,
+    )
+
+fun FinnOppgaveRequestV2.toDto() =
     OppgaveRequest(
         offset = this.offset,
         limit = min(this.limit, LIMIT_MOT_OPPGAVE),

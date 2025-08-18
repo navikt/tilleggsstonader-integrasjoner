@@ -9,6 +9,7 @@ import no.nav.tilleggsstonader.integrasjoner.util.SikkerhetsContext
 import no.nav.tilleggsstonader.kontrakter.oppgave.FinnMappeRequest
 import no.nav.tilleggsstonader.kontrakter.oppgave.FinnMappeResponseDto
 import no.nav.tilleggsstonader.kontrakter.oppgave.FinnOppgaveRequest
+import no.nav.tilleggsstonader.kontrakter.oppgave.FinnOppgaveRequestV2
 import no.nav.tilleggsstonader.kontrakter.oppgave.FinnOppgaveResponseDto
 import no.nav.tilleggsstonader.kontrakter.oppgave.IdentGruppe
 import no.nav.tilleggsstonader.kontrakter.oppgave.MappeDto
@@ -32,6 +33,8 @@ class OppgaveService(
     private val logger = LoggerFactory.getLogger(OppgaveService::class.java)
 
     fun finnOppgaver(finnOppgaveRequest: FinnOppgaveRequest): FinnOppgaveResponseDto = oppgaveClient.finnOppgaver(finnOppgaveRequest)
+
+    fun finnOppgaverV2(finnOppgaveRequest: FinnOppgaveRequestV2): FinnOppgaveResponseDto = oppgaveClient.finnOppgaverV2(finnOppgaveRequest)
 
     fun hentOppgave(oppgaveId: Long): Oppgave = oppgaveClient.finnOppgaveMedId(oppgaveId)
 
