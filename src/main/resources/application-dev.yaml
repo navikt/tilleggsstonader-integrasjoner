@@ -10,9 +10,6 @@ clients:
   dokarkiv:
     uri: https://dokarkiv-q2.dev-fss-pub.nais.io
     scope: api://${CLIENT_ENV}-fss.teamdokumenthandtering.dokarkiv/.default
-  dokdist:
-    uri: https://dokdistfordeling.dev-fss-pub.nais.io # kjører i q2
-    scope: api://${CLIENT_ENV}-fss.teamdokumenthandtering.saf/.default
   saf:
     uri: https://saf-q2.dev-fss-pub.nais.io # kjører i q2
     scope: api://${CLIENT_ENV}-fss.teamdokumenthandtering.saf/.default

@@ -206,8 +206,8 @@ clients:
     uri: https://dokarkiv.prod-fss-pub.nais.io
     scope: api://${CLIENT_ENV}-fss.teamdokumenthandtering.dokarkiv/.default
   dokdist:
-    uri: https://dokdistfordeling.prod-fss-pub.nais.io
-    scope: api://${CLIENT_ENV}-fss.teamdokumenthandtering.saf/.default
+    uri: https://dokdistfordeling.${CLIENT_ENV}-fss-pub.nais.io
+    scope: api://${CLIENT_ENV}-fss.teamdokumenthandtering.dokdistfordeling/.default
   saf:
     uri: https://saf.prod-fss-pub.nais.io
     scope: api://${CLIENT_ENV}-fss.teamdokumenthandtering.saf/.default
