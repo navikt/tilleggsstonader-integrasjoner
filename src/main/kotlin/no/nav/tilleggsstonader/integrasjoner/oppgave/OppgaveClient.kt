@@ -7,7 +7,6 @@ import no.nav.tilleggsstonader.integrasjoner.util.QueryParams
 import no.nav.tilleggsstonader.kontrakter.oppgave.FinnMappeRequest
 import no.nav.tilleggsstonader.kontrakter.oppgave.FinnMappeResponseDto
 import no.nav.tilleggsstonader.kontrakter.oppgave.FinnOppgaveRequest
-import no.nav.tilleggsstonader.kontrakter.oppgave.FinnOppgaveRequestV2
 import no.nav.tilleggsstonader.kontrakter.oppgave.FinnOppgaveResponseDto
 import no.nav.tilleggsstonader.kontrakter.oppgave.Oppgave
 import no.nav.tilleggsstonader.libs.http.client.AbstractRestClient
@@ -60,32 +59,6 @@ class OppgaveClient(
             .toUriString()
 
     fun finnOppgaver(finnOppgaveRequest: FinnOppgaveRequest): FinnOppgaveResponseDto {
-        val oppgaveRequest = finnOppgaveRequest.toDto()
-        var offset = oppgaveRequest.offset
-
-        var queryParams = toQueryParams(oppgaveRequest)
-        val oppgaverOgAntall = finnOppgave(queryParams)
-        val oppgaver: MutableList<Oppgave> = oppgaverOgAntall.oppgaver.toMutableList()
-        val grense =
-            if (finnOppgaveRequest.limit == null) {
-                oppgaverOgAntall.antallTreffTotalt
-            } else {
-                oppgaveRequest.offset + finnOppgaveRequest.limit!!
-            }
-        offset += LIMIT_MOT_OPPGAVE
-
-        while (offset < grense) {
-            queryParams =
-                toQueryParams(oppgaveRequest.copy(offset = offset, limit = min((grense - offset), LIMIT_MOT_OPPGAVE)))
-            val nyeOppgaver = finnOppgave(queryParams)
-            oppgaver.addAll(nyeOppgaver.oppgaver)
-            offset += LIMIT_MOT_OPPGAVE
-        }
-
-        return FinnOppgaveResponseDto(oppgaverOgAntall.antallTreffTotalt, oppgaver)
-    }
-
-    fun finnOppgaverV2(finnOppgaveRequest: FinnOppgaveRequestV2): FinnOppgaveResponseDto {
         val oppgaveRequest = finnOppgaveRequest.toDto()
         var offset = oppgaveRequest.offset
 
@@ -180,7 +153,8 @@ class OppgaveClient(
             }.fold(
                 onSuccess = { it },
                 onFailure = {
-                    var feilmelding = "Feil ved fjerning av behandlesAvApplikasjon for ${fjernBehandlesAvApplikasjon.id}."
+                    var feilmelding =
+                        "Feil ved fjerning av behandlesAvApplikasjon for ${fjernBehandlesAvApplikasjon.id}."
                     val statusCode =
                         if (it is HttpStatusCodeException) {
                             feilmelding += " Response fra oppgave = ${it.responseBodyAsString}"

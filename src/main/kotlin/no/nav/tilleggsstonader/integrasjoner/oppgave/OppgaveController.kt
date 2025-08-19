@@ -4,7 +4,6 @@ import no.nav.security.token.support.core.api.ProtectedWithClaims
 import no.nav.tilleggsstonader.kontrakter.oppgave.FinnMappeRequest
 import no.nav.tilleggsstonader.kontrakter.oppgave.FinnMappeResponseDto
 import no.nav.tilleggsstonader.kontrakter.oppgave.FinnOppgaveRequest
-import no.nav.tilleggsstonader.kontrakter.oppgave.FinnOppgaveRequestV2
 import no.nav.tilleggsstonader.kontrakter.oppgave.FinnOppgaveResponseDto
 import no.nav.tilleggsstonader.kontrakter.oppgave.MappeDto
 import no.nav.tilleggsstonader.kontrakter.oppgave.OppdatertOppgaveResponse
@@ -37,11 +36,6 @@ class OppgaveController(
     fun finnOppgaverV4(
         @RequestBody finnOppgaveRequest: FinnOppgaveRequest,
     ): FinnOppgaveResponseDto = oppgaveService.finnOppgaver(finnOppgaveRequest)
-
-    @PostMapping("/finnV2")
-    fun finnOppgaverV5(
-        @RequestBody finnOppgaveRequest: FinnOppgaveRequestV2,
-    ): FinnOppgaveResponseDto = oppgaveService.finnOppgaverV2(finnOppgaveRequest)
 
     @GetMapping("/mappe/sok")
     fun finnMapperV1(finnMappeRequest: FinnMappeRequest): FinnMappeResponseDto = oppgaveService.finnMapper(finnMappeRequest)
