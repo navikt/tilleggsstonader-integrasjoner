@@ -153,7 +153,8 @@ class OppgaveClient(
             }.fold(
                 onSuccess = { it },
                 onFailure = {
-                    var feilmelding = "Feil ved fjerning av behandlesAvApplikasjon for ${fjernBehandlesAvApplikasjon.id}."
+                    var feilmelding =
+                        "Feil ved fjerning av behandlesAvApplikasjon for ${fjernBehandlesAvApplikasjon.id}."
                     val statusCode =
                         if (it is HttpStatusCodeException) {
                             feilmelding += " Response fra oppgave = ${it.responseBodyAsString}"
