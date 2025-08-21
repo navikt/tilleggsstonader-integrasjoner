@@ -48,6 +48,11 @@ spotless {
 configurations.all {
     resolutionStrategy {
         failOnNonReproducibleResolution()
+        force(
+            "org.bouncycastle:bcutil-jdk18on:1.81",
+            "org.bouncycastle:bcprov-jdk18on:1.81",
+            "org.bouncycastle:bcpkix-jdk18on:1.81",
+        )
     }
 }
 
@@ -65,7 +70,7 @@ dependencies {
 
     implementation("io.micrometer:micrometer-registry-prometheus")
 
-    // Tillegggsstønader libs
+    // Tilleggggstønader libs
     implementation("no.nav.tilleggsstonader-libs:util:$tilleggsstønaderLibsVersion")
     implementation("no.nav.tilleggsstonader-libs:log:$tilleggsstønaderLibsVersion")
     implementation("no.nav.tilleggsstonader-libs:http-client:$tilleggsstønaderLibsVersion")
