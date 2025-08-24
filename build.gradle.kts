@@ -2,9 +2,9 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 val javaVersion = JavaLanguageVersion.of(21)
-val springdocVersion = "2.8.9"
+val springdocVersion = "2.8.11"
 val tilleggsstønaderLibsVersion = "2025.08.18-09.30.6e87d5f8ea6d"
-val tilleggsstønaderKontrakterVersion = "2025.08.19-12.23.e5e354546578"
+val tilleggsstønaderKontrakterVersion = "2025.08.21-08.34.d72c34cf2ed9"
 val tokenSupportVersion = "5.0.34"
 val springCloudVersion = "4.3.0"
 
@@ -21,7 +21,7 @@ plugins {
     id("com.github.ben-manes.versions") version "0.52.0"
     id("se.patrikerdes.use-latest-versions") version "0.2.19"
 
-    id("org.springframework.boot") version "3.5.4"
+    id("org.springframework.boot") version "3.5.5"
     id("io.spring.dependency-management") version "1.1.7"
     kotlin("plugin.spring") version "2.2.10"
 
