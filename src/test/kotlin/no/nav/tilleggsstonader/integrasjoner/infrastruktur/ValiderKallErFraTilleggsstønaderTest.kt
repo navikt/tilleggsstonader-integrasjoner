@@ -20,10 +20,10 @@ class ValiderKallErFraTilleggsstønaderTest : IntegrationTest() {
     private val applikasjon = "dev-gcp:namespace:annen-applikasjon"
 
     @Test
-    fun `kall mot status går ok`() {
+    fun `kall mot liveness går ok`() {
         val response =
             restTemplate.exchange<String>(
-                localhost("/internal/status/isAlive"),
+                localhost("/internal/health/liveness"),
                 HttpMethod.GET,
                 HttpEntity(null, headers),
             )
