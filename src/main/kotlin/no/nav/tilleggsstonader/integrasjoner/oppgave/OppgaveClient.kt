@@ -66,11 +66,7 @@ class OppgaveClient(
         val oppgaverOgAntall = finnOppgave(queryParams)
         val oppgaver: MutableList<Oppgave> = oppgaverOgAntall.oppgaver.toMutableList()
         val grense =
-            if (finnOppgaveRequest.limit == null) {
-                oppgaverOgAntall.antallTreffTotalt
-            } else {
-                oppgaveRequest.offset + finnOppgaveRequest.limit!!
-            }
+            oppgaveRequest.offset + finnOppgaveRequest.limit
         offset += LIMIT_MOT_OPPGAVE
 
         while (offset < grense) {
