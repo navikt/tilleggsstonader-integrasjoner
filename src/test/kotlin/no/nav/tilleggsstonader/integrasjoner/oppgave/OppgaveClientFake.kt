@@ -43,27 +43,27 @@ class OppgaveClientFake : OppgaveClient(URI.create("http://localhost"), mockk())
         return eksisterendeOppgave
     }
 
-    override fun opprettOppgave(request: OpprettOppgaveRequestDto): Long {
+    override fun opprettOppgave(dto: OpprettOppgaveRequestDto): Long {
         val oppgave =
             Oppgave(
                 id = ++maxOppgaveId,
                 versjon = 1,
                 status = StatusEnum.OPPRETTET,
-                identer = listOf(OppgaveIdentV2(request.personident!!, IdentGruppe.FOLKEREGISTERIDENT)),
-                tildeltEnhetsnr = request.tildeltEnhetsnr,
+                identer = listOf(OppgaveIdentV2(dto.personident!!, IdentGruppe.FOLKEREGISTERIDENT)),
+                tildeltEnhetsnr = dto.tildeltEnhetsnr,
                 saksreferanse = null,
-                journalpostId = request.journalpostId,
-                tema = request.tema,
-                oppgavetype = request.oppgavetype,
-                behandlingstema = request.behandlingstema,
-                tilordnetRessurs = request.tilordnetRessurs,
-                fristFerdigstillelse = request.fristFerdigstillelse?.let { LocalDate.parse(it) },
-                aktivDato = request.aktivDato?.let { LocalDate.parse(it) },
-                beskrivelse = request.beskrivelse,
-                prioritet = request.prioritet,
-                behandlingstype = request.behandlingstype,
-                behandlesAvApplikasjon = request.behandlesAvApplikasjon,
-                mappeId = request.mappeId?.let { Optional.of(it) },
+                journalpostId = dto.journalpostId,
+                tema = dto.tema,
+                oppgavetype = dto.oppgavetype,
+                behandlingstema = dto.behandlingstema,
+                tilordnetRessurs = dto.tilordnetRessurs,
+                fristFerdigstillelse = dto.fristFerdigstillelse?.let { LocalDate.parse(it) },
+                aktivDato = dto.aktivDato?.let { LocalDate.parse(it) },
+                beskrivelse = dto.beskrivelse,
+                prioritet = dto.prioritet,
+                behandlingstype = dto.behandlingstype,
+                behandlesAvApplikasjon = dto.behandlesAvApplikasjon,
+                mappeId = dto.mappeId?.let { Optional.of(it) },
                 opprettetTidspunkt = LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME),
             )
         oppgavelager[oppgave.id] = oppgave
