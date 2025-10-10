@@ -51,12 +51,12 @@ class HentJournalpostControllerTest : IntegrationTest() {
         headers.setBearerAuth(onBehalfOfToken())
         uriHentSaksnummer =
             UriComponentsBuilder
-                .fromHttpUrl(localhost(JOURNALPOST_BASE_URL) + "/sak")
+                .fromUriString(localhost(JOURNALPOST_BASE_URL) + "/sak")
                 .queryParam("journalpostId", JOURNALPOST_ID)
                 .toUriString()
         uriHentJournalpost =
             UriComponentsBuilder
-                .fromHttpUrl(localhost(JOURNALPOST_BASE_URL))
+                .fromUriString(localhost(JOURNALPOST_BASE_URL))
                 .queryParam("journalpostId", JOURNALPOST_ID)
                 .toUriString()
         uriHentDokument = localhost(JOURNALPOST_BASE_URL) + "/hentdokument/$JOURNALPOST_ID/$DOKUMENTINFO_ID"
