@@ -47,7 +47,7 @@ class FullmaktClient(
     }
 }
 
-private data class FullmaktIdentRequest private constructor(
+private data class FullmaktIdentRequest(
     val ident: String, // Base64-encodet
 ) {
     companion object {
