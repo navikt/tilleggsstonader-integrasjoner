@@ -65,10 +65,14 @@ fun Dokumenttype.tilMetadata(): Dokumentmetadata =
         Dokumenttype.DAGLIG_REISE_TSO_INTERNT_VEDTAK -> DagligReiseTsoInterntVedtakMetadata
         Dokumenttype.DAGLIG_REISE_TSO_KLAGE_VEDTAKSBREV -> DagligReiseTsoKlageVedtak
         Dokumenttype.DAGLIG_REISE_TSO_KLAGE_INTERNT_VEDTAK -> DagligReiseTsoKlageInterntVedtak
+        Dokumenttype.DAGLIG_REISE_TSO_KJØRELISTE -> DagligReiseTsoKjørelisteMetadata
+        Dokumenttype.DAGLIG_REISE_TSO_KJØRELISTE_VEDLEGG -> DagligReiseTsoKjørelisteVedleggMetadata
 
         Dokumenttype.DAGLIG_REISE_TSR_VEDTAKSBREV -> DagligReiseTsrVedtaksbrevMetadata
         Dokumenttype.DAGLIG_REISE_TSR_FRITTSTÅENDE_BREV -> DagligReiseTsrFrittståendeBrevMetadata
         Dokumenttype.DAGLIG_REISE_TSR_INTERNT_VEDTAK -> DagligReiseTsrInterntVedtakMetadata
         Dokumenttype.DAGLIG_REISE_TSR_KLAGE_VEDTAKSBREV -> DagligReiseTsrKlageVedtak
         Dokumenttype.DAGLIG_REISE_TSR_KLAGE_INTERNT_VEDTAK -> DagligReiseTsrKlageInterntVedtak
+        Dokumenttype.DAGLIG_REISE_TSR_KJØRELISTE -> DagligReiseTsrKjørelisteMetadata
+        Dokumenttype.DAGLIG_REISE_TSR_KJØRELISTE_VEDLEGG -> DagligReiseTsrKjørelisteVedlegg
     }
