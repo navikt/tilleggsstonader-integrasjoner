@@ -2,13 +2,13 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 val javaVersion = JavaLanguageVersion.of(21)
-val springdocVersion = "2.8.11"
-val tilleggsstønaderLibsVersion = "2025.08.18-09.30.6e87d5f8ea6d"
-val tilleggsstønaderKontrakterVersion = "2025.10.10-10.44.231a373b2958"
-val tokenSupportVersion = "5.0.35"
+val springdocVersion = "2.8.13"
+val tilleggsstønaderLibsVersion = "2025.10.14-11.02.0ba3aa7f0dc3"
+val tilleggsstønaderKontrakterVersion = "2025.10.30-12.57.e4c90cc6948f"
+val tokenSupportVersion = "5.0.39"
 val springCloudVersion = "4.3.0"
 
-val mockkVersion = "1.14.5"
+val mockkVersion = "1.14.6"
 
 group = "no.nav.tilleggsstonader.integrasjoner"
 version = "1.0.0"
@@ -16,16 +16,16 @@ version = "1.0.0"
 plugins {
     application
 
-    kotlin("jvm") version "2.2.10"
-    id("com.diffplug.spotless") version "7.2.1"
-    id("com.github.ben-manes.versions") version "0.52.0"
+    kotlin("jvm") version "2.2.21"
+    id("com.diffplug.spotless") version "8.0.0"
+    id("com.github.ben-manes.versions") version "0.53.0"
     id("se.patrikerdes.use-latest-versions") version "0.2.19"
 
-    id("org.springframework.boot") version "3.5.5"
+    id("org.springframework.boot") version "3.5.7"
     id("io.spring.dependency-management") version "1.1.7"
-    kotlin("plugin.spring") version "2.2.10"
+    kotlin("plugin.spring") version "2.2.21"
 
-    id("org.cyclonedx.bom") version "2.3.1"
+    id("org.cyclonedx.bom") version "3.0.1"
 }
 
 repositories {
@@ -49,9 +49,9 @@ configurations.all {
     resolutionStrategy {
         failOnNonReproducibleResolution()
         force(
-            "org.bouncycastle:bcutil-jdk18on:1.81",
-            "org.bouncycastle:bcprov-jdk18on:1.81",
-            "org.bouncycastle:bcpkix-jdk18on:1.81",
+            "org.bouncycastle:bcutil-jdk18on:1.82",
+            "org.bouncycastle:bcprov-jdk18on:1.82",
+            "org.bouncycastle:bcpkix-jdk18on:1.82",
         )
     }
 }
@@ -66,7 +66,7 @@ dependencies {
     implementation("org.springdoc:springdoc-openapi-starter-common:$springdocVersion")
 
     // Logging
-    implementation("net.logstash.logback:logstash-logback-encoder:8.1")
+    implementation("net.logstash.logback:logstash-logback-encoder:9.0")
 
     implementation("io.micrometer:micrometer-registry-prometheus")
 
