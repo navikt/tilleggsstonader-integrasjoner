@@ -240,7 +240,7 @@ class SettPåVentServiceTest {
     }
 
     private fun plukkOppgaven() {
-        val opppgave = oppgaveService.hentOppgave(oppgaveId!!)
-        oppgaveService.fordelOppgave(oppgaveId!!, dummySaksbehandler, opppgave.versjon)
+        val oppgave = oppgaveService.hentOppgave(oppgaveId!!)
+        oppgaveService.fordelOppgave(oppgaveId!!, dummySaksbehandler, oppgave.versjon, oppgave.endretAvEnhetsnr)
     }
 }

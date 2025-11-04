@@ -4,6 +4,7 @@ import no.nav.tilleggsstonader.integrasjoner.infrastruktur.exception.OppslagExce
 import no.nav.tilleggsstonader.integrasjoner.util.QueryParamUtil.medQueryParams
 import no.nav.tilleggsstonader.integrasjoner.util.QueryParamUtil.toQueryParams
 import no.nav.tilleggsstonader.integrasjoner.util.QueryParams
+import no.nav.tilleggsstonader.integrasjoner.util.SikkerhetsContext
 import no.nav.tilleggsstonader.kontrakter.oppgave.FinnMappeRequest
 import no.nav.tilleggsstonader.kontrakter.oppgave.FinnMappeResponseDto
 import no.nav.tilleggsstonader.kontrakter.oppgave.FinnOppgaveRequest
@@ -92,8 +93,12 @@ class OppgaveClient(
         return getForEntity(buildMappeRequestUri(queryParams), httpHeaders(), queryParams.tilUriVariables())
     }
 
-    fun oppdaterOppgave(patchDto: Oppgave): Oppgave =
-        Result
+    fun oppdaterOppgave(patchDto: Oppgave): Oppgave {
+        if (SikkerhetsContext.erSaksbehandler() && patchDto.endretAvEnhetsnr == null) {
+            log.warn("Kaller patch-endepunkt til oppgave uten endretAvEnhetsnr")
+        }
+
+        return Result
             .runCatching {
                 patchForEntity<Oppgave>(
                     oppgaveIdUrl,
@@ -136,6 +141,7 @@ class OppgaveClient(
                     )
                 },
             )
+    }
 
     fun fjernBehandlesAvApplikasjon(fjernBehandlesAvApplikasjon: OppgaveFjernBehandlesAvApplikasjon): Oppgave? =
         Result

@@ -50,7 +50,8 @@ class OppgaveController(
         @PathVariable(name = "oppgaveId") oppgaveId: Long,
         @RequestParam("saksbehandler") saksbehandler: String?,
         @RequestParam("versjon") versjon: Int?,
-    ): Oppgave = oppgaveService.fordelOppgave(oppgaveId, saksbehandler, versjon)
+        @RequestParam("endretAvEnhetsnr") endretAvEnhetsnr: String?,
+    ): Oppgave = oppgaveService.fordelOppgave(oppgaveId, saksbehandler, versjon, endretAvEnhetsnr)
 
     @PatchMapping("/{oppgaveId}/oppdater")
     fun patchOppgave(
@@ -74,8 +75,9 @@ class OppgaveController(
     fun ferdigstillOppgave(
         @PathVariable(name = "oppgaveId") oppgaveId: Long,
         @RequestParam(name = "versjon") versjon: Int?,
+        @RequestParam("endretAvEnhetsnr") endretAvEnhetsnr: String?,
     ): OppgaveResponse {
-        oppgaveService.ferdigstill(oppgaveId, versjon)
+        oppgaveService.ferdigstill(oppgaveId, versjon, endretAvEnhetsnr)
         return OppgaveResponse(oppgaveId = oppgaveId)
     }
 
