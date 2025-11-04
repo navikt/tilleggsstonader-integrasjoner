@@ -41,7 +41,7 @@ class OppgaveService(
         oppgaveId: Long,
         saksbehandler: String?,
         versjon: Int?,
-        endretAvEnhet: String?,
+        endretAvEnhetsnr: String?,
     ): Oppgave {
         val oppgave = oppgaveClient.finnOppgaveMedId(oppgaveId)
         logger.info("Fordeler oppgave=$oppgaveId")
@@ -71,7 +71,7 @@ class OppgaveService(
                 versjon = versjon ?: oppgave.versjon,
                 tilordnetRessurs = saksbehandler ?: "",
                 beskrivelse = lagOppgaveBeskrivelseFordeling(oppgave = oppgave, nySaksbehandlerIdent = saksbehandler),
-                endretAvEnhetsnr = endretAvEnhet ?: oppgave.endretAvEnhetsnr,
+                endretAvEnhetsnr = endretAvEnhetsnr ?: oppgave.endretAvEnhetsnr,
             )
         return oppgaveClient.oppdaterOppgave(oppdatertOppgaveDto)
     }
