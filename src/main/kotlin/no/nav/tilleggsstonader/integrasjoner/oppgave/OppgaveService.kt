@@ -41,6 +41,7 @@ class OppgaveService(
         oppgaveId: Long,
         saksbehandler: String?,
         versjon: Int?,
+        endretAvEnhet: String?,
     ): Oppgave {
         val oppgave = oppgaveClient.finnOppgaveMedId(oppgaveId)
         logger.info("Fordeler oppgave=$oppgaveId")
@@ -70,6 +71,7 @@ class OppgaveService(
                 versjon = versjon ?: oppgave.versjon,
                 tilordnetRessurs = saksbehandler ?: "",
                 beskrivelse = lagOppgaveBeskrivelseFordeling(oppgave = oppgave, nySaksbehandlerIdent = saksbehandler),
+                endretAvEnhetsnr = endretAvEnhet ?: oppgave.endretAvEnhetsnr,
             )
         return oppgaveClient.oppdaterOppgave(oppdatertOppgaveDto)
     }
@@ -140,6 +142,7 @@ class OppgaveService(
     fun ferdigstill(
         oppgaveId: Long,
         versjon: Int?,
+        endretAvEnhetsnr: String?,
     ) {
         val oppgave = oppgaveClient.finnOppgaveMedId(oppgaveId)
 
@@ -152,6 +155,7 @@ class OppgaveService(
                         id = oppgave.id,
                         versjon = versjon ?: oppgave.versjon,
                         status = StatusEnum.FERDIGSTILT,
+                        endretAvEnhetsnr = endretAvEnhetsnr ?: oppgave.endretAvEnhetsnr,
                     )
                 oppgaveClient.oppdaterOppgave(patchOppgaveDto)
             }
