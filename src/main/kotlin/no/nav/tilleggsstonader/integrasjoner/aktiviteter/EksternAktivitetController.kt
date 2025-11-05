@@ -53,6 +53,7 @@ fun AktivitetArenaDto.tilDto(): AktivitetSøknadDto =
         tekst = lagAktivitetTekst(typeNavn, fom, tom),
         type = if (erUtdanning == true) AktivitetSøknadType.UTDANNING else AktivitetSøknadType.TILTAK,
     )
+
 fun lagAktivitetTekst(
     typeNavn: String,
     fom: LocalDate?,
