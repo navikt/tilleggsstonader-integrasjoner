@@ -50,7 +50,7 @@ enum class AktivitetSøknadType {
 fun AktivitetArenaDto.tilDto(): AktivitetSøknadDto {
     val dato =
         fom?.let {
-            "${it.norskDatoTekstligMåned()} - ${ tom?.let { tom?.norskDatoTekstligMåned()?:"pågoende" }}"
+            "${it.norskDatoTekstligMåned()} - ${tom?.norskDatoTekstligMåned() ?: "pågående"}"
         } ?: ""
     return AktivitetSøknadDto(
         id = id,
