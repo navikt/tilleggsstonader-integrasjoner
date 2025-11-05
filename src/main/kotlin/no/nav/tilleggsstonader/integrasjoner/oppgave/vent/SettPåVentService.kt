@@ -32,6 +32,7 @@ class SettPåVentService(
                 fristFerdigstillelse = request.frist,
                 beskrivelse = SettPåVentBeskrivelseUtil.settPåVent(oppgave, request),
                 mappeId = of(mappe.id),
+                endretAvEnhetsnr = request.endretAvEnhetsnr,
             )
         val oppdatertOppgave = oppgaveService.patchOppgave(oppdaterOppgave)
         return SettPåVentResponse(oppgave.id, oppdatertOppgave.versjon)
@@ -47,6 +48,7 @@ class SettPåVentService(
                 fristFerdigstillelse = request.frist,
                 beskrivelse = SettPåVentBeskrivelseUtil.oppdaterSettPåVent(oppgave, request),
                 tilordnetRessurs = if (request.beholdOppgave) SikkerhetsContext.hentSaksbehandler() else "",
+                endretAvEnhetsnr = request.endretAvEnhetsnr,
             )
         val oppdatertOppgave = oppgaveService.patchOppgave(oppdaterOppgave)
         return SettPåVentResponse(oppgave.id, oppdatertOppgave.versjon)
@@ -74,6 +76,7 @@ class SettPåVentService(
                     fristFerdigstillelse = request.frist,
                     beskrivelse = SettPåVentBeskrivelseUtil.taAvVent(oppgave, request),
                     mappeId = ofNullable(mappeId),
+                    endretAvEnhetsnr = request.endretAvEnhetsnr,
                 ),
             )
         return SettPåVentResponse(oppgave.id, oppgaveVersjon = oppdatertOppgave.versjon)

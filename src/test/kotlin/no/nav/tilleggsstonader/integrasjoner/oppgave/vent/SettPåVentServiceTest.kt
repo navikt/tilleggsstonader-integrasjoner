@@ -36,6 +36,7 @@ class SettPåVentServiceTest {
             kommentar = "ny beskrivelse",
             frist = LocalDate.of(2023, 1, 1),
             beholdOppgave = false,
+            endretAvEnhetsnr = "4462",
         )
 
     fun oppdaterSettPåVentDto(
@@ -47,6 +48,7 @@ class SettPåVentServiceTest {
         frist = LocalDate.now().plusDays(5),
         kommentar = "oppdatert beskrivelse",
         beholdOppgave = false,
+        endretAvEnhetsnr = "4462",
     )
 
     val dummySaksbehandler = "saksbeh"
@@ -160,6 +162,7 @@ class SettPåVentServiceTest {
                 kommentar = null,
                 beholdOppgave = true,
                 frist = LocalDate.now(),
+                endretAvEnhetsnr = "4462",
             )
 
         @BeforeEach

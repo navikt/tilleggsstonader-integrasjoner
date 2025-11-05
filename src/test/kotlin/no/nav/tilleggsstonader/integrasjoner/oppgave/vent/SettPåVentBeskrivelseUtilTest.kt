@@ -23,6 +23,7 @@ class SettPåVentBeskrivelseUtilTest {
             kommentar = "En kommentar",
             frist = LocalDate.of(2023, 1, 1),
             beholdOppgave = false,
+            endretAvEnhetsnr = "4462",
         )
 
     private val oppdaterPåVent =
@@ -32,6 +33,7 @@ class SettPåVentBeskrivelseUtilTest {
             kommentar = "En kommentar",
             frist = LocalDate.of(2023, 1, 1),
             beholdOppgave = false,
+            endretAvEnhetsnr = "4462",
         )
 
     @BeforeEach
@@ -134,6 +136,7 @@ class SettPåVentBeskrivelseUtilTest {
                 kommentar = "Tatt av vent-kommentar",
                 beholdOppgave = true,
                 frist = LocalDate.now(),
+                endretAvEnhetsnr = "4462",
             )
 
         @Test
