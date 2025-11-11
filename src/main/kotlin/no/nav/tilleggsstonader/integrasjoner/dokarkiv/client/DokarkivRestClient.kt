@@ -60,7 +60,7 @@ class DokarkivRestClient(
             response = objectMapper.readValue<ArkiverDokumentResponse>(e.responseBodyAsString)
         } catch (ex: Exception) {
             throw OppslagException(
-                "Klarer ikke å parse response fra dokarkiv ved 409",
+                "Klarer ikke å parse response fra dokarkiv ved response 409. Mest sannsynnlig er journalposten allerede opprettet. Verifiser dette med en saksbehandler",
                 "Dokarkiv",
                 OppslagException.Level.KRITISK,
                 HttpStatus.INTERNAL_SERVER_ERROR,
@@ -130,7 +130,9 @@ class DokarkivRestClient(
             )
         } catch (e: ProblemDetailException) {
             if (e.httpStatus == HttpStatus.BAD_REQUEST) {
-                throw KanIkkeFerdigstilleJournalpostException(e.detail.detail ?: "Ukjent feil ved ferdigstilling av journalpost")
+                throw KanIkkeFerdigstilleJournalpostException(
+                    e.detail.detail ?: "Ukjent feil ved ferdigstilling av journalpost",
+                )
             }
             throw e
         }
