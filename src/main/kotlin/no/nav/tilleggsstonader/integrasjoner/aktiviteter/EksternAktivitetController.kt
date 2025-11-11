@@ -47,14 +47,22 @@ enum class AktivitetSøknadType {
     UTDANNING,
 }
 
-fun AktivitetArenaDto.tilDto(): AktivitetSøknadDto {
-    val dato =
-        fom?.let {
-            "${it.norskDatoTekstligMåned()} - ${tom?.norskDatoTekstligMåned()}"
-        } ?: ""
-    return AktivitetSøknadDto(
+fun AktivitetArenaDto.tilDto(): AktivitetSøknadDto =
+    AktivitetSøknadDto(
         id = id,
-        tekst = "$typeNavn: $dato",
+        tekst = lagAktivitetTekst(typeNavn, fom, tom),
         type = if (erUtdanning == true) AktivitetSøknadType.UTDANNING else AktivitetSøknadType.TILTAK,
     )
+
+fun lagAktivitetTekst(
+    typeNavn: String,
+    fom: LocalDate?,
+    tom: LocalDate?,
+): String {
+    val dato =
+        when (fom) {
+            null -> ""
+            else -> "${fom.norskDatoTekstligMåned()} - ${tom?.norskDatoTekstligMåned() ?: "ukjent sluttdato"}"
+        }
+    return if (dato.isBlank()) typeNavn else "$typeNavn: $dato"
 }
