@@ -185,7 +185,7 @@ class DokarkivControllerTest : IntegrationTest() {
         assertThat(
             response.detail.detail,
         ).isEqualTo(
-            "[Dokarkiv][Klarer ikke å parse response fra dokarkiv ved 409][org.springframework.web.client.HttpClientErrorException\$Conflict]",
+            "[Dokarkiv][Klarer ikke å parse response fra dokarkiv ved response 409. Mest sannsynnlig er journalposten allerede opprettet. Verifiser dette med en saksbehandler][org.springframework.web.client.HttpClientErrorException\$Conflict]",
         )
     }
 
