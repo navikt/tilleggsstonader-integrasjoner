@@ -60,12 +60,9 @@ fun lagAktivitetTekst(
     tom: LocalDate?,
 ): String {
     val dato =
-        fom?.let {
-            "${it.norskDatoTekstligMåned()} - ${tom?.norskDatoTekstligMåned() ?: "ukjent sluttdato"}"
-        } ?: ""
-
-    return buildString {
-        append(typeNavn)
-        if (dato.isNotBlank()) append(": $dato")
-    }
+        when (fom) {
+            null -> ""
+            else -> "${fom.norskDatoTekstligMåned()} - ${tom?.norskDatoTekstligMåned() ?: "ukjent sluttdato"}"
+        }
+    return if (dato.isBlank()) typeNavn else "$typeNavn: $dato"
 }
