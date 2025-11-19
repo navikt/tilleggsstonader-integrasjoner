@@ -6,6 +6,8 @@ import no.nav.tilleggsstonader.integrasjoner.ensligforsørger.EnsligForsørgerCl
 import no.nav.tilleggsstonader.integrasjoner.etterlatte.EtterlatteClient
 import no.nav.tilleggsstonader.integrasjoner.infrastruktur.config.getValue
 import no.nav.tilleggsstonader.integrasjoner.tiltakspenger.TiltakspengerClient
+import no.nav.tilleggsstonader.integrasjoner.tiltakspenger.TiltakspengerDetaljerResponse
+import no.nav.tilleggsstonader.integrasjoner.tiltakspenger.TiltakspengerPerioderResponseNy
 import no.nav.tilleggsstonader.integrasjoner.util.VirtualThreadUtil.parallelt
 import no.nav.tilleggsstonader.kontrakter.ytelse.EnsligForsørgerStønadstype
 import no.nav.tilleggsstonader.kontrakter.ytelse.ResultatKilde
@@ -82,6 +84,8 @@ class YtelseService(
             TypeYtelsePeriode.ENSLIG_FORSØRGER -> hentEnslig(data)
             TypeYtelsePeriode.OMSTILLINGSSTØNAD -> hentOmstillingsstønad(data)
             TypeYtelsePeriode.TILTAKSPENGER -> hentTiltakspenger(data)
+            TypeYtelsePeriode.TILTAKSPENGER_TPSAK -> hentTiltakspengerFraTpsak(data)
+            TypeYtelsePeriode.TILTAKSPENGER_ARENA -> hentTiltakspengerFraArena(data)
         }
 
     private fun hentAap(data: HentYtelserCacheData): List<YtelsePeriode> {
@@ -131,15 +135,58 @@ class YtelseService(
     private fun hentTiltakspenger(data: HentYtelserCacheData): List<YtelsePeriode> {
         val tiltakspengerResponse =
             cacheManager.getValue("ytelser-tiltakspenger", data) {
-                tiltakspengerClient.hentPerioder(data.ident, fom = data.fom, tom = data.tom)
+                tiltakspengerClient.hentPerioderGammelVersjon(data.ident, fom = data.fom, tom = data.tom)
             }
-        return tiltakspengerResponse.map { it ->
+        return tiltakspengerResponse.map {
             YtelsePeriode(
                 type = TypeYtelsePeriode.TILTAKSPENGER,
                 fom = it.periode.fraOgMed,
                 tom = it.periode.tilOgMed,
             )
         }
+    }
+
+    private fun hentTiltakspengerFraArena(data: HentYtelserCacheData): List<YtelsePeriode> {
+        val tiltakspengerResponse =
+            cacheManager.getValue("ytelser-tiltakspenger-arena", data) {
+                tiltakspengerClient.hentPerioderNyVersjon(data.ident, fom = data.fom, tom = data.tom)
+            }
+        return tiltakspengerResponse
+            .filter { it.kilde == TiltakspengerPerioderResponseNy.KildeDto.ARENA }
+            .filter {
+                it.rettighet in
+                    listOf(
+                        TiltakspengerPerioderResponseNy.RettighetDto.TILTAKSPENGER,
+                        TiltakspengerPerioderResponseNy.RettighetDto.TILTAKSPENGER_OG_BARNETILLEGG,
+                    )
+            }.map {
+                YtelsePeriode(
+                    type = TypeYtelsePeriode.TILTAKSPENGER_ARENA,
+                    fom = it.vedtaksperiode.fraOgMed,
+                    tom = it.vedtaksperiode.tilOgMed,
+                )
+            }
+    }
+
+    private fun hentTiltakspengerFraTpsak(data: HentYtelserCacheData): List<YtelsePeriode> {
+        val tiltakspengerResponse =
+            cacheManager.getValue("ytelser-tiltakspenger-tpsak", data) {
+                tiltakspengerClient.hentDetaljer(data.ident, fom = data.fom, tom = data.tom)
+            }
+        return tiltakspengerResponse
+            .filter {
+                it.rettighet in
+                    listOf(
+                        TiltakspengerDetaljerResponse.RettighetResponseJson.TILTAKSPENGER,
+                        TiltakspengerDetaljerResponse.RettighetResponseJson.TILTAKSPENGER_OG_BARNETILLEGG,
+                    )
+            }.map {
+                YtelsePeriode(
+                    type = TypeYtelsePeriode.TILTAKSPENGER_TPSAK,
+                    fom = it.fom,
+                    tom = it.tom,
+                )
+            }
     }
 
     private fun hentOmstillingsstønad(data: HentYtelserCacheData): List<YtelsePeriode> {
