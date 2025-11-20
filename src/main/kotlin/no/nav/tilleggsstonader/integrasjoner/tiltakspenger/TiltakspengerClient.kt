@@ -11,42 +11,17 @@ import java.time.LocalDate
 
 @Component
 class TiltakspengerClient(
-    @Value("\${clients.tiltakspenger.uri}") private val baseUrl: URI,
+    @Value($$"${clients.tiltakspenger.uri}") private val baseUrl: URI,
     @Qualifier("azure") restTemplate: RestTemplate,
 ) : AbstractRestClient(restTemplate) {
-    @Deprecated(
-        "Periodene vi mottar fra dette endepunktet tar ikke hensyn til omgjøringer, som gjør at de ikke blir helt til å stole på.",
-        ReplaceWith("hentDetaljer"),
-    )
-    fun hentPerioderGammelVersjon(
-        ident: String,
-        fom: LocalDate,
-        tom: LocalDate,
-    ): List<TiltakspengerPerioderResponseGammel> {
-        val request =
-            VedtakRequestDto(
-                ident = ident,
-                fom = fom,
-                tom = tom,
-            )
-        val uri =
-            UriComponentsBuilder
-                .fromUri(baseUrl)
-                .pathSegment("vedtak", "perioder")
-                .encode()
-                .toUriString()
-
-        return postForEntity<List<TiltakspengerPerioderResponseGammel>>(uri, request)
-    }
-
     /**
      * Henter Tiltakspenger fra Arena. Disse periodene tar ikke hensyn til omgjøringer og kan derfor være ukorrekte.
      */
-    fun hentPerioderNyVersjon(
+    fun hentPerioder(
         ident: String,
         fom: LocalDate,
         tom: LocalDate,
-    ): List<TiltakspengerPerioderResponseNy> {
+    ): List<TiltakspengerPerioderResponse> {
         val request =
             VedtakRequestDto(
                 ident = ident,
@@ -60,7 +35,7 @@ class TiltakspengerClient(
                 .encode()
                 .toUriString()
 
-        return postForEntity<List<TiltakspengerPerioderResponseNy>>(uri, request)
+        return postForEntity<List<TiltakspengerPerioderResponse>>(uri, request)
     }
 
     /**

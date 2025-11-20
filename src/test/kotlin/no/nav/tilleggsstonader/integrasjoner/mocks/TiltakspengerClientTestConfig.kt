@@ -3,11 +3,9 @@ package no.nav.tilleggsstonader.integrasjoner.mocks
 import io.mockk.clearMocks
 import io.mockk.every
 import io.mockk.mockk
-import no.nav.tilleggsstonader.integrasjoner.tiltakspenger.Periode
 import no.nav.tilleggsstonader.integrasjoner.tiltakspenger.TiltakspengerClient
 import no.nav.tilleggsstonader.integrasjoner.tiltakspenger.TiltakspengerDetaljerResponse
-import no.nav.tilleggsstonader.integrasjoner.tiltakspenger.TiltakspengerPerioderResponseGammel
-import no.nav.tilleggsstonader.integrasjoner.tiltakspenger.TiltakspengerPerioderResponseNy
+import no.nav.tilleggsstonader.integrasjoner.tiltakspenger.TiltakspengerPerioderResponse
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary
@@ -27,18 +25,18 @@ class TiltakspengerClientTestConfig {
     }
 
     companion object {
-        private val tiltakspengerPeriodeNyVersjon =
-            TiltakspengerPerioderResponseNy(
+        private val tiltakspengerPeriodeResponse =
+            TiltakspengerPerioderResponse(
                 vedtaksperiode =
-                    TiltakspengerPerioderResponseNy.PeriodeDto(
+                    TiltakspengerPerioderResponse.PeriodeDto(
                         fraOgMed = LocalDate.now(),
                         tilOgMed = LocalDate.now().plusDays(1),
                     ),
-                rettighet = TiltakspengerPerioderResponseNy.RettighetDto.TILTAKSPENGER,
-                kilde = TiltakspengerPerioderResponseNy.KildeDto.ARENA,
+                rettighet = TiltakspengerPerioderResponse.RettighetDto.TILTAKSPENGER,
+                kilde = TiltakspengerPerioderResponse.KildeDto.ARENA,
                 innvilgelsesperioder =
                     listOf(
-                        TiltakspengerPerioderResponseNy.PeriodeDto(
+                        TiltakspengerPerioderResponse.PeriodeDto(
                             fraOgMed = LocalDate.now(),
                             tilOgMed = LocalDate.now().plusDays(1),
                         ),
@@ -48,16 +46,7 @@ class TiltakspengerClientTestConfig {
                 vedtakstidspunkt = OffsetDateTime.now(),
             )
 
-        private val tiltakspengerPeriodeGammel =
-            TiltakspengerPerioderResponseGammel(
-                periode =
-                    Periode(
-                        fraOgMed = LocalDate.now(),
-                        tilOgMed = LocalDate.now().plusDays(1),
-                    ),
-            )
-
-        private val tiltakspengerDetaljer =
+        private val tiltakspengerDetaljerResponse =
             TiltakspengerDetaljerResponse(
                 fom = LocalDate.now(),
                 tom = LocalDate.now().plusDays(1),
@@ -66,9 +55,8 @@ class TiltakspengerClientTestConfig {
 
         fun resetMock(client: TiltakspengerClient) {
             clearMocks(client)
-            every { client.hentPerioderGammelVersjon(any(), any(), any()) } returns listOf(tiltakspengerPeriodeGammel)
-            every { client.hentPerioderNyVersjon(any(), any(), any()) } returns listOf(tiltakspengerPeriodeNyVersjon)
-            every { client.hentDetaljer(any(), any(), any()) } returns listOf(tiltakspengerDetaljer)
+            every { client.hentPerioder(any(), any(), any()) } returns listOf(tiltakspengerPeriodeResponse)
+            every { client.hentDetaljer(any(), any(), any()) } returns listOf(tiltakspengerDetaljerResponse)
         }
     }
 }

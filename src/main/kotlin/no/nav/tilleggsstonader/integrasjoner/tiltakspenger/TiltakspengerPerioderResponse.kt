@@ -3,7 +3,7 @@ package no.nav.tilleggsstonader.integrasjoner.tiltakspenger
 import java.time.LocalDate
 import java.time.OffsetDateTime
 
-data class TiltakspengerPerioderResponseNy(
+data class TiltakspengerPerioderResponse(
     val rettighet: RettighetDto,
     val kilde: KildeDto,
     val vedtaksperiode: PeriodeDto,

@@ -7,7 +7,7 @@ import no.nav.tilleggsstonader.integrasjoner.etterlatte.EtterlatteClient
 import no.nav.tilleggsstonader.integrasjoner.infrastruktur.config.getValue
 import no.nav.tilleggsstonader.integrasjoner.tiltakspenger.TiltakspengerClient
 import no.nav.tilleggsstonader.integrasjoner.tiltakspenger.TiltakspengerDetaljerResponse
-import no.nav.tilleggsstonader.integrasjoner.tiltakspenger.TiltakspengerPerioderResponseNy
+import no.nav.tilleggsstonader.integrasjoner.tiltakspenger.TiltakspengerPerioderResponse
 import no.nav.tilleggsstonader.integrasjoner.util.VirtualThreadUtil.parallelt
 import no.nav.tilleggsstonader.kontrakter.ytelse.EnsligForsørgerStønadstype
 import no.nav.tilleggsstonader.kontrakter.ytelse.ResultatKilde
@@ -83,7 +83,6 @@ class YtelseService(
             TypeYtelsePeriode.DAGPENGER -> hentDagpenger(data)
             TypeYtelsePeriode.ENSLIG_FORSØRGER -> hentEnslig(data)
             TypeYtelsePeriode.OMSTILLINGSSTØNAD -> hentOmstillingsstønad(data)
-            TypeYtelsePeriode.TILTAKSPENGER -> hentTiltakspenger(data)
             TypeYtelsePeriode.TILTAKSPENGER_TPSAK -> hentTiltakspengerFraTpsak(data)
             TypeYtelsePeriode.TILTAKSPENGER_ARENA -> hentTiltakspengerFraArena(data)
         }
@@ -132,32 +131,18 @@ class YtelseService(
         }
     }
 
-    private fun hentTiltakspenger(data: HentYtelserCacheData): List<YtelsePeriode> {
-        val tiltakspengerResponse =
-            cacheManager.getValue("ytelser-tiltakspenger", data) {
-                tiltakspengerClient.hentPerioderGammelVersjon(data.ident, fom = data.fom, tom = data.tom)
-            }
-        return tiltakspengerResponse.map {
-            YtelsePeriode(
-                type = TypeYtelsePeriode.TILTAKSPENGER,
-                fom = it.periode.fraOgMed,
-                tom = it.periode.tilOgMed,
-            )
-        }
-    }
-
     private fun hentTiltakspengerFraArena(data: HentYtelserCacheData): List<YtelsePeriode> {
         val tiltakspengerResponse =
             cacheManager.getValue("ytelser-tiltakspenger-arena", data) {
-                tiltakspengerClient.hentPerioderNyVersjon(data.ident, fom = data.fom, tom = data.tom)
+                tiltakspengerClient.hentPerioder(data.ident, fom = data.fom, tom = data.tom)
             }
         return tiltakspengerResponse
-            .filter { it.kilde == TiltakspengerPerioderResponseNy.KildeDto.ARENA }
+            .filter { it.kilde == TiltakspengerPerioderResponse.KildeDto.ARENA }
             .filter {
                 it.rettighet in
                     listOf(
-                        TiltakspengerPerioderResponseNy.RettighetDto.TILTAKSPENGER,
-                        TiltakspengerPerioderResponseNy.RettighetDto.TILTAKSPENGER_OG_BARNETILLEGG,
+                        TiltakspengerPerioderResponse.RettighetDto.TILTAKSPENGER,
+                        TiltakspengerPerioderResponse.RettighetDto.TILTAKSPENGER_OG_BARNETILLEGG,
                     )
             }.map {
                 YtelsePeriode(
