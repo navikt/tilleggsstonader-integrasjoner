@@ -2,7 +2,8 @@ package no.nav.tilleggsstonader.integrasjoner.tiltakspenger
 
 import java.time.LocalDate
 
-data class TiltakspengerPerioderResponse(
+@Deprecated("Deprekert av team Tiltakspenger", replaceWith = ReplaceWith("TiltakspengerPerioderResponseNy"))
+data class TiltakspengerPerioderResponseGammel(
     val periode: Periode,
 )
 
