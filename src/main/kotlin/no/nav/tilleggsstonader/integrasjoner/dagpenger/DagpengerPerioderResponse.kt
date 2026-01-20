@@ -9,5 +9,5 @@ data class DagpengerPerioderResponse(
 
 data class Periode(
     val fraOgMedDato: LocalDate,
-    val tilOgMedDato: LocalDate,
+    val tilOgMedDato: LocalDate?,
 )
