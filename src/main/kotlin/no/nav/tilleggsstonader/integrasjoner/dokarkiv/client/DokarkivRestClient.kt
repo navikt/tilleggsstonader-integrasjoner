@@ -154,7 +154,7 @@ class DokarkivRestClient(
                     if (NAVIDENT_REGEX.matches(navIdent)) {
                         add(NavHttpHeaders.NAV_USER_ID.asString(), navIdent)
                     } else {
-                        logger.warn("Sender ikke med navIdent navIdent=$navIdent")
+                        logger.info("Sender ikke med navIdent navIdent=$navIdent")
                     }
                 }
             }
