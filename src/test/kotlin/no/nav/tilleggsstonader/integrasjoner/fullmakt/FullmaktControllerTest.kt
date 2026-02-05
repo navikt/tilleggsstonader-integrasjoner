@@ -11,7 +11,6 @@ import no.nav.tilleggsstonader.libs.test.httpclient.ProblemDetailUtil.catchProbl
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
@@ -19,8 +18,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.test.context.TestPropertySource
 import org.springframework.web.client.exchange
 
-@TestPropertySource(properties = ["clients.repr-api.uri=http://localhost:28086"])
-@AutoConfigureWireMock(port = 28086)
+@TestPropertySource(properties = ["clients.repr-api.uri=http://localhost:28085"])
 class FullmaktControllerTest : IntegrationTest() {
     private val fullmaktsgiverIdent = "12345678910"
     private val fullmektigIdent = "30515505985"

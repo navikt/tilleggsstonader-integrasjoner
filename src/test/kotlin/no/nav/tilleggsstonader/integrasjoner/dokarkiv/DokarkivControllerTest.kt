@@ -34,7 +34,7 @@ import no.nav.tilleggsstonader.kontrakter.dokarkiv.OppdaterJournalpostRequest
 import no.nav.tilleggsstonader.kontrakter.dokarkiv.OppdaterJournalpostResponse
 import no.nav.tilleggsstonader.kontrakter.dokarkiv.Sak
 import no.nav.tilleggsstonader.kontrakter.felles.BrukerIdType
-import no.nav.tilleggsstonader.kontrakter.felles.ObjectMapperProvider.objectMapper
+import no.nav.tilleggsstonader.kontrakter.felles.JsonMapperProvider.jsonMapper
 import no.nav.tilleggsstonader.kontrakter.felles.Tema
 import no.nav.tilleggsstonader.libs.test.assertions.catchThrowableOfType
 import no.nav.tilleggsstonader.libs.test.httpclient.ProblemDetailUtil.catchProblemDetailException
@@ -42,7 +42,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.slf4j.LoggerFactory
-import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
@@ -53,7 +52,6 @@ import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.client.exchange
 
 @TestPropertySource(properties = ["clients.dokarkiv.uri=http://localhost:28085"])
-@AutoConfigureWireMock(port = 28085)
 class DokarkivControllerTest : IntegrationTest() {
     @BeforeEach
     fun setUp() {
@@ -373,7 +371,7 @@ class DokarkivControllerTest : IntegrationTest() {
     fun `skal opprette logisk vedlegg`() {
         stubFor(
             post("/rest/journalpostapi/v1/dokumentInfo/321/logiskVedlegg/")
-                .willReturn(okJson(objectMapper.writeValueAsString(LogiskVedleggResponse(21L)))),
+                .willReturn(okJson(jsonMapper.writeValueAsString(LogiskVedleggResponse(21L)))),
         )
 
         val response =

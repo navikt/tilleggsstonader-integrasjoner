@@ -98,7 +98,20 @@ fun <K : Any, T> CacheManager.getNullable(
     cache: String,
     key: K,
     valueLoader: () -> T?,
-): T? = (getCacheOrThrow(cache)).get(key, valueLoader)
+): T? {
+    val springCache = getCacheOrThrow(cache)
+
+    @Suppress("UNCHECKED_CAST")
+    val cached = springCache.get(key)?.get() as T?
+    if (cached != null) return cached
+
+    val loaded = valueLoader()
+    if (loaded != null) {
+        springCache.put(key, loaded)
+    }
+
+    return loaded
+}
 
 fun CacheManager.getCacheOrThrow(cache: String) = this.getCache(cache) ?: error("Finner ikke cache=$cache")
 

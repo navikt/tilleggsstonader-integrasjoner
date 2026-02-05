@@ -29,7 +29,7 @@ import java.time.LocalDateTime
 class TestControllerTest : IntegrationTest() {
     val json = """{"tekst":"abc","dato":"2023-01-01","tidspunkt":"2023-01-01T12:00:03"}"""
     val feilJson =
-        """{"type":"about:blank","title":"Internal Server Error","status":500,"detail":"Ukjent feil","instance":"/api/test/error"}"""
+        """{"detail":"Ukjent feil","instance":"/api/test/error","status":500,"title":"Internal Server Error"}"""
 
     @BeforeEach
     fun setUp() {
@@ -97,7 +97,7 @@ class TestControllerTest : IntegrationTest() {
 
     @Test
     fun `skal håndtere ukjent feil`() {
-        var response =
+        val response =
             catchException {
                 restTemplate.exchange<String>(localhost("api/test/error"), HttpMethod.GET, HttpEntity(null, headers))
             }

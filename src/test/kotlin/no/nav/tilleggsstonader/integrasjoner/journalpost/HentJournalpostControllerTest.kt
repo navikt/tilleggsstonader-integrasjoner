@@ -27,7 +27,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.slf4j.LoggerFactory
-import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
@@ -37,7 +36,6 @@ import org.springframework.web.util.UriComponentsBuilder
 import java.time.LocalDateTime
 
 @TestPropertySource(properties = ["clients.saf.uri=http://localhost:28085"])
-@AutoConfigureWireMock(port = 28085)
 class HentJournalpostControllerTest : IntegrationTest() {
     private val testLogger = LoggerFactory.getLogger(HentJournalpostController::class.java) as Logger
 

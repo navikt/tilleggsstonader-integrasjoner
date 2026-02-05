@@ -1,6 +1,5 @@
 package no.nav.tilleggsstonader.integrasjoner.dokarkiv.client
 
-import com.fasterxml.jackson.module.kotlin.readValue
 import no.nav.tilleggsstonader.integrasjoner.dokarkiv.client.domene.FerdigstillJournalPost
 import no.nav.tilleggsstonader.integrasjoner.dokarkiv.client.domene.OpprettJournalpostRequest
 import no.nav.tilleggsstonader.integrasjoner.dokarkiv.client.domene.OpprettJournalpostResponse
@@ -9,7 +8,7 @@ import no.nav.tilleggsstonader.integrasjoner.util.MDCOperations
 import no.nav.tilleggsstonader.kontrakter.dokarkiv.ArkiverDokumentResponse
 import no.nav.tilleggsstonader.kontrakter.dokarkiv.OppdaterJournalpostRequest
 import no.nav.tilleggsstonader.kontrakter.dokarkiv.OppdaterJournalpostResponse
-import no.nav.tilleggsstonader.kontrakter.felles.ObjectMapperProvider.objectMapper
+import no.nav.tilleggsstonader.kontrakter.felles.JsonMapperProvider.jsonMapper
 import no.nav.tilleggsstonader.libs.http.client.AbstractRestClient
 import no.nav.tilleggsstonader.libs.http.client.ProblemDetailException
 import no.nav.tilleggsstonader.libs.log.NavHttpHeaders
@@ -23,6 +22,7 @@ import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.client.HttpStatusCodeException
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.util.UriComponentsBuilder
+import tools.jackson.module.kotlin.readValue
 import java.net.URI
 
 @Component
@@ -57,7 +57,7 @@ class DokarkivRestClient(
     private fun håndterConflict(e: HttpClientErrorException.Conflict) {
         var response: ArkiverDokumentResponse? = null
         try {
-            response = objectMapper.readValue<ArkiverDokumentResponse>(e.responseBodyAsString)
+            response = jsonMapper.readValue<ArkiverDokumentResponse>(e.responseBodyAsString)
         } catch (ex: Exception) {
             throw OppslagException(
                 "Klarer ikke å parse response fra dokarkiv ved response 409. Mest sannsynnlig er journalposten allerede opprettet. Verifiser dette med en saksbehandler",

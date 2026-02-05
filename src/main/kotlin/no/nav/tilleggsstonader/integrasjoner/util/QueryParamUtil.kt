@@ -1,13 +1,13 @@
 package no.nav.tilleggsstonader.integrasjoner.util
 
-import com.fasterxml.jackson.module.kotlin.readValue
-import no.nav.tilleggsstonader.kontrakter.felles.ObjectMapperProvider.objectMapper
+import no.nav.tilleggsstonader.kontrakter.felles.JsonMapperProvider.jsonMapper
 import org.springframework.web.util.UriComponentsBuilder
+import tools.jackson.module.kotlin.readValue
 
 object QueryParamUtil {
     fun toQueryParams(any: Any): QueryParams {
-        val writeValueAsString = objectMapper.writeValueAsString(any)
-        val readValue: LinkedHashMap<String, Any?> = objectMapper.readValue(writeValueAsString)
+        val writeValueAsString = jsonMapper.writeValueAsString(any)
+        val readValue: LinkedHashMap<String, Any?> = jsonMapper.readValue(writeValueAsString)
         val queryParams = mutableMapOf<String, List<Pair<String, String>>>()
         readValue
             .filterNot { it.value == null }

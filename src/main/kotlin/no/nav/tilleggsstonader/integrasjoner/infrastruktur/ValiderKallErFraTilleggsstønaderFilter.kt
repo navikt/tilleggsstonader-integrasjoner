@@ -5,7 +5,7 @@ import jakarta.servlet.http.HttpFilter
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import no.nav.tilleggsstonader.integrasjoner.util.SikkerhetsContext.erKallFraTilleggsstønader
-import no.nav.tilleggsstonader.kontrakter.felles.ObjectMapperProvider.objectMapper
+import no.nav.tilleggsstonader.kontrakter.felles.JsonMapperProvider.jsonMapper
 import org.springframework.http.HttpStatus
 import org.springframework.http.ProblemDetail
 
@@ -21,7 +21,7 @@ class ValiderKallErFraTilleggsstønaderFilter : HttpFilter() {
         if (!request.requestURI.contains("/ekstern") && !shouldNotFilter(request.requestURI)) {
             if (!erKallFraTilleggsstønader()) {
                 val problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, "Ikke tilgang til endepunkt")
-                response.writer.write(objectMapper.writeValueAsString(problemDetail))
+                response.writer.write(jsonMapper.writeValueAsString(problemDetail))
                 response.status = HttpStatus.FORBIDDEN.value()
                 return
             }

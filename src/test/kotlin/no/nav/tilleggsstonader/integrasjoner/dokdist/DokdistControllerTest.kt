@@ -15,7 +15,6 @@ import no.nav.tilleggsstonader.libs.test.httpclient.ProblemDetailUtil.catchProbl
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock
 import org.springframework.core.io.ClassPathResource
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
@@ -28,7 +27,6 @@ import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 
 @TestPropertySource(properties = ["clients.dokdist.uri=http://localhost:28085"])
-@AutoConfigureWireMock(port = 28085)
 class DokdistControllerTest : IntegrationTest() {
     private val request = DistribuerJournalpostRequest(JOURNALPOST_ID, Fagsystem.TILLEGGSSTONADER, "ba-sak", null)
 
