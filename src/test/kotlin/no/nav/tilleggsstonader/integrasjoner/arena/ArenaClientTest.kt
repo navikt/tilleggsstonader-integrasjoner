@@ -4,19 +4,17 @@ import com.github.tomakehurst.wiremock.client.WireMock.badRequest
 import com.github.tomakehurst.wiremock.client.WireMock.get
 import com.github.tomakehurst.wiremock.client.WireMock.stubFor
 import com.github.tomakehurst.wiremock.client.WireMock.urlMatching
-import no.nav.security.mock.oauth2.http.objectMapper
 import no.nav.tilleggsstonader.integrasjoner.IntegrationTest
+import no.nav.tilleggsstonader.kontrakter.felles.JsonMapperProvider.jsonMapper
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock
 import org.springframework.test.context.TestPropertySource
 import org.springframework.web.client.HttpClientErrorException.BadRequest
 import java.time.LocalDate
 
 @TestPropertySource(properties = ["clients.arena.uri=http://localhost:28085"])
-@AutoConfigureWireMock(port = 28085)
 class ArenaClientTest : IntegrationTest() {
     @Autowired
     lateinit var arenaClient: ArenaClient
@@ -65,7 +63,7 @@ class ArenaClientTest : IntegrationTest() {
         val response =
             badRequest()
                 .withHeader("Content-Type", "application/json; charset=utf-8")
-                .withBody(objectMapper.writeValueAsString(responseJson.trimIndent()))
+                .withBody(jsonMapper.writeValueAsString(responseJson.trimIndent()))
         stubFor(get(urlMatching("/api/v1/tilleggsstoenad/aktiviteter.*")).willReturn(response))
     }
 }

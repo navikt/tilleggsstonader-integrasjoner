@@ -1,11 +1,10 @@
 package no.nav.tilleggsstonader.integrasjoner.dokdist
 
-import com.fasterxml.jackson.module.kotlin.readValue
 import no.nav.tilleggsstonader.integrasjoner.dokdist.domene.DistribuerJournalpostRequestTo
 import no.nav.tilleggsstonader.integrasjoner.dokdist.domene.DistribuerJournalpostResponseTo
 import no.nav.tilleggsstonader.integrasjoner.dokdist.domene.DokdistConflictException
 import no.nav.tilleggsstonader.integrasjoner.infrastruktur.exception.OppslagException
-import no.nav.tilleggsstonader.kontrakter.felles.ObjectMapperProvider.objectMapper
+import no.nav.tilleggsstonader.kontrakter.felles.JsonMapperProvider.jsonMapper
 import no.nav.tilleggsstonader.libs.http.client.AbstractRestClient
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
@@ -14,6 +13,7 @@ import org.springframework.stereotype.Component
 import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.util.UriComponentsBuilder
+import tools.jackson.module.kotlin.readValue
 import java.net.URI
 
 @Component
@@ -36,7 +36,7 @@ class DokdistRestClient(
     private fun håndterConflict(e: HttpClientErrorException.Conflict) {
         var response: DistribuerJournalpostResponseTo? = null
         try {
-            response = objectMapper.readValue<DistribuerJournalpostResponseTo>(e.responseBodyAsString)
+            response = jsonMapper.readValue<DistribuerJournalpostResponseTo>(e.responseBodyAsString)
         } catch (ex: Exception) {
             throw OppslagException(
                 "Klarer ikke å parse response fra dokdist ved 409",

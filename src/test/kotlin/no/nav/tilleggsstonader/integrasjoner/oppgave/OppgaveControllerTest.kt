@@ -17,7 +17,7 @@ import com.github.tomakehurst.wiremock.client.WireMock.verify
 import no.nav.tilleggsstonader.integrasjoner.IntegrationTest
 import no.nav.tilleggsstonader.integrasjoner.infrastruktur.exception.ApiExceptionHandler
 import no.nav.tilleggsstonader.integrasjoner.util.FileUtil.readFile
-import no.nav.tilleggsstonader.kontrakter.felles.ObjectMapperProvider.objectMapper
+import no.nav.tilleggsstonader.kontrakter.felles.JsonMapperProvider.jsonMapper
 import no.nav.tilleggsstonader.kontrakter.felles.Tema
 import no.nav.tilleggsstonader.kontrakter.oppgave.FinnMappeResponseDto
 import no.nav.tilleggsstonader.kontrakter.oppgave.IdentGruppe
@@ -36,7 +36,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.slf4j.LoggerFactory
-import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
@@ -47,7 +46,6 @@ import java.time.LocalDate
 import java.util.Optional
 
 @TestPropertySource(properties = ["clients.oppgave.uri=http://localhost:28085"])
-@AutoConfigureWireMock(port = 28085)
 class OppgaveControllerTest : IntegrationTest() {
     val oppgave = Oppgave(id = OPPGAVE_ID, versjon = 0)
 
@@ -81,7 +79,7 @@ class OppgaveControllerTest : IntegrationTest() {
                 MappeDto(id = 3, navn = "123", enhetsnr = "4489", tema = "PEN"),
             )
         stubFor(
-            get(GET_MAPPER_URL).willReturn(okJson(objectMapper.writeValueAsString(FinnMappeResponseDto(3, mapper)))),
+            get(GET_MAPPER_URL).willReturn(okJson(jsonMapper.writeValueAsString(FinnMappeResponseDto(3, mapper)))),
         )
 
         val response: ResponseEntity<FinnMappeResponseDto> =
@@ -120,7 +118,7 @@ class OppgaveControllerTest : IntegrationTest() {
     @Test
     fun `skal opprette oppgave med mappeId, returnere oppgaveid og 201 Created`() {
         stubFor(
-            post("/api/v1/oppgaver").willReturn(okJson(objectMapper.writeValueAsString(oppgave))),
+            post("/api/v1/oppgaver").willReturn(okJson(jsonMapper.writeValueAsString(oppgave))),
         )
 
         val opprettOppgave =
@@ -142,7 +140,7 @@ class OppgaveControllerTest : IntegrationTest() {
 
     @Test
     fun `skal opprette oppgave uten ident, returnere oppgaveid og 201 Created`() {
-        stubFor(post("/api/v1/oppgaver").willReturn(okJson(objectMapper.writeValueAsString(oppgave))))
+        stubFor(post("/api/v1/oppgaver").willReturn(okJson(jsonMapper.writeValueAsString(oppgave))))
 
         val opprettOppgave =
             OpprettOppgaveRequest(
@@ -193,7 +191,7 @@ class OppgaveControllerTest : IntegrationTest() {
     fun `Ferdigstilling av oppgave som er alt ferdigstillt skal logge og returnerer 200 OK`() {
         stubFor(
             get("/api/v1/oppgaver/123").willReturn(
-                okJson(objectMapper.writeValueAsString(oppgave.copy(status = StatusEnum.FERDIGSTILT))),
+                okJson(jsonMapper.writeValueAsString(oppgave.copy(status = StatusEnum.FERDIGSTILT))),
             ),
         )
 
@@ -215,7 +213,7 @@ class OppgaveControllerTest : IntegrationTest() {
         val oppgave = oppgave.copy(status = StatusEnum.FEILREGISTRERT)
         stubFor(
             get("/api/v1/oppgaver/$OPPGAVE_ID").willReturn(
-                okJson(objectMapper.writeValueAsString(oppgave)),
+                okJson(jsonMapper.writeValueAsString(oppgave)),
             ),
         )
 
@@ -237,7 +235,7 @@ class OppgaveControllerTest : IntegrationTest() {
         val oppgave = oppgave.copy(status = StatusEnum.OPPRETTET)
         stubFor(
             get("/api/v1/oppgaver/$OPPGAVE_ID").willReturn(
-                okJson(objectMapper.writeValueAsString(oppgave)),
+                okJson(jsonMapper.writeValueAsString(oppgave)),
             ),
         )
 
@@ -246,7 +244,7 @@ class OppgaveControllerTest : IntegrationTest() {
                 .withRequestBody(matchingJsonPath("$.[?(@.status == 'FERDIGSTILT')]"))
                 .willReturn(
                     aResponse().withStatus(200).withHeader("Content-Type", "application/json").withBody(
-                        objectMapper.writeValueAsBytes(
+                        jsonMapper.writeValueAsBytes(
                             Oppgave(
                                 id = OPPGAVE_ID,
                                 versjon = 0,
@@ -318,7 +316,7 @@ class OppgaveControllerTest : IntegrationTest() {
     @Test
     fun `fordelOppgave skal tilordne oppgave til saksbehandler når saksbehandler er satt på requesten`() {
         val saksbehandlerId = "Z999999"
-        stubFor(get(GET_OPPGAVE_URL).willReturn(okJson(objectMapper.writeValueAsString(oppgave))))
+        stubFor(get(GET_OPPGAVE_URL).willReturn(okJson(jsonMapper.writeValueAsString(oppgave))))
         stubFor(patch(urlEqualTo("/api/v1/oppgaver/$OPPGAVE_ID")).willReturn(responseOk))
 
         val response: ResponseEntity<Oppgave> =
@@ -334,7 +332,7 @@ class OppgaveControllerTest : IntegrationTest() {
 
     @Test
     fun `fordelOppgave skal tilbakestille tilordning på oppgave når saksbehandler ikke er satt på requesten`() {
-        stubFor(get(GET_OPPGAVE_URL).willReturn(okJson(objectMapper.writeValueAsString(oppgave))))
+        stubFor(get(GET_OPPGAVE_URL).willReturn(okJson(jsonMapper.writeValueAsString(oppgave))))
         stubFor(
             patch(urlEqualTo("/api/v1/oppgaver/$OPPGAVE_ID")).willReturn(responseOk),
         )
@@ -355,7 +353,7 @@ class OppgaveControllerTest : IntegrationTest() {
         val oppgave = oppgave.copy(status = StatusEnum.FERDIGSTILT)
         stubFor(
             get(GET_OPPGAVE_URL).willReturn(
-                okJson(objectMapper.writeValueAsString(oppgave)),
+                okJson(jsonMapper.writeValueAsString(oppgave)),
             ),
         )
         stubFor(patch(urlEqualTo("/api/v1/oppgaver/$OPPGAVE_ID")).willReturn(responseOk))
@@ -378,7 +376,7 @@ class OppgaveControllerTest : IntegrationTest() {
     @Test
     fun `Skal hente oppgave basert på id`() {
         stubFor(
-            get(GET_OPPGAVE_URL).willReturn(okJson(objectMapper.writeValueAsString(oppgave))),
+            get(GET_OPPGAVE_URL).willReturn(okJson(jsonMapper.writeValueAsString(oppgave))),
         )
 
         val response: ResponseEntity<Oppgave> =

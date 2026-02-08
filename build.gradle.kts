@@ -2,11 +2,11 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 val javaVersion = JavaLanguageVersion.of(21)
-val springdocVersion = "2.8.13"
-val tilleggsstønaderLibsVersion = "2025.10.14-11.02.0ba3aa7f0dc3"
-val tilleggsstønaderKontrakterVersion = "2025.11.20-16.01.4a0045ebcd19"
-val tokenSupportVersion = "5.0.39"
-val springCloudVersion = "4.3.0"
+val springdocVersion = "3.0.1"
+val tilleggsstønaderLibsVersion = "2026.02.03-18.07.ff46d4dd53fd"
+val tilleggsstønaderKontrakterVersion = "2026.02.05-10.59.18c33ed695f2"
+val tokenSupportVersion = "6.0.2"
+val wiremockSpringVersion = "4.1.0"
 
 val mockkVersion = "1.14.6"
 
@@ -21,7 +21,7 @@ plugins {
     id("com.github.ben-manes.versions") version "0.53.0"
     id("se.patrikerdes.use-latest-versions") version "0.2.19"
 
-    id("org.springframework.boot") version "3.5.7"
+    id("org.springframework.boot") version "4.0.2"
     id("io.spring.dependency-management") version "1.1.7"
     kotlin("plugin.spring") version "2.2.21"
 }
@@ -59,7 +59,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-validation")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("tools.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.springdoc:springdoc-openapi-starter-common:$springdocVersion")
 
@@ -79,8 +79,7 @@ dependencies {
 
     // Test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.springframework.cloud:spring-cloud-contract-wiremock:$springCloudVersion")
-
+    testImplementation("org.wiremock.integrations:wiremock-spring-boot:$wiremockSpringVersion")
     testImplementation("io.mockk:mockk:$mockkVersion")
 
     testImplementation("no.nav.security:token-validation-spring-test:$tokenSupportVersion")

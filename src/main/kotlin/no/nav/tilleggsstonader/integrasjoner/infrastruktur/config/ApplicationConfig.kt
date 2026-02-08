@@ -25,7 +25,7 @@ class ApplicationConfig {
     fun validerKallErFraTilleggsstønaderFilter(): FilterRegistrationBean<ValiderKallErFraTilleggsstønaderFilter> {
         logger.info("Registering ${ValiderKallErFraTilleggsstønaderFilter::class.simpleName} filter")
         val filterRegistration = FilterRegistrationBean<ValiderKallErFraTilleggsstønaderFilter>()
-        filterRegistration.filter = ValiderKallErFraTilleggsstønaderFilter()
+        filterRegistration.setFilter(ValiderKallErFraTilleggsstønaderFilter())
         filterRegistration.order = 3
         return filterRegistration
     }

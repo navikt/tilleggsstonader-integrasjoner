@@ -9,12 +9,11 @@ import no.nav.tilleggsstonader.integrasjoner.arena.ArenaAktivitetUtil.aktivitetA
 import no.nav.tilleggsstonader.integrasjoner.arena.PeriodeArena
 import no.nav.tilleggsstonader.kontrakter.aktivitet.AktivitetArenaDto
 import no.nav.tilleggsstonader.kontrakter.aktivitet.TypeAktivitet
-import no.nav.tilleggsstonader.kontrakter.felles.ObjectMapperProvider.objectMapper
+import no.nav.tilleggsstonader.kontrakter.felles.JsonMapperProvider.jsonMapper
 import no.nav.tilleggsstonader.kontrakter.felles.Stønadstype
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
 import org.springframework.test.context.TestPropertySource
@@ -22,7 +21,6 @@ import org.springframework.web.client.exchange
 import java.time.LocalDate
 
 @TestPropertySource(properties = ["clients.arena.uri=http://localhost:28085"])
-@AutoConfigureWireMock(port = 28085)
 class EksternAktivitetControllerTest : IntegrationTest() {
     @BeforeEach
     fun setUp() {
@@ -32,7 +30,7 @@ class EksternAktivitetControllerTest : IntegrationTest() {
     @Test
     fun `skal hente aktiviteter til skjemabyggeren`() {
         stubAktiviteter(
-            objectMapper.writeValueAsString(
+            jsonMapper.writeValueAsString(
                 listOf(
                     aktivitetArenaResponse(),
                     aktivitetArenaResponse(erStoenadsberettigetAktivitet = false, aktivitetstype = TypeAktivitet.AAPLOK.name),
@@ -62,7 +60,7 @@ class EksternAktivitetControllerTest : IntegrationTest() {
             )
 
         stubAktiviteter(
-            objectMapper.writeValueAsString(listOf(aktivitetsperiode)),
+            jsonMapper.writeValueAsString(listOf(aktivitetsperiode)),
         )
 
         val entity = HttpEntity(null, headers)
@@ -86,7 +84,7 @@ class EksternAktivitetControllerTest : IntegrationTest() {
             )
 
         stubAktiviteter(
-            objectMapper.writeValueAsString(listOf(aktivitetsperiode)),
+            jsonMapper.writeValueAsString(listOf(aktivitetsperiode)),
         )
 
         val entity = HttpEntity(null, headers)
@@ -110,7 +108,7 @@ class EksternAktivitetControllerTest : IntegrationTest() {
             )
 
         stubAktiviteter(
-            objectMapper.writeValueAsString(listOf(aktivitetsperiode)),
+            jsonMapper.writeValueAsString(listOf(aktivitetsperiode)),
         )
 
         val entity = HttpEntity(null, headers)

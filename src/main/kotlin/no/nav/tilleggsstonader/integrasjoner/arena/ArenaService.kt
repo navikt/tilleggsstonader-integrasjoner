@@ -1,7 +1,7 @@
 package no.nav.tilleggsstonader.integrasjoner.arena
 
 import no.nav.tilleggsstonader.kontrakter.aktivitet.AktivitetArenaDto
-import no.nav.tilleggsstonader.kontrakter.felles.ObjectMapperProvider.objectMapper
+import no.nav.tilleggsstonader.kontrakter.felles.JsonMapperProvider.jsonMapper
 import no.nav.tilleggsstonader.libs.log.SecureLogger.secureLogger
 import org.slf4j.LoggerFactory
 import org.springframework.cache.annotation.Cacheable
@@ -27,7 +27,7 @@ class ArenaService(
                 AktivitetDtoMapper.map(it)
             } catch (e: Exception) {
                 logger.error("Feilet mapping av aktivitet, se secure logs for mer info")
-                secureLogger.error("Feilet mapping av aktivitet, ${objectMapper.writeValueAsString(it)}", e)
+                secureLogger.error("Feilet mapping av aktivitet, ${jsonMapper.writeValueAsString(it)}", e)
                 null
             }
         }

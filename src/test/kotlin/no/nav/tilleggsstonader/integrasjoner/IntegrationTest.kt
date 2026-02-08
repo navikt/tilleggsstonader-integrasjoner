@@ -16,6 +16,8 @@ import org.springframework.http.HttpHeaders
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.web.client.RestTemplate
+import org.wiremock.spring.ConfigureWireMock
+import org.wiremock.spring.EnableWireMock
 
 @ExtendWith(SpringExtension::class)
 @SpringBootTest(classes = [App::class], webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -30,6 +32,7 @@ import org.springframework.web.client.RestTemplate
     "mock-az-ad",
 )
 @EnableMockOAuth2Server
+@EnableWireMock(value = [ConfigureWireMock(port = 28085)])
 abstract class IntegrationTest {
     @Suppress("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired

@@ -2,7 +2,6 @@ package no.nav.tilleggsstonader.integrasjoner.oppgave
 
 import DatoFormat
 import com.fasterxml.jackson.annotation.JsonInclude
-import no.nav.tilleggsstonader.integrasjoner.infrastruktur.config.getValue
 import no.nav.tilleggsstonader.integrasjoner.infrastruktur.exception.OppslagException
 import no.nav.tilleggsstonader.integrasjoner.infrastruktur.exception.OppslagException.Level
 import no.nav.tilleggsstonader.integrasjoner.util.SikkerhetsContext
@@ -17,6 +16,7 @@ import no.nav.tilleggsstonader.kontrakter.oppgave.OppgaveMappe
 import no.nav.tilleggsstonader.kontrakter.oppgave.OpprettOppgaveRequest
 import no.nav.tilleggsstonader.kontrakter.oppgave.StatusEnum
 import no.nav.tilleggsstonader.libs.log.SecureLogger.secureLogger
+import no.nav.tilleggsstonader.libs.spring.cache.getValue
 import org.slf4j.LoggerFactory
 import org.springframework.cache.CacheManager
 import org.springframework.http.HttpStatus
