@@ -8,7 +8,7 @@ val tilleggsstønaderKontrakterVersion = "2026.02.05-10.59.18c33ed695f2"
 val tokenSupportVersion = "6.0.2"
 val wiremockSpringVersion = "4.1.0"
 
-val mockkVersion = "1.14.6"
+val mockkVersion = "1.14.9"
 
 group = "no.nav.tilleggsstonader.integrasjoner"
 version = "1.0.0"
@@ -17,7 +17,7 @@ plugins {
     application
 
     kotlin("jvm") version "2.2.21"
-    id("com.diffplug.spotless") version "8.0.0"
+    id("com.diffplug.spotless") version "8.2.1"
     id("com.github.ben-manes.versions") version "0.53.0"
     id("se.patrikerdes.use-latest-versions") version "0.2.19"
 
@@ -47,9 +47,9 @@ configurations.all {
     resolutionStrategy {
         failOnNonReproducibleResolution()
         force(
-            "org.bouncycastle:bcutil-jdk18on:1.82",
-            "org.bouncycastle:bcprov-jdk18on:1.82",
-            "org.bouncycastle:bcpkix-jdk18on:1.82",
+            "org.bouncycastle:bcutil-jdk18on:1.83",
+            "org.bouncycastle:bcprov-jdk18on:1.83",
+            "org.bouncycastle:bcpkix-jdk18on:1.83",
         )
     }
 }
