@@ -1,6 +1,6 @@
 package no.nav.tilleggsstonader.integrasjoner.ensligforsørger
 
-import no.nav.tilleggsstonader.libs.http.client.AbstractRestClient
+import no.nav.tilleggsstonader.libs.http.client.postForEntity
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
@@ -15,8 +15,8 @@ import java.time.LocalDate
 @Component
 class EnsligForsørgerClient(
     @Value("\${clients.enslig.uri}") private val baseUrl: URI,
-    @Qualifier("azure") restTemplate: RestTemplate,
-) : AbstractRestClient(restTemplate) {
+    @Qualifier("azure") private val restTemplate: RestTemplate,
+) {
     val uriPerioder =
         UriComponentsBuilder
             .fromUri(baseUrl)
@@ -35,6 +35,6 @@ class EnsligForsørgerClient(
                 "fomDato" to fom,
                 "tomDato" to tom,
             )
-        return postForEntity<EnsligForsørgerPerioderResponse>(uriPerioder, request)
+        return restTemplate.postForEntity<EnsligForsørgerPerioderResponse>(uriPerioder, request)
     }
 }

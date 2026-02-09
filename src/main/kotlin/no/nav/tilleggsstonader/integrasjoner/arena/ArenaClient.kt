@@ -1,6 +1,6 @@
 package no.nav.tilleggsstonader.integrasjoner.arena
 
-import no.nav.tilleggsstonader.libs.http.client.AbstractRestClient
+import no.nav.tilleggsstonader.libs.http.client.getForEntity
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
@@ -18,8 +18,8 @@ import java.time.LocalDate
 @Component
 class ArenaClient(
     @Value("\${clients.arena.uri}") private val baseUrl: URI,
-    @Qualifier("azure") restTemplate: RestTemplate,
-) : AbstractRestClient(restTemplate) {
+    @Qualifier("azure") private val restTemplate: RestTemplate,
+) {
     private val logger = LoggerFactory.getLogger(javaClass)
 
     val uriAktiviteter =
@@ -44,7 +44,7 @@ class ArenaClient(
         val headers = hentAktivitetHeaders(ident)
 
         try {
-            return getForEntity<List<AktivitetArenaResponse>>(uriAktiviteter, headers, uriVariables)
+            return restTemplate.getForEntity<List<AktivitetArenaResponse>>(uriAktiviteter, headers, uriVariables)
         } catch (e: BadRequest) {
             if (manglerFødselsnummer(e)) return emptyList()
             throw e

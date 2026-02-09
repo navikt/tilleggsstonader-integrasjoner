@@ -3,7 +3,7 @@ package no.nav.tilleggsstonader.integrasjoner.journalpost.client
 import no.nav.tilleggsstonader.integrasjoner.journalpost.JournalpostForbiddenException
 import no.nav.tilleggsstonader.integrasjoner.journalpost.JournalpostRestClientException
 import no.nav.tilleggsstonader.integrasjoner.util.MDCOperations
-import no.nav.tilleggsstonader.libs.http.client.AbstractRestClient
+import no.nav.tilleggsstonader.libs.http.client.getForEntity
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpHeaders
@@ -22,8 +22,8 @@ import java.net.URI
 @Service
 class SafHentDokumentClient(
     @Value("\${clients.saf.uri}") safBaseUrl: URI,
-    @Qualifier("azure") restTemplate: RestTemplate,
-) : AbstractRestClient(restTemplate) {
+    @Qualifier("azure") private val restTemplate: RestTemplate,
+) {
     private val safHentdokumentUri =
         UriComponentsBuilder
             .fromUri(safBaseUrl)
@@ -49,7 +49,7 @@ class SafHentDokumentClient(
                     "dokumentInfoId" to dokumentInfoId,
                     "variantFormat" to variantFormat,
                 )
-            return getForEntity(safHentdokumentUri, httpHeaders(), uriVariables = uriVariables)
+            return restTemplate.getForEntity(safHentdokumentUri, httpHeaders(), uriVariables = uriVariables)
         } catch (e: HttpClientErrorException.Forbidden) {
             throw JournalpostForbiddenException(e.message, e)
         } catch (e: Exception) {

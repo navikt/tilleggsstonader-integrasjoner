@@ -5,7 +5,7 @@ import no.nav.tilleggsstonader.integrasjoner.dokdist.domene.DistribuerJournalpos
 import no.nav.tilleggsstonader.integrasjoner.dokdist.domene.DokdistConflictException
 import no.nav.tilleggsstonader.integrasjoner.infrastruktur.exception.OppslagException
 import no.nav.tilleggsstonader.kontrakter.felles.JsonMapperProvider.jsonMapper
-import no.nav.tilleggsstonader.libs.http.client.AbstractRestClient
+import no.nav.tilleggsstonader.libs.http.client.postForEntity
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
@@ -19,13 +19,13 @@ import java.net.URI
 @Component
 class DokdistRestClient(
     @Value("\${clients.dokdist.uri}") private val dokdistUri: URI,
-    @Qualifier("azure") restTemplate: RestTemplate,
-) : AbstractRestClient(restTemplate) {
+    @Qualifier("azure") private val restTemplate: RestTemplate,
+) {
     val distribuerUri = UriComponentsBuilder.fromUri(dokdistUri).path(PATH_DISTRIBUERJOURNALPOST).toUriString()
 
     fun distribuerJournalpost(req: DistribuerJournalpostRequestTo): DistribuerJournalpostResponseTo =
         try {
-            postForEntity(distribuerUri, req)
+            restTemplate.postForEntity(distribuerUri, req)
         } catch (e: RuntimeException) {
             if (e is HttpClientErrorException.Conflict) {
                 håndterConflict(e)

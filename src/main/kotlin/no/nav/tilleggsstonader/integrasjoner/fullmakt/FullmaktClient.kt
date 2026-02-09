@@ -4,7 +4,7 @@ import no.nav.tilleggsstonader.integrasjoner.infrastruktur.exception.OppslagExce
 import no.nav.tilleggsstonader.integrasjoner.infrastruktur.exception.OppslagException.Level.MEDIUM
 import no.nav.tilleggsstonader.kontrakter.felles.IdentRequest
 import no.nav.tilleggsstonader.kontrakter.fullmakt.FullmektigDto
-import no.nav.tilleggsstonader.libs.http.client.AbstractRestClient
+import no.nav.tilleggsstonader.libs.http.client.postForEntity
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
@@ -19,8 +19,8 @@ import java.util.UUID
 @Component
 class FullmaktClient(
     @Value("\${clients.repr-api.uri}") private val baseUrl: URI,
-    @Qualifier("azureClientCredential") restTemplate: RestTemplate,
-) : AbstractRestClient(restTemplate) {
+    @Qualifier("azureClientCredential") private val restTemplate: RestTemplate,
+) {
     fun hentFullmektige(fullmaktsgiversIdent: IdentRequest): List<FullmektigDto> {
         val uri =
             UriComponentsBuilder
@@ -30,10 +30,11 @@ class FullmaktClient(
                 .toUriString()
 
         return try {
-            postForEntity<List<FullmaktsgiverResponse>>(
-                uri = uri,
-                payload = FullmaktIdentRequest.fra(fullmaktsgiversIdent),
-            ).map { it.tilFullmektigDto() }
+            restTemplate
+                .postForEntity<List<FullmaktsgiverResponse>>(
+                    uri = uri,
+                    payload = FullmaktIdentRequest.fra(fullmaktsgiversIdent),
+                ).map { it.tilFullmektigDto() }
         } catch (ex: RestClientResponseException) {
             throw OppslagException(
                 message = "Kunne ikke hente ut fullmakter fra REPR",

@@ -10,8 +10,11 @@ import no.nav.tilleggsstonader.kontrakter.oppgave.FinnMappeResponseDto
 import no.nav.tilleggsstonader.kontrakter.oppgave.FinnOppgaveRequest
 import no.nav.tilleggsstonader.kontrakter.oppgave.FinnOppgaveResponseDto
 import no.nav.tilleggsstonader.kontrakter.oppgave.Oppgave
-import no.nav.tilleggsstonader.libs.http.client.AbstractRestClient
+import no.nav.tilleggsstonader.libs.http.client.getForEntity
+import no.nav.tilleggsstonader.libs.http.client.patchForEntity
+import no.nav.tilleggsstonader.libs.http.client.postForEntity
 import no.nav.tilleggsstonader.libs.log.mdc.MDCConstants
+import org.slf4j.LoggerFactory
 import org.slf4j.MDC
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
@@ -28,11 +31,11 @@ import kotlin.math.min
 @Component
 class OppgaveClient(
     @Value("\${clients.oppgave.uri}") private val oppgaveBaseUrl: URI,
-    @Qualifier("azure") restTemplate: RestTemplate,
-) : AbstractRestClient(restTemplate) {
+    @Qualifier("azure") private val restTemplate: RestTemplate,
+) {
     fun finnOppgaveMedId(oppgaveId: Long): Oppgave {
         try {
-            return getForEntity(oppgaveIdUrl, httpHeaders(), oppgaveIdUriVariables(oppgaveId))
+            return restTemplate.getForEntity(oppgaveIdUrl, httpHeaders(), oppgaveIdUriVariables(oppgaveId))
         } catch (e: HttpClientErrorException.NotFound) {
             throw OppslagException(
                 "Finner ikke oppgave med id=$oppgaveId",
@@ -82,7 +85,7 @@ class OppgaveClient(
     }
 
     private fun finnOppgave(queryParams: QueryParams) =
-        getForEntity<FinnOppgaveResponseDto>(
+        restTemplate.getForEntity<FinnOppgaveResponseDto>(
             uri = buildOppgaveRequestUri(queryParams),
             httpHeaders = httpHeaders(),
             uriVariables = queryParams.tilUriVariables(),
@@ -90,17 +93,17 @@ class OppgaveClient(
 
     fun finnMapper(finnMappeRequest: FinnMappeRequest): FinnMappeResponseDto {
         val queryParams = toQueryParams(finnMappeRequest)
-        return getForEntity(buildMappeRequestUri(queryParams), httpHeaders(), queryParams.tilUriVariables())
+        return restTemplate.getForEntity(buildMappeRequestUri(queryParams), httpHeaders(), queryParams.tilUriVariables())
     }
 
     fun oppdaterOppgave(patchDto: Oppgave): Oppgave {
         if (SikkerhetsContext.erSaksbehandler() && patchDto.endretAvEnhetsnr == null) {
-            log.warn("Kaller patch-endepunkt til oppgave uten endretAvEnhetsnr")
+            logger.warn("Kaller patch-endepunkt til oppgave uten endretAvEnhetsnr")
         }
 
         return Result
             .runCatching {
-                patchForEntity<Oppgave>(
+                restTemplate.patchForEntity<Oppgave>(
                     oppgaveIdUrl,
                     patchDto,
                     httpHeaders(),
@@ -146,7 +149,7 @@ class OppgaveClient(
     fun fjernBehandlesAvApplikasjon(fjernBehandlesAvApplikasjon: OppgaveFjernBehandlesAvApplikasjon): Oppgave? =
         Result
             .runCatching {
-                patchForEntity<Oppgave>(
+                restTemplate.patchForEntity<Oppgave>(
                     oppgaveIdUrl,
                     fjernBehandlesAvApplikasjon,
                     httpHeaders(),
@@ -183,7 +186,7 @@ class OppgaveClient(
     fun opprettOppgave(dto: OpprettOppgaveRequestDto): Long {
         val uri = UriComponentsBuilder.fromUri(oppgaveBaseUrl).path(PATH_OPPGAVE).toUriString()
         return Result
-            .runCatching { postForEntity<Oppgave>(uri, dto, httpHeaders()) }
+            .runCatching { restTemplate.postForEntity<Oppgave>(uri, dto, httpHeaders()) }
             .map { it.id }
             .onFailure {
                 var feilmelding = "Feil ved oppretting av oppgave for ${dto.aktoerId}."
@@ -220,5 +223,7 @@ class OppgaveClient(
         private const val PATH_OPPGAVE = "/api/v1/oppgaver"
         private const val PATH_MAPPE = "/api/v1/mapper"
         private const val X_CORRELATION_ID = "X-Correlation-ID"
+
+        private val logger = LoggerFactory.getLogger(OppgaveClient::class.java)
     }
 }

@@ -9,8 +9,10 @@ import no.nav.tilleggsstonader.kontrakter.dokarkiv.ArkiverDokumentResponse
 import no.nav.tilleggsstonader.kontrakter.dokarkiv.OppdaterJournalpostRequest
 import no.nav.tilleggsstonader.kontrakter.dokarkiv.OppdaterJournalpostResponse
 import no.nav.tilleggsstonader.kontrakter.felles.JsonMapperProvider.jsonMapper
-import no.nav.tilleggsstonader.libs.http.client.AbstractRestClient
 import no.nav.tilleggsstonader.libs.http.client.ProblemDetailException
+import no.nav.tilleggsstonader.libs.http.client.patchForEntity
+import no.nav.tilleggsstonader.libs.http.client.postForEntity
+import no.nav.tilleggsstonader.libs.http.client.putForEntity
 import no.nav.tilleggsstonader.libs.log.NavHttpHeaders
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Qualifier
@@ -28,8 +30,8 @@ import java.net.URI
 @Component
 class DokarkivRestClient(
     @Value("\${clients.dokarkiv.uri}") private val dokarkivUrl: URI,
-    @Qualifier("azure") restTemplate: RestTemplate,
-) : AbstractRestClient(restTemplate) {
+    @Qualifier("azure") private val restTemplate: RestTemplate,
+) {
     fun lagJournalpostUri(ferdigstill: Boolean): String =
         UriComponentsBuilder
             .fromUri(dokarkivUrl)
@@ -45,7 +47,7 @@ class DokarkivRestClient(
     ): OpprettJournalpostResponse {
         val uri = lagJournalpostUri(ferdigstill)
         try {
-            return postForEntity(uri, request, headers(navIdent), mapOf("ferdigstill" to ferdigstill))
+            return restTemplate.postForEntity(uri, request, headers(navIdent), mapOf("ferdigstill" to ferdigstill))
         } catch (e: RuntimeException) {
             if (e is HttpClientErrorException.Conflict) {
                 håndterConflict(e)
@@ -84,7 +86,7 @@ class DokarkivRestClient(
                 .encode()
                 .toUriString()
         try {
-            return putForEntity(uri, request, headers(navIdent), mapOf("journalpostId" to journalpostId))
+            return restTemplate.putForEntity(uri, request, headers(navIdent), mapOf("journalpostId" to journalpostId))
         } catch (e: RuntimeException) {
             throw oppslagExceptionVed("oppdatering", e, request.bruker?.id)
         }
@@ -122,7 +124,7 @@ class DokarkivRestClient(
                 .encode()
                 .toUriString()
         try {
-            patchForEntity<String>(
+            restTemplate.patchForEntity<String>(
                 uri,
                 FerdigstillJournalPost(journalførendeEnhet),
                 headers(navIdent),

@@ -5,7 +5,9 @@ import no.nav.tilleggsstonader.integrasjoner.util.MDCOperations
 import no.nav.tilleggsstonader.kontrakter.dokarkiv.BulkOppdaterLogiskVedleggRequest
 import no.nav.tilleggsstonader.kontrakter.dokarkiv.LogiskVedleggRequest
 import no.nav.tilleggsstonader.kontrakter.dokarkiv.LogiskVedleggResponse
-import no.nav.tilleggsstonader.libs.http.client.AbstractRestClient
+import no.nav.tilleggsstonader.libs.http.client.deleteForEntity
+import no.nav.tilleggsstonader.libs.http.client.postForEntity
+import no.nav.tilleggsstonader.libs.http.client.putForEntityNullable
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpHeaders
@@ -19,8 +21,8 @@ import java.net.URI
 @Component
 class DokarkivLogiskVedleggRestClient(
     @Value("\${clients.dokarkiv.uri}") private val dokarkivUrl: URI,
-    @Qualifier("azure") restTemplate: RestTemplate,
-) : AbstractRestClient(restTemplate) {
+    @Qualifier("azure") private val restTemplate: RestTemplate,
+) {
     fun opprettLogiskVedlegg(
         dokumentInfoId: String,
         request: LogiskVedleggRequest,
@@ -32,7 +34,7 @@ class DokarkivLogiskVedleggRestClient(
                 .encode()
                 .toUriString()
         try {
-            return postForEntity(uri, request, headers(), mapOf("dokumentInfo" to dokumentInfoId))
+            return restTemplate.postForEntity(uri, request, headers(), mapOf("dokumentInfo" to dokumentInfoId))
         } catch (e: RuntimeException) {
             val responsebody = if (e is HttpStatusCodeException) e.responseBodyAsString else ""
             val message = "Kan ikke opprette logisk vedlegg for dokumentinfo $dokumentInfoId $responsebody"
@@ -58,7 +60,7 @@ class DokarkivLogiskVedleggRestClient(
                 .toUriString()
         try {
             val uriVariables = mapOf("dokumentInfo" to dokumentInfoId, "logiskVedleggId" to logiskVedleggId)
-            deleteForEntity<String>(uri, null, headers(), uriVariables)
+            restTemplate.deleteForEntity<String>(uri, null, headers(), uriVariables)
         } catch (e: RuntimeException) {
             val responsebody = if (e is HttpStatusCodeException) e.responseBodyAsString else ""
             val message = "Kan ikke slette logisk vedlegg for dokumentinfo $dokumentInfoId $responsebody"
@@ -84,7 +86,7 @@ class DokarkivLogiskVedleggRestClient(
                 .buildAndExpand(dokumentinfoId)
                 .toUriString()
         try {
-            putForEntityNullable<Unit>(uri, request, headers(), uriVariables)
+            restTemplate.putForEntityNullable<Unit>(uri, request, headers(), uriVariables)
         } catch (e: RuntimeException) {
             val responsebody = if (e is HttpStatusCodeException) e.responseBodyAsString else ""
             val message = "Kan ikke bulk oppdatere logiske vedlegg for dokumentinfo $dokumentinfoId $responsebody"

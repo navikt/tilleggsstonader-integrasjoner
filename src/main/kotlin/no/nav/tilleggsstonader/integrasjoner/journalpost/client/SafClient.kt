@@ -13,7 +13,7 @@ import no.nav.tilleggsstonader.integrasjoner.util.MDCOperations
 import no.nav.tilleggsstonader.integrasjoner.util.graphqlQuery
 import no.nav.tilleggsstonader.kontrakter.journalpost.Journalpost
 import no.nav.tilleggsstonader.kontrakter.journalpost.JournalposterForBrukerRequest
-import no.nav.tilleggsstonader.libs.http.client.AbstractRestClient
+import no.nav.tilleggsstonader.libs.http.client.postForEntity
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpHeaders
@@ -26,8 +26,8 @@ import java.net.URI
 @Service
 class SafClient(
     @Value("\${clients.saf.uri}") safBaseUrl: URI,
-    @Qualifier("azure") restTemplate: RestTemplate,
-) : AbstractRestClient(restTemplate) {
+    @Qualifier("azure") private val restTemplate: RestTemplate,
+) {
     private val safUri = UriComponentsBuilder.fromUri(safBaseUrl).pathSegment(PATH_GRAPHQL).toUriString()
 
     fun hentJournalpost(journalpostId: String): Journalpost {
@@ -37,7 +37,7 @@ class SafClient(
                 graphqlQuery("/saf/journalpostForId.graphql"),
             )
         val response =
-            postForEntity<SafJournalpostResponse<SafJournalpostData>>(
+            restTemplate.postForEntity<SafJournalpostResponse<SafJournalpostData>>(
                 safUri,
                 safJournalpostRequest,
                 httpHeaders(),
@@ -74,7 +74,7 @@ class SafClient(
 
     fun finnJournalposter(safJournalpostRequest: SafJournalpostRequest): List<Journalpost> {
         val response =
-            postForEntity<SafJournalpostResponse<SafJournalpostBrukerData>>(
+            restTemplate.postForEntity<SafJournalpostResponse<SafJournalpostBrukerData>>(
                 uri = safUri,
                 payload = safJournalpostRequest,
                 httpHeaders = httpHeaders(),

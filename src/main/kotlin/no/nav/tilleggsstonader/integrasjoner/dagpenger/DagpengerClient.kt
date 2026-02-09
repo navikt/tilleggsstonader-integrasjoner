@@ -1,6 +1,6 @@
 package no.nav.tilleggsstonader.integrasjoner.dagpenger
 
-import no.nav.tilleggsstonader.libs.http.client.AbstractRestClient
+import no.nav.tilleggsstonader.libs.http.client.postForEntity
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
@@ -12,8 +12,8 @@ import java.time.LocalDate
 @Component
 class DagpengerClient(
     @Value("\${clients.dagpenger.uri}") private val baseUrl: URI,
-    @Qualifier("azure") restTemplate: RestTemplate,
-) : AbstractRestClient(restTemplate) {
+    @Qualifier("azure") private val restTemplate: RestTemplate,
+) {
     val dagpengerUri =
         UriComponentsBuilder
             .fromUri(baseUrl)
@@ -32,6 +32,6 @@ class DagpengerClient(
                 "fraOgMedDato" to fom.toString(),
                 "tilOgMedDato" to tom?.toString(),
             )
-        return postForEntity<DagpengerPerioderResponse>(dagpengerUri, request)
+        return restTemplate.postForEntity<DagpengerPerioderResponse>(dagpengerUri, request)
     }
 }

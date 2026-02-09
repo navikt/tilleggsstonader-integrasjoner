@@ -1,6 +1,6 @@
 package no.nav.tilleggsstonader.integrasjoner.tiltakspenger
 
-import no.nav.tilleggsstonader.libs.http.client.AbstractRestClient
+import no.nav.tilleggsstonader.libs.http.client.postForEntity
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
@@ -12,8 +12,8 @@ import java.time.LocalDate
 @Component
 class TiltakspengerClient(
     @Value($$"${clients.tiltakspenger.uri}") private val baseUrl: URI,
-    @Qualifier("azure") restTemplate: RestTemplate,
-) : AbstractRestClient(restTemplate) {
+    @Qualifier("azure") private val restTemplate: RestTemplate,
+) {
     /**
      * Henter Tiltakspenger fra Arena. Disse periodene tar ikke hensyn til omgjøringer og kan derfor være ukorrekte.
      */
@@ -35,7 +35,7 @@ class TiltakspengerClient(
                 .encode()
                 .toUriString()
 
-        return postForEntity<List<TiltakspengerPerioderResponse>>(uri, request)
+        return restTemplate.postForEntity<List<TiltakspengerPerioderResponse>>(uri, request)
     }
 
     /**
@@ -59,6 +59,6 @@ class TiltakspengerClient(
                 .encode()
                 .toUriString()
 
-        return postForEntity<List<TiltakspengerDetaljerResponse>>(uri, request)
+        return restTemplate.postForEntity<List<TiltakspengerDetaljerResponse>>(uri, request)
     }
 }

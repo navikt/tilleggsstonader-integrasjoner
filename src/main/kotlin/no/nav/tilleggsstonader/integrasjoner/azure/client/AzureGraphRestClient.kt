@@ -2,7 +2,7 @@ package no.nav.tilleggsstonader.integrasjoner.azure.client
 
 import no.nav.tilleggsstonader.integrasjoner.azure.domene.AzureAdBruker
 import no.nav.tilleggsstonader.integrasjoner.azure.domene.AzureAdBrukere
-import no.nav.tilleggsstonader.libs.http.client.AbstractRestClient
+import no.nav.tilleggsstonader.libs.http.client.getForEntity
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpHeaders
@@ -13,9 +13,9 @@ import java.net.URI
 
 @Service
 class AzureGraphRestClient(
-    @Qualifier("azure") restTemplate: RestTemplate,
+    @Qualifier("azure") private val restTemplate: RestTemplate,
     @Value("\${clients.azure-graph.uri}") private val aadGraphURI: URI,
-) : AbstractRestClient(restTemplate) {
+) {
     fun finnSaksbehandler(navIdent: String): AzureAdBrukere {
         val uri =
             UriComponentsBuilder
@@ -25,7 +25,7 @@ class AzureGraphRestClient(
                 .queryParam("\$select", FELTER)
                 .encode()
                 .toUriString()
-        return getForEntity(
+        return restTemplate.getForEntity(
             uri,
             HttpHeaders().apply {
                 add("ConsistencyLevel", "eventual")
@@ -42,7 +42,7 @@ class AzureGraphRestClient(
                 .queryParam("\$select", FELTER)
                 .encode()
                 .toUriString()
-        return getForEntity(uri, uriVariables = mapOf("id" to id))
+        return restTemplate.getForEntity(uri, uriVariables = mapOf("id" to id))
     }
 
     companion object {

@@ -1,6 +1,6 @@
 package no.nav.tilleggsstonader.integrasjoner.etterlatte
 
-import no.nav.tilleggsstonader.libs.http.client.AbstractRestClient
+import no.nav.tilleggsstonader.libs.http.client.postForEntity
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
@@ -12,8 +12,8 @@ import java.time.LocalDate
 @Component
 class EtterlatteClient(
     @Value("\${clients.etterlatte.uri}") private val baseUrl: URI,
-    @Qualifier("azure") restTemplate: RestTemplate,
-) : AbstractRestClient(restTemplate) {
+    @Qualifier("azure") private val restTemplate: RestTemplate,
+) {
     val uriPerioder =
         UriComponentsBuilder
             .fromUri(baseUrl)
@@ -27,7 +27,7 @@ class EtterlatteClient(
         fom: LocalDate,
     ): List<Samordningsvedtak> {
         val requestBody = FoedselsnummerDTO(foedselsnummer = ident)
-        return postForEntity<List<Samordningsvedtak>>(
+        return restTemplate.postForEntity<List<Samordningsvedtak>>(
             uriPerioder,
             requestBody,
             uriVariables = mapOf("fomDato" to fom),
