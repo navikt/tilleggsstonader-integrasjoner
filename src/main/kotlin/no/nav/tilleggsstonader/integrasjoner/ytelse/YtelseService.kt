@@ -118,15 +118,22 @@ class YtelseService(
     }
 
     private fun hentDagpenger(data: HentYtelserCacheData): List<YtelsePeriode> {
-        val dagpengerResponse =
+        val dagpengerPeriodeResponse =
             cacheManager.getValue("ytelser-dagpenger", data) {
                 dagpengerClient.hentPerioder(data.ident, fom = data.fom, tom = data.tom)
             }
-        return dagpengerResponse.perioder.map { periode ->
+        val dagpengerBeregningerResponse =
+            cacheManager.getValue("beregninger-dagpenger", data) {
+                dagpengerClient.hentBeregninger(data.ident, fom = data.fom, tom = data.tom)
+            }
+
+        return dagpengerPeriodeResponse.perioder.map { periode ->
             YtelsePeriode(
                 type = TypeYtelsePeriode.DAGPENGER,
                 fom = periode.fraOgMedDato,
                 tom = periode.tilOgMedDato,
+                // TODO avklar hvordan vi bør velge ut periode her
+                gjennståendeDagerFraTelleverk = dagpengerBeregningerResponse.maxByOrNull { it.fraOgMed }?.gjenståendeDager,
             )
         }
     }
