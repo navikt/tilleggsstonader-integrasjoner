@@ -1,5 +1,6 @@
 package no.nav.tilleggsstonader.integrasjoner.dagpenger
 
+import no.nav.tilleggsstonader.kontrakter.ytelse.GjennståendeDagerFraTelleverk
 import java.time.LocalDate
 
 data class DagpengerBeregningerResponse(
@@ -9,4 +10,10 @@ data class DagpengerBeregningerResponse(
     val utbetaltBeløp: Int,
     val gjenståendeDager: Int,
     val kilde: String,
-)
+) {
+    fun tilDomene() =
+        GjennståendeDagerFraTelleverk(
+            dato = tilOgMed,
+            antallDager = gjenståendeDager,
+        )
+}

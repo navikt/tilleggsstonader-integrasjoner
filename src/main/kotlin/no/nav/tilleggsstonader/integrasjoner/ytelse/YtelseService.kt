@@ -132,8 +132,7 @@ class YtelseService(
                 type = TypeYtelsePeriode.DAGPENGER,
                 fom = periode.fraOgMedDato,
                 tom = periode.tilOgMedDato,
-                // TODO avklar hvordan vi bør velge ut periode her
-                gjennståendeDagerFraTelleverk = dagpengerBeregningerResponse.maxByOrNull { it.fraOgMed }?.gjenståendeDager,
+                gjennståendeDagerFraTelleverk = dagpengerBeregningerResponse.maxByOrNull { it.fraOgMed }?.tilDomene(),
             )
         }
     }
