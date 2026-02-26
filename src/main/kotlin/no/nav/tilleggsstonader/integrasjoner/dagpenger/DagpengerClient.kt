@@ -14,7 +14,7 @@ class DagpengerClient(
     @Value("\${clients.dagpenger.uri}") private val baseUrl: URI,
     @Qualifier("azure") private val restTemplate: RestTemplate,
 ) {
-    val dagpengerUri =
+    val dagpengerPerioderUri =
         UriComponentsBuilder
             .fromUri(baseUrl)
             .pathSegment("dagpenger", "datadeling", "v1", "perioder")
@@ -32,6 +32,27 @@ class DagpengerClient(
                 "fraOgMedDato" to fom.toString(),
                 "tilOgMedDato" to tom?.toString(),
             )
-        return restTemplate.postForEntity<DagpengerPerioderResponse>(dagpengerUri, request)
+        return restTemplate.postForEntity<DagpengerPerioderResponse>(dagpengerPerioderUri, request)
+    }
+
+    val dagpengerBeregningerUri =
+        UriComponentsBuilder
+            .fromUri(baseUrl)
+            .pathSegment("dagpenger", "datadeling", "v1", "beregninger")
+            .encode()
+            .toUriString()
+
+    fun hentBeregninger(
+        ident: String,
+        fom: LocalDate,
+        tom: LocalDate? = null,
+    ): List<DagpengerBeregningerResponse> {
+        val request =
+            mapOf(
+                "personIdent" to ident,
+                "fraOgMedDato" to fom.toString(),
+                "tilOgMedDato" to tom?.toString(),
+            )
+        return restTemplate.postForEntity<List<DagpengerBeregningerResponse>>(dagpengerBeregningerUri, request)
     }
 }

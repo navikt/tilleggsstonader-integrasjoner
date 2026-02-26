@@ -18,6 +18,7 @@ import no.nav.tilleggsstonader.libs.log.SecureLogger.secureLogger
 import no.nav.tilleggsstonader.libs.spring.cache.getValue
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Qualifier
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.cache.CacheManager
 import org.springframework.stereotype.Service
 
@@ -30,6 +31,7 @@ class YtelseService(
     private val tiltakspengerClient: TiltakspengerClient,
     @Qualifier("shortCache")
     private val cacheManager: CacheManager,
+    @Value("\${CLIENT_ENV}") private val clientEnv: String,
 ) {
     private val logger = LoggerFactory.getLogger(javaClass)
 
@@ -118,15 +120,26 @@ class YtelseService(
     }
 
     private fun hentDagpenger(data: HentYtelserCacheData): List<YtelsePeriode> {
-        val dagpengerResponse =
+        val dagpengerPeriodeResponse =
             cacheManager.getValue("ytelser-dagpenger", data) {
                 dagpengerClient.hentPerioder(data.ident, fom = data.fom, tom = data.tom)
             }
-        return dagpengerResponse.perioder.map { periode ->
+
+        val dagpengerBeregningerResponse =
+            if (clientEnv == "dev") {
+                cacheManager.getValue("beregninger-dagpenger", data) {
+                    dagpengerClient.hentBeregninger(data.ident, fom = data.fom, tom = data.tom)
+                }
+            } else {
+                null
+            }
+
+        return dagpengerPeriodeResponse.perioder.map { periode ->
             YtelsePeriode(
                 type = TypeYtelsePeriode.DAGPENGER,
                 fom = periode.fraOgMedDato,
                 tom = periode.tilOgMedDato,
+                gjennståendeDagerFraTelleverk = dagpengerBeregningerResponse?.maxByOrNull { it.fraOgMed }?.tilDomene(),
             )
         }
     }
