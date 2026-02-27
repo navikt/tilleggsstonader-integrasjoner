@@ -39,7 +39,12 @@ class YtelseService(
         val perioder = mutableListOf<YtelsePeriode>()
         val kildeResultat = mutableListOf<YtelsePerioderDto.KildeResultatYtelse>()
 
-        val data = HentYtelserCacheData(ident = request.ident, fom = request.fom, tom = request.tom)
+        val data =
+            HentYtelserCacheData(
+                ident = request.ident,
+                fom = minOf(request.fom, request.tom),
+                tom = maxOf(request.fom, request.tom),
+            )
         request.typer
             .distinct()
             .map { hentPeriodeFn(it, data) }

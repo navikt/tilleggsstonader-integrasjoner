@@ -77,7 +77,7 @@ class YtelseServiceTest : IntegrationTest() {
         ytelseService.hentYtelser(ytelsePerioderRequest())
         ytelseService.hentYtelser(ytelsePerioderRequest(ident = "ident2"))
         ytelseService.hentYtelser(ytelsePerioderRequest(fom = LocalDate.now().plusDays(1)))
-        ytelseService.hentYtelser(ytelsePerioderRequest(tom = LocalDate.now().plusDays(1)))
+        ytelseService.hentYtelser(ytelsePerioderRequest(tom = LocalDate.now().plusDays(2)))
 
         verify(exactly = 4) { aapClient.hentPerioder(any(), any(), any()) }
         verify(exactly = 4) { dagpengerClient.hentPerioder(any(), any(), any()) }
