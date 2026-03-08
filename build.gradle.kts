@@ -2,11 +2,11 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 val javaVersion = JavaLanguageVersion.of(21)
-val springdocVersion = "3.0.1"
+val springdocVersion = "3.0.2"
 val tilleggsstønaderLibsVersion = "2026.02.09-09.29.ad6bc1afa3ed"
 val tilleggsstønaderKontrakterVersion = "2026.02.26-13.06.4f3780e9d998"
 val tokenSupportVersion = "6.0.3"
-val wiremockSpringVersion = "4.1.0"
+val wiremockSpringVersion = "4.2.0"
 
 val mockkVersion = "1.14.9"
 
