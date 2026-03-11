@@ -139,7 +139,7 @@ class YtelseService(
                 type = TypeYtelsePeriode.DAGPENGER,
                 fom = periode.fraOgMedDato,
                 tom = periode.tilOgMedDato,
-                gjennståendeDagerFraTelleverk = dagpengerBeregningerResponse?.maxByOrNull { it.fraOgMed }?.tilDomene(),
+                gjenståendeDagerFraTelleverk = dagpengerBeregningerResponse?.maxByOrNull { it.fraOgMed }?.tilDomene(),
             )
         }
     }
