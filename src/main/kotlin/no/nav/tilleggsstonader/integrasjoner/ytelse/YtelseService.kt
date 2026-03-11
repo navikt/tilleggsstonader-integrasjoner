@@ -31,7 +31,6 @@ class YtelseService(
     private val tiltakspengerClient: TiltakspengerClient,
     @Qualifier("shortCache")
     private val cacheManager: CacheManager,
-    @Value("\${CLIENT_ENV}") private val clientEnv: String,
 ) {
     private val logger = LoggerFactory.getLogger(javaClass)
 
@@ -126,12 +125,8 @@ class YtelseService(
             }
 
         val dagpengerBeregningerResponse =
-            if (clientEnv == "dev") {
-                cacheManager.getValue("beregninger-dagpenger", data) {
-                    dagpengerClient.hentBeregninger(data.ident, fom = data.fom, tom = data.tom)
-                }
-            } else {
-                null
+            cacheManager.getValue("beregninger-dagpenger", data) {
+                dagpengerClient.hentBeregninger(data.ident, fom = data.fom, tom = data.tom)
             }
 
         return dagpengerPeriodeResponse.perioder.map { periode ->
@@ -139,7 +134,7 @@ class YtelseService(
                 type = TypeYtelsePeriode.DAGPENGER,
                 fom = periode.fraOgMedDato,
                 tom = periode.tilOgMedDato,
-                gjenståendeDagerFraTelleverk = dagpengerBeregningerResponse?.maxByOrNull { it.fraOgMed }?.tilDomene(),
+                gjenståendeDagerFraTelleverk = dagpengerBeregningerResponse.maxByOrNull { it.fraOgMed }?.tilDomene(),
             )
         }
     }
