@@ -7,7 +7,6 @@ import com.github.tomakehurst.wiremock.client.WireMock.urlMatching
 import no.nav.tilleggsstonader.integrasjoner.IntegrationTest
 import no.nav.tilleggsstonader.integrasjoner.arena.ArenaAktivitetUtil.aktivitetArenaResponse
 import no.nav.tilleggsstonader.integrasjoner.arena.PeriodeArena
-import no.nav.tilleggsstonader.kontrakter.aktivitet.AktivitetArenaDto
 import no.nav.tilleggsstonader.kontrakter.aktivitet.TypeAktivitet
 import no.nav.tilleggsstonader.kontrakter.felles.JsonMapperProvider.jsonMapper
 import no.nav.tilleggsstonader.kontrakter.felles.Stønadstype
