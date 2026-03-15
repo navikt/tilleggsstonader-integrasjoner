@@ -2,11 +2,11 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 val javaVersion = JavaLanguageVersion.of(21)
-val springdocVersion = "3.0.1"
+val springdocVersion = "3.0.2"
 val tilleggsstønaderLibsVersion = "2026.02.09-09.29.ad6bc1afa3ed"
 val tilleggsstønaderKontrakterVersion = "2026.03.11-10.20.9e5abdcefdcc"
 val tokenSupportVersion = "6.0.3"
-val wiremockSpringVersion = "4.1.0"
+val wiremockSpringVersion = "4.2.0"
 
 val mockkVersion = "1.14.9"
 
@@ -17,7 +17,7 @@ plugins {
     application
 
     kotlin("jvm") version "2.2.21"
-    id("com.diffplug.spotless") version "8.2.1"
+    id("com.diffplug.spotless") version "8.3.0"
     id("com.github.ben-manes.versions") version "0.53.0"
     id("se.patrikerdes.use-latest-versions") version "0.2.19"
 
