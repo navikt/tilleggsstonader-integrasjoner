@@ -28,6 +28,12 @@ management:
     base-path: "/internal"
   prometheus.metrics.export.enabled: true
 
+springdoc:
+  swagger-ui:
+    enabled: true
+  api-docs:
+    enabled: true
+
 tilleggsstonader:
   http-client:
     read-timeout: PT20S  # 20 sekunder, lavere enn default i libs slik at integrasjoner timer ut først
