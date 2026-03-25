@@ -6,7 +6,7 @@ val springdocVersion = "3.0.2"
 val tilleggsstønaderLibsVersion = "2026.02.09-09.29.ad6bc1afa3ed"
 val tilleggsstønaderKontrakterVersion = "2026.03.11-10.20.9e5abdcefdcc"
 val tokenSupportVersion = "6.0.3"
-val wiremockSpringVersion = "4.2.0"
+val wiremockSpringVersion = "4.2.1"
 
 val mockkVersion = "1.14.9"
 
