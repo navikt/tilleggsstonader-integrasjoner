@@ -5,7 +5,7 @@ val javaVersion = JavaLanguageVersion.of(21)
 val springdocVersion = "3.0.2"
 val tilleggsstønaderLibsVersion = "2026.02.09-09.29.ad6bc1afa3ed"
 val tilleggsstønaderKontrakterVersion = "2026.03.26-09.45.24e12cd321e7"
-val tokenSupportVersion = "6.0.3"
+val tokenSupportVersion = "6.0.4"
 val wiremockSpringVersion = "4.2.1"
 
 val mockkVersion = "1.14.9"
@@ -17,11 +17,11 @@ plugins {
     application
 
     kotlin("jvm") version "2.2.21"
-    id("com.diffplug.spotless") version "8.3.0"
+    id("com.diffplug.spotless") version "8.4.0"
     id("com.github.ben-manes.versions") version "0.53.0"
     id("se.patrikerdes.use-latest-versions") version "0.2.19"
 
-    id("org.springframework.boot") version "4.0.3"
+    id("org.springframework.boot") version "4.0.4"
     id("io.spring.dependency-management") version "1.1.7"
     kotlin("plugin.spring") version "2.2.21"
 }
