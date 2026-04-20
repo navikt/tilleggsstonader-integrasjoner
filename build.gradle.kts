@@ -51,9 +51,9 @@ configurations.all {
     resolutionStrategy {
         failOnNonReproducibleResolution()
         force(
-            "org.bouncycastle:bcutil-jdk18on:1.83",
-            "org.bouncycastle:bcprov-jdk18on:1.83",
-            "org.bouncycastle:bcpkix-jdk18on:1.83",
+            "org.bouncycastle:bcutil-jdk18on:1.84",
+            "org.bouncycastle:bcprov-jdk18on:1.84",
+            "org.bouncycastle:bcpkix-jdk18on:1.84",
         )
     }
 }
