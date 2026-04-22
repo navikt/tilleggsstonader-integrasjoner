@@ -8,7 +8,7 @@ import no.nav.tilleggsstonader.kontrakter.sak.DokumentBrevkode
 import org.springframework.stereotype.Component
 
 @Component
-data object ReiseTilSamlingTSOSøknadMetadata : SøknadMetadata(
+data object ReiseTilSamlingTsoSøknadMetadata : SøknadMetadata(
     tema = Tema.TSO,
     behandlingstema = Behandlingstema.ReiseTilSamlingTSO,
     dokumenttype = Dokumenttype.REISE_TIL_SAMLING_TSO_SØKNAD,
@@ -18,20 +18,20 @@ data object ReiseTilSamlingTSOSøknadMetadata : SøknadMetadata(
 )
 
 @Component
-data object ReiseTilSamlingTSOSøknadVedleggMetadata : SøknadVedleggMetadata(
+data object ReiseTilSamlingTsoSøknadVedleggMetadata : SøknadVedleggMetadata(
     tema = Tema.TSO,
     dokumenttype = Dokumenttype.REISE_TIL_SAMLING_TSO_SØKNAD_VEDLEGG,
 )
 
 @Component
-data object ReiseTilSamlingTSOFrittståendeBrevMetadata : FrittståendeBrevMetadata(
+data object ReiseTilSamlingTsoFrittståendeBrevMetadata : FrittståendeBrevMetadata(
     tema = Tema.TSO,
     behandlingstema = Behandlingstema.ReiseTilSamlingTSO,
     dokumenttype = Dokumenttype.REISE_TIL_SAMLING_TSO_FRITTSTÅENDE_BREV,
 )
 
 @Component
-data object ReiseTilSamlingTSOInterntVedtakMetadata : InterntVedtakBrevMetadata(
+data object ReiseTilSamlingTsoInterntVedtakMetadata : InterntVedtakBrevMetadata(
     tema = Tema.TSO,
     behandlingstema = Behandlingstema.ReiseTilSamlingTSO,
     dokumenttype = Dokumenttype.REISE_TIL_SAMLING_TSO_INTERNT_VEDTAK,
@@ -39,21 +39,21 @@ data object ReiseTilSamlingTSOInterntVedtakMetadata : InterntVedtakBrevMetadata(
 )
 
 @Component
-data object ReiseTilSamlingTSOVedtaksbrevMetadata : VedtaksbrevMetadata(
+data object ReiseTilSamlingTsoVedtaksbrevMetadata : VedtaksbrevMetadata(
     tema = Tema.TSO,
     behandlingstema = Behandlingstema.ReiseTilSamlingTSO,
     dokumenttype = Dokumenttype.REISE_TIL_SAMLING_TSO_VEDTAKSBREV,
 )
 
 @Component
-data object ReiseTilSamlingTSOKlageInterntVedtak : KlageInterntVedtak(
+data object ReiseTilSamlingTsoKlageInterntVedtak : KlageInterntVedtak(
     tema = Tema.TSO,
     behandlingstema = Behandlingstema.ReiseTilSamlingTSO,
     dokumenttype = Dokumenttype.REISE_TIL_SAMLING_TSO_KLAGE_INTERNT_VEDTAK,
 )
 
 @Component
-data object ReiseTilSamlingTSOKlageVedtak : KlageVedtak(
+data object ReiseTilSamlingTsoKlageVedtak : KlageVedtak(
     tema = Tema.TSO,
     behandlingstema = Behandlingstema.ReiseTilSamlingTSO,
     dokumenttype = Dokumenttype.REISE_TIL_SAMLING_TSO_KLAGE_VEDTAKSBREV,
