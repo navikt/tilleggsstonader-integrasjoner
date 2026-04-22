@@ -75,4 +75,12 @@ fun Dokumenttype.tilMetadata(): Dokumentmetadata =
         Dokumenttype.DAGLIG_REISE_TSR_KLAGE_INTERNT_VEDTAK -> DagligReiseTsrKlageInterntVedtak
         Dokumenttype.DAGLIG_REISE_TSR_KJØRELISTE -> DagligReiseTsrKjørelisteMetadata
         Dokumenttype.DAGLIG_REISE_TSR_KJØRELISTE_VEDLEGG -> DagligReiseTsrKjørelisteVedlegg
+
+        Dokumenttype.REISE_TIL_SAMLING_TSO_SØKNAD -> ReiseTilSamlingTsoSøknadMetadata
+        Dokumenttype.REISE_TIL_SAMLING_TSO_SØKNAD_VEDLEGG -> ReiseTilSamlingTsoSøknadVedleggMetadata
+        Dokumenttype.REISE_TIL_SAMLING_TSO_VEDTAKSBREV -> ReiseTilSamlingTsoVedtaksbrevMetadata
+        Dokumenttype.REISE_TIL_SAMLING_TSO_FRITTSTÅENDE_BREV -> ReiseTilSamlingTsoFrittståendeBrevMetadata
+        Dokumenttype.REISE_TIL_SAMLING_TSO_INTERNT_VEDTAK -> ReiseTilSamlingTsoInterntVedtakMetadata
+        Dokumenttype.REISE_TIL_SAMLING_TSO_KLAGE_VEDTAKSBREV -> ReiseTilSamlingTsoKlageVedtak
+        Dokumenttype.REISE_TIL_SAMLING_TSO_KLAGE_INTERNT_VEDTAK -> ReiseTilSamlingTsoKlageInterntVedtak
     }
