@@ -6,7 +6,7 @@ val tomcatVersion = "11.0.21"
 val springdocVersion = "3.0.3"
 val tilleggsstønaderLibsVersion = "2026.02.09-09.29.ad6bc1afa3ed"
 val tilleggsstønaderKontrakterVersion = "2026.04.22-09.43.b90e3c437eb6"
-val tokenSupportVersion = "6.0.5"
+val tokenSupportVersion = "6.0.6"
 val wiremockSpringVersion = "4.2.1"
 
 val mockkVersion = "1.14.9"
@@ -19,10 +19,10 @@ plugins {
 
     kotlin("jvm") version "2.2.21"
     id("com.diffplug.spotless") version "8.4.0"
-    id("com.github.ben-manes.versions") version "0.53.0"
+    id("com.github.ben-manes.versions") version "0.54.0"
     id("se.patrikerdes.use-latest-versions") version "0.2.19"
 
-    id("org.springframework.boot") version "4.0.5"
+    id("org.springframework.boot") version "4.0.6"
     id("io.spring.dependency-management") version "1.1.7"
     kotlin("plugin.spring") version "2.2.21"
 }
