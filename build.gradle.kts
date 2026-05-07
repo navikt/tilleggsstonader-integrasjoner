@@ -4,7 +4,7 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 val javaVersion = JavaLanguageVersion.of(21)
 val tomcatVersion = "11.0.21"
 val springdocVersion = "3.0.3"
-val tilleggsstønaderLibsVersion = "2026.02.09-09.29.ad6bc1afa3ed"
+val tilleggsstønaderLibsVersion = "2026.05.06-12.26.7cb4f43fb62a"
 val tilleggsstønaderKontrakterVersion = "2026.04.22-09.43.b90e3c437eb6"
 val tokenSupportVersion = "6.0.6"
 val wiremockSpringVersion = "4.2.1"
