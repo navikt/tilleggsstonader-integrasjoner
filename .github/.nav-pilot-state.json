@@ -128,6 +128,10 @@
     {
       "path": ".github/prompts/nais-manifest.prompt.md",
       "hash": "a7564098ae008cce"
+    },
+    {
+      "path": ".github/skills/observability-debugging/",
+      "hash": "cc94b1e7bfe7626c"
     }
   ]
 }
