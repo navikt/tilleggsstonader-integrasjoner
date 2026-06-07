@@ -9,7 +9,7 @@ val tilleggsstønaderKontrakterVersion = "2026.04.22-09.43.b90e3c437eb6"
 val tokenSupportVersion = "6.0.8"
 val wiremockSpringVersion = "4.2.1"
 
-val mockkVersion = "1.14.9"
+val mockkVersion = "1.14.11"
 
 group = "no.nav.tilleggsstonader.integrasjoner"
 version = "1.0.0"
@@ -18,7 +18,7 @@ plugins {
     application
 
     kotlin("jvm") version "2.3.21"
-    id("com.diffplug.spotless") version "8.5.1"
+    id("com.diffplug.spotless") version "8.6.0"
     id("com.github.ben-manes.versions") version "0.54.0"
     id("se.patrikerdes.use-latest-versions") version "0.2.19"
 
