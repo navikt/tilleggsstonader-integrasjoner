@@ -370,7 +370,7 @@ class DokarkivControllerTest : IntegrationTest() {
     @Test
     fun `skal opprette logisk vedlegg`() {
         stubFor(
-            post("/rest/journalpostapi/v1/dokumentInfo/321/logiskVedlegg/")
+            post("/rest/journalpostapi/v1/dokumentInfo/321/logiskVedlegg")
                 .willReturn(okJson(jsonMapper.writeValueAsString(LogiskVedleggResponse(21L)))),
         )
 
@@ -388,7 +388,7 @@ class DokarkivControllerTest : IntegrationTest() {
     @Test
     fun `skal returnere feil hvis man ikke kan opprette logisk vedlegg`() {
         stubFor(
-            post("/rest/journalpostapi/v1/dokumentInfo/321/logiskVedlegg/")
+            post("/rest/journalpostapi/v1/dokumentInfo/321/logiskVedlegg")
                 .willReturn(aResponse().withStatus(404).withBody("melding fra klient")),
         )
 
@@ -446,7 +446,7 @@ class DokarkivControllerTest : IntegrationTest() {
     @Test
     fun `skal bulk oppdatere logiske vedlegg for et dokument`() {
         stubFor(
-            put("/rest/journalpostapi/v1/dokumentInfo/321/logiskVedlegg/")
+            put("/rest/journalpostapi/v1/dokumentInfo/321/logiskVedlegg")
                 .willReturn(noContent()),
         )
 
