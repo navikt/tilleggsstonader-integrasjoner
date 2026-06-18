@@ -28,10 +28,7 @@ internal class DokarkivMetadataTest {
     @ParameterizedTest
     @EnumSource(value = Stønadstype::class)
     fun `alle stønader skal være koblet til metadata for div typer brev`(stønadstype: Stønadstype) {
-        // klassenavn til suffix mapping
         listOf(
-            MetadataInformasjon("SøknadMetadata", "_SØKNAD", påkrevd = false),
-            MetadataInformasjon("SøknadVedleggMetadata", "_SØKNAD_VEDLEGG", påkrevd = false),
             MetadataInformasjon("FrittståendeBrevMetadata", "_FRITTSTÅENDE_BREV"),
             MetadataInformasjon("InterntVedtakMetadata", "_INTERNT_VEDTAK"),
             MetadataInformasjon("VedtaksbrevMetadata", "_VEDTAKSBREV"),
@@ -39,11 +36,31 @@ internal class DokarkivMetadataTest {
             MetadataInformasjon("KlageVedtak", "_KLAGE_VEDTAKSBREV"),
         ).forEach { info ->
             val metadata = finnPåkrevdBrev(stønadstype, info.klassenavnSuffix)
+            require(metadata != null) {
+                "Finner ikke metadata for stønadstype=$stønadstype for klassenavn=${info.klassenavnSuffix}"
+            }
+            metadata.behandlingstema?.let { assertThat(it).isEqualTo(stønadstype.tilBehandlingstema()) }
+            assertThat(metadata.dokumenttype.name).isEqualTo("$stønadstype${info.dokumenttypeSuffix}")
+        }
+    }
+
+    @ParameterizedTest
+    @EnumSource(
+        value = Stønadstype::class,
+        mode = EnumSource.Mode.EXCLUDE,
+        names = ["BOUTGIFTER", "DAGLIG_REISE_TSO", "DAGLIG_REISE_TSR", "REISE_TIL_SAMLING_TSO"],
+    )
+    fun `stønader med søknad skal ha søknad metadata med korrekt dokumenttype`(stønadstype: Stønadstype) {
+        listOf(
+            MetadataInformasjon("SøknadMetadata", "_SØKNAD"),
+            MetadataInformasjon("SøknadVedleggMetadata", "_SØKNAD_VEDLEGG"),
+        ).forEach { info ->
+            val metadata = finnPåkrevdBrev(stønadstype, info.klassenavnSuffix)
             if (metadata != null) {
                 metadata.behandlingstema?.let { assertThat(it).isEqualTo(stønadstype.tilBehandlingstema()) }
                 assertThat(metadata.dokumenttype.name).isEqualTo("$stønadstype${info.dokumenttypeSuffix}")
             }
-            require(metadata != null || !info.påkrevd) {
+            require(metadata != null) {
                 "Finner ikke metadata for stønadstype=$stønadstype for klassenavn=${info.klassenavnSuffix}"
             }
         }
@@ -52,7 +69,6 @@ internal class DokarkivMetadataTest {
     data class MetadataInformasjon(
         val klassenavnSuffix: String,
         val dokumenttypeSuffix: String,
-        val påkrevd: Boolean = true,
     )
 
     private fun finnPåkrevdBrev(

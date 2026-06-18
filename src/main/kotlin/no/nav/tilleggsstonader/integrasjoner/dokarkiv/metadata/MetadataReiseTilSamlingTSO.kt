@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component
 data object ReiseTilSamlingTsoSøknadMetadata : SøknadMetadata(
     tema = Tema.TSO,
     behandlingstema = Behandlingstema.ReiseTilSamlingTSO,
-    dokumenttype = Dokumenttype.REISE_TIL_SAMLING_TSO_SØKNAD,
+    dokumenttype = Dokumenttype.REISE_TIL_SAMLING_SØKNAD,
     tittel = "Søknad om ${
         Stønadstype.REISE_TIL_SAMLING_TSO.visningsnavn}",
     brevkode = DokumentBrevkode.REISE_TIL_SAMLING.verdi,
@@ -20,7 +20,7 @@ data object ReiseTilSamlingTsoSøknadMetadata : SøknadMetadata(
 @Component
 data object ReiseTilSamlingTsoSøknadVedleggMetadata : SøknadVedleggMetadata(
     tema = Tema.TSO,
-    dokumenttype = Dokumenttype.REISE_TIL_SAMLING_TSO_SØKNAD_VEDLEGG,
+    dokumenttype = Dokumenttype.REISE_TIL_SAMLING_SØKNAD_VEDLEGG,
 )
 
 @Component

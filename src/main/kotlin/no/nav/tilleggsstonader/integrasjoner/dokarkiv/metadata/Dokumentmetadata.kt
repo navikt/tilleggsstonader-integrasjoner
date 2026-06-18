@@ -76,8 +76,9 @@ fun Dokumenttype.tilMetadata(): Dokumentmetadata =
         Dokumenttype.DAGLIG_REISE_TSR_KJØRELISTE -> DagligReiseTsrKjørelisteMetadata
         Dokumenttype.DAGLIG_REISE_TSR_KJØRELISTE_VEDLEGG -> DagligReiseTsrKjørelisteVedlegg
 
-        Dokumenttype.REISE_TIL_SAMLING_TSO_SØKNAD -> ReiseTilSamlingTsoSøknadMetadata
-        Dokumenttype.REISE_TIL_SAMLING_TSO_SØKNAD_VEDLEGG -> ReiseTilSamlingTsoSøknadVedleggMetadata
+        // Setter tema TSO som default, så er det opp til Sak å eventuelt endre dette før journalposten ferdigstilles.
+        Dokumenttype.REISE_TIL_SAMLING_SØKNAD -> ReiseTilSamlingTsoSøknadMetadata
+        Dokumenttype.REISE_TIL_SAMLING_SØKNAD_VEDLEGG -> ReiseTilSamlingTsoSøknadVedleggMetadata
         Dokumenttype.REISE_TIL_SAMLING_TSO_VEDTAKSBREV -> ReiseTilSamlingTsoVedtaksbrevMetadata
         Dokumenttype.REISE_TIL_SAMLING_TSO_FRITTSTÅENDE_BREV -> ReiseTilSamlingTsoFrittståendeBrevMetadata
         Dokumenttype.REISE_TIL_SAMLING_TSO_INTERNT_VEDTAK -> ReiseTilSamlingTsoInterntVedtakMetadata
