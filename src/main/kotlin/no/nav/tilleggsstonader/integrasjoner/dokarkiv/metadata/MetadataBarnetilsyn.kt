@@ -10,10 +10,10 @@ import org.springframework.stereotype.Component
 @Component
 data object BarnetilsynSøknadMetadata : SøknadMetadata(
     tema = Tema.TSO,
-    behandlingstema = Behandlingstema.TilsynBarn,
+    behandlingstema = Behandlingstema.PassAvBarn,
     dokumenttype = Dokumenttype.BARNETILSYN_SØKNAD,
     tittel = "Søknad om ${Stønadstype.BARNETILSYN.visningsnavn}",
-    brevkode = DokumentBrevkode.BARNETILSYN.verdi,
+    brevkode = DokumentBrevkode.PASS_AV_BARN.verdi,
 )
 
 @Component
@@ -25,14 +25,14 @@ data object BarnetilsynSøknadVedleggMetadata : SøknadVedleggMetadata(
 @Component
 data object BarnetilsynFrittståendeBrevMetadata : FrittståendeBrevMetadata(
     tema = Tema.TSO,
-    behandlingstema = Behandlingstema.TilsynBarn,
+    behandlingstema = Behandlingstema.PassAvBarn,
     dokumenttype = Dokumenttype.BARNETILSYN_FRITTSTÅENDE_BREV,
 )
 
 @Component
 data object BarnetilsynInterntVedtakMetadata : InterntVedtakBrevMetadata(
     tema = Tema.TSO,
-    behandlingstema = Behandlingstema.TilsynBarn,
+    behandlingstema = Behandlingstema.PassAvBarn,
     dokumenttype = Dokumenttype.BARNETILSYN_INTERNT_VEDTAK,
     tittel = "Internt vedtak tilsyn barn",
 )
@@ -40,20 +40,20 @@ data object BarnetilsynInterntVedtakMetadata : InterntVedtakBrevMetadata(
 @Component
 data object BarnetilsynVedtaksbrevMetadata : VedtaksbrevMetadata(
     tema = Tema.TSO,
-    behandlingstema = Behandlingstema.TilsynBarn,
+    behandlingstema = Behandlingstema.PassAvBarn,
     dokumenttype = Dokumenttype.BARNETILSYN_VEDTAKSBREV,
 )
 
 @Component
 data object BarnetilsynKlageInterntVedtak : KlageInterntVedtak(
     tema = Tema.TSO,
-    behandlingstema = Behandlingstema.TilsynBarn,
+    behandlingstema = Behandlingstema.PassAvBarn,
     dokumenttype = Dokumenttype.BARNETILSYN_KLAGE_INTERNT_VEDTAK,
 )
 
 @Component
 data object BarnetilsynKlageVedtak : KlageVedtak(
     tema = Tema.TSO,
-    behandlingstema = Behandlingstema.TilsynBarn,
+    behandlingstema = Behandlingstema.PassAvBarn,
     dokumenttype = Dokumenttype.BARNETILSYN_KLAGE_VEDTAKSBREV,
 )
