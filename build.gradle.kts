@@ -7,7 +7,7 @@ val springdocVersion = "3.0.3"
 val tilleggsstønaderLibsVersion = "2026.05.06-12.26.7cb4f43fb62a"
 val tilleggsstønaderKontrakterVersion = "2026.07.20-15.42.126edeadd7ee"
 val tokenSupportVersion = "6.0.11"
-val wiremockSpringVersion = "4.2.1"
+val wiremockSpringVersion = "4.2.2"
 
 val mockkVersion = "1.14.11"
 
@@ -51,9 +51,9 @@ configurations.all {
     resolutionStrategy {
         failOnNonReproducibleResolution()
         force(
-            "org.bouncycastle:bcutil-jdk18on:1.84",
-            "org.bouncycastle:bcprov-jdk18on:1.84",
-            "org.bouncycastle:bcpkix-jdk18on:1.84",
+            "org.bouncycastle:bcutil-jdk18on:1.85",
+            "org.bouncycastle:bcprov-jdk18on:1.85",
+            "org.bouncycastle:bcpkix-jdk18on:1.85",
         )
     }
 }
