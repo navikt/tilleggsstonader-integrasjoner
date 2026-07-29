@@ -8,6 +8,10 @@ import no.nav.tilleggsstonader.kontrakter.oppgave.OppgavePrioritet
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class OpprettOppgaveRequestDto(
+    val tema: Tema,
+    val oppgavetype: String,
+    val aktivDato: String,
+    val prioritet: OppgavePrioritet,
     val tildeltEnhetsnr: String? = null,
     val journalpostId: String? = null,
     val behandlesAvApplikasjon: String? = null,
@@ -18,12 +22,8 @@ data class OpprettOppgaveRequestDto(
     val orgnr: String? = null,
     val tilordnetRessurs: String? = null,
     val beskrivelse: String? = null,
-    val tema: Tema? = null,
     val behandlingstema: String? = null,
-    val oppgavetype: String? = null,
     val behandlingstype: String? = null,
     val mappeId: Long? = null,
     val fristFerdigstillelse: String? = null,
-    val aktivDato: String? = null,
-    val prioritet: OppgavePrioritet? = null,
 )
