@@ -15,6 +15,7 @@ data class EnsligForsørgerPeriode(
     val fomDato: LocalDate,
     val tomDato: LocalDate,
     val stønadstype: EnsligForsørgerStønadstype,
+    val erNyttRegelverk2026: Boolean? = null,
 )
 
 enum class EnsligForsørgerStønadstype {
