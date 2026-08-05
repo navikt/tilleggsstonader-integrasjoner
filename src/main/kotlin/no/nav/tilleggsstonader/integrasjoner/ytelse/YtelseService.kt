@@ -93,8 +93,7 @@ class YtelseService(
                 aapClient.hentPerioder(data.ident, fom = data.fom, tom = data.tom)
             }
         return perioder.perioder.map {
-            YtelsePeriode(
-                type = TypeYtelsePeriode.AAP,
+            YtelsePeriode.AAP(
                 fom = it.periode.fraOgMedDato,
                 tom = it.periode.tilOgMedDato,
                 aapErFerdigAvklart = it.aktivitetsfaseKode.equals("FA", ignoreCase = true), // FA = Ferdig avklart
@@ -108,11 +107,11 @@ class YtelseService(
                 ensligForsørgerClient.hentPerioder(data.ident, fom = data.fom, tom = data.tom)
             }
         return perioder.data.perioder.map {
-            YtelsePeriode(
-                type = TypeYtelsePeriode.ENSLIG_FORSØRGER,
+            YtelsePeriode.EnsligForsørger(
                 fom = it.fomDato,
                 tom = it.tomDato,
                 ensligForsørgerStønadstype = EnsligForsørgerStønadstype.valueOf(it.stønadstype.name),
+                erNyttRegelverk2026 = it.erNyttRegelverk2026,
             )
         }
     }
@@ -129,8 +128,7 @@ class YtelseService(
             }
 
         return dagpengerPeriodeResponse.perioder.map { periode ->
-            YtelsePeriode(
-                type = TypeYtelsePeriode.DAGPENGER,
+            YtelsePeriode.Dagpenger(
                 fom = periode.fraOgMedDato,
                 tom = periode.tilOgMedDato,
                 gjenståendeDagerFraTelleverk = dagpengerBeregningerResponse.maxByOrNull { it.fraOgMed }?.tilDomene(),
@@ -152,8 +150,7 @@ class YtelseService(
                         TiltakspengerPerioderResponse.RettighetDto.TILTAKSPENGER_OG_BARNETILLEGG,
                     )
             }.map {
-                YtelsePeriode(
-                    type = TypeYtelsePeriode.TILTAKSPENGER_ARENA,
+                YtelsePeriode.TiltakspengerArena(
                     fom = it.vedtaksperiode.fraOgMed,
                     tom = it.vedtaksperiode.tilOgMed,
                 )
@@ -173,8 +170,7 @@ class YtelseService(
                         TiltakspengerDetaljerResponse.RettighetResponseJson.TILTAKSPENGER_OG_BARNETILLEGG,
                     )
             }.map {
-                YtelsePeriode(
-                    type = TypeYtelsePeriode.TILTAKSPENGER_TPSAK,
+                YtelsePeriode.TiltakspengerTPSak(
                     fom = it.fom,
                     tom = it.tom,
                 )
@@ -187,8 +183,7 @@ class YtelseService(
                 etterlatteClient.hentPerioder(data.ident, fom = data.fom)
             }
         return perioder.flatMap { it.perioder }.map {
-            YtelsePeriode(
-                type = TypeYtelsePeriode.OMSTILLINGSSTØNAD,
+            YtelsePeriode.Omstillingsstønad(
                 fom = it.fom,
                 tom = it.tom,
             )
