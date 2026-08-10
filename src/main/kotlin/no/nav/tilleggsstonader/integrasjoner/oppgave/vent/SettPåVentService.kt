@@ -25,7 +25,7 @@ class SettPåVentService(
         val enhet = oppgave.tildeltEnhetsnr ?: error("Oppgave=${oppgave.id} mangler enhetsnummer")
         val mappe = oppgaveService.finnMappe(enhet, OppgaveMappe.PÅ_VENT)
         val oppdaterOppgave =
-            Oppgave(
+            oppgave.copy(
                 id = oppgave.id,
                 versjon = oppgave.versjon,
                 tilordnetRessurs = if (request.beholdOppgave) SikkerhetsContext.hentSaksbehandler() else "",
@@ -34,6 +34,7 @@ class SettPåVentService(
                 mappeId = of(mappe.id),
                 endretAvEnhetsnr = request.endretAvEnhetsnr,
             )
+
         val oppdatertOppgave = oppgaveService.patchOppgave(oppdaterOppgave)
         return SettPåVentResponse(oppgave.id, oppdatertOppgave.versjon)
     }
@@ -42,7 +43,7 @@ class SettPåVentService(
         val oppgave = oppgaveService.hentOppgave(request.oppgaveId)
         feilHvisIkkeEierAvOppgaven(oppgave, "Kan ikke oppdatere behandling på vent når man ikke er eier av oppgaven.")
         val oppdaterOppgave =
-            Oppgave(
+            oppgave.copy(
                 id = request.oppgaveId,
                 versjon = request.oppgaveVersjon,
                 fristFerdigstillelse = request.frist,
@@ -69,7 +70,7 @@ class SettPåVentService(
         val mappeId = oppgaveService.finnMappe(enhet, OppgaveMappe.KLAR).id
         val oppdatertOppgave =
             oppgaveService.patchOppgave(
-                Oppgave(
+                oppgave.copy(
                     id = oppgave.id,
                     versjon = oppgave.versjon,
                     tilordnetRessurs = tilordnetRessurs,
