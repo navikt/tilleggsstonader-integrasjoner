@@ -16,10 +16,13 @@ data class OpprettOppgaveRequestDto(
     val journalpostId: String? = null,
     val behandlesAvApplikasjon: String? = null,
     val saksreferanse: String? = null,
-    val samhandlernr: String? = null,
-    val aktoerId: String? = null,
     val personident: String? = null,
+    @Deprecated("Skal ikke brukes, foretrekk personident")
+    val aktoerId: String? = null,
+    @Deprecated("Skal ikke brukes, foretrekk personident")
     val orgnr: String? = null,
+    @Deprecated("Skal ikke brukes, foretrekk personident")
+    val samhandlernr: String? = null,
     val tilordnetRessurs: String? = null,
     val beskrivelse: String? = null,
     val behandlingstema: String? = null,
