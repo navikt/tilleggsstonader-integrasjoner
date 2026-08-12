@@ -1,8 +1,8 @@
 package no.nav.tilleggsstonader.integrasjoner.oppgave.vent
 
+import no.nav.tilleggsstonader.integrasjoner.oppgave.testOppgave
 import no.nav.tilleggsstonader.integrasjoner.util.BrukerContextUtil.clearBrukerContext
 import no.nav.tilleggsstonader.integrasjoner.util.BrukerContextUtil.mockBrukerContext
-import no.nav.tilleggsstonader.kontrakter.oppgave.Oppgave
 import no.nav.tilleggsstonader.kontrakter.oppgave.vent.OppdaterPåVentRequest
 import no.nav.tilleggsstonader.kontrakter.oppgave.vent.SettPåVentRequest
 import no.nav.tilleggsstonader.kontrakter.oppgave.vent.TaAvVentRequest
@@ -52,7 +52,7 @@ class SettPåVentBeskrivelseUtilTest {
         fun `skal oppdatere beskrivelse med ny info og beholde eksisterende beskrivelse`() {
             val beskrivelse =
                 SettPåVentBeskrivelseUtil.settPåVent(
-                    Oppgave(id = 0, versjon = 0, beskrivelse = "tidligere beskrivelse", tilordnetRessurs = "a100"),
+                    testOppgave(id = 0, versjon = 0, beskrivelse = "tidligere beskrivelse", tilordnetRessurs = "a100"),
                     settPåVent,
                     tidspunkt,
                 )
@@ -75,7 +75,7 @@ class SettPåVentBeskrivelseUtilTest {
         fun `skal oppdatere beskrivelse med ny info og appende beskrivelse fra forrige oppgave`() {
             val beskrivelse =
                 SettPåVentBeskrivelseUtil.oppdaterSettPåVent(
-                    Oppgave(id = 0, versjon = 0, beskrivelse = "tidligere beskrivelse"),
+                    testOppgave(id = 0, versjon = 0, beskrivelse = "tidligere beskrivelse"),
                     oppdaterPåVent,
                     tidspunkt,
                 )
@@ -95,7 +95,7 @@ class SettPåVentBeskrivelseUtilTest {
             val frist = LocalDate.of(2023, 1, 1)
             val beskrivelse =
                 SettPåVentBeskrivelseUtil.oppdaterSettPåVent(
-                    Oppgave(id = 0, versjon = 0, beskrivelse = "tidligere beskrivelse", fristFerdigstillelse = frist),
+                    testOppgave(id = 0, versjon = 0, beskrivelse = "tidligere beskrivelse", fristFerdigstillelse = frist),
                     oppdaterPåVent,
                     tidspunkt,
                 )
@@ -113,7 +113,7 @@ class SettPåVentBeskrivelseUtilTest {
         fun `skal fjerne saksbehandler på oppgaven når man oppdaterer sett på vent`() {
             val beskrivelse =
                 SettPåVentBeskrivelseUtil.oppdaterSettPåVent(
-                    Oppgave(id = 0, versjon = 0, tilordnetRessurs = "a100"),
+                    testOppgave(id = 0, versjon = 0, tilordnetRessurs = "a100"),
                     oppdaterPåVent,
                     tidspunkt,
                 )
@@ -143,7 +143,7 @@ class SettPåVentBeskrivelseUtilTest {
         fun `skal oppdatere beskrivelse med ny info og appende beskrivelse fra forrige oppgave`() {
             val beskrivelse =
                 SettPåVentBeskrivelseUtil.taAvVent(
-                    Oppgave(id = 0, versjon = 0, beskrivelse = "tidligere beskrivelse", tilordnetRessurs = null),
+                    testOppgave(id = 0, versjon = 0, beskrivelse = "tidligere beskrivelse", tilordnetRessurs = null),
                     taAvVentRequest,
                     tidspunkt,
                 )

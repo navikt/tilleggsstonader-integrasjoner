@@ -4,13 +4,9 @@ import no.nav.tilleggsstonader.integrasjoner.oppgave.OppgaveClientFake
 import no.nav.tilleggsstonader.integrasjoner.oppgave.OppgaveService
 import no.nav.tilleggsstonader.integrasjoner.oppgave.OppgaveUtil.MAPPE_ID_KLAR
 import no.nav.tilleggsstonader.integrasjoner.oppgave.OppgaveUtil.MAPPE_ID_PÅ_VENT
+import no.nav.tilleggsstonader.integrasjoner.oppgave.testOpprettOppgaveRequest
 import no.nav.tilleggsstonader.integrasjoner.util.BrukerContextUtil.testWithBrukerContext
 import no.nav.tilleggsstonader.kontrakter.felles.Behandlingstema
-import no.nav.tilleggsstonader.kontrakter.felles.Tema
-import no.nav.tilleggsstonader.kontrakter.oppgave.IdentGruppe
-import no.nav.tilleggsstonader.kontrakter.oppgave.OppgaveIdentV2
-import no.nav.tilleggsstonader.kontrakter.oppgave.Oppgavetype
-import no.nav.tilleggsstonader.kontrakter.oppgave.OpprettOppgaveRequest
 import no.nav.tilleggsstonader.kontrakter.oppgave.vent.OppdaterPåVentRequest
 import no.nav.tilleggsstonader.kontrakter.oppgave.vent.SettPåVentRequest
 import no.nav.tilleggsstonader.kontrakter.oppgave.vent.TaAvVentRequest
@@ -57,12 +53,9 @@ class SettPåVentServiceTest {
     fun setUp() {
         oppgaveId =
             oppgaveService.opprettOppgave(
-                OpprettOppgaveRequest(
-                    ident = OppgaveIdentV2("", IdentGruppe.FOLKEREGISTERIDENT),
+                testOpprettOppgaveRequest(
                     enhetsnummer = "4462",
-                    tema = Tema.TSO,
                     behandlingstema = Behandlingstema.Læremidler.name,
-                    oppgavetype = Oppgavetype.BehandleSak,
                     fristFerdigstillelse = LocalDate.now(),
                     beskrivelse = "en beskrivelse",
                     tilordnetRessurs = dummySaksbehandler,

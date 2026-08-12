@@ -5,7 +5,7 @@ val javaVersion = JavaLanguageVersion.of(21)
 val tomcatVersion = "11.0.22"
 val springdocVersion = "3.1.0"
 val tilleggsstønaderLibsVersion = "2026.05.06-12.26.7cb4f43fb62a"
-val tilleggsstønaderKontrakterVersion = "2026.08.05-10.12.bd9fe22b2e75"
+val tilleggsstønaderKontrakterVersion = "2026.08.12-10.44.7c5db548d32f"
 val tokenSupportVersion = "6.0.11"
 val wiremockSpringVersion = "4.2.2"
 

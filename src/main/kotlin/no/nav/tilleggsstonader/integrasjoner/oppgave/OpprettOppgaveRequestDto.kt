@@ -8,22 +8,25 @@ import no.nav.tilleggsstonader.kontrakter.oppgave.OppgavePrioritet
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class OpprettOppgaveRequestDto(
+    val tema: Tema,
+    val oppgavetype: String,
+    val aktivDato: String,
+    val prioritet: OppgavePrioritet,
     val tildeltEnhetsnr: String? = null,
     val journalpostId: String? = null,
     val behandlesAvApplikasjon: String? = null,
     val saksreferanse: String? = null,
-    val samhandlernr: String? = null,
-    val aktoerId: String? = null,
     val personident: String? = null,
+    @Deprecated("Skal ikke brukes, foretrekk personident")
+    val aktoerId: String? = null,
+    @Deprecated("Skal ikke brukes, foretrekk personident")
     val orgnr: String? = null,
+    @Deprecated("Skal ikke brukes, foretrekk personident")
+    val samhandlernr: String? = null,
     val tilordnetRessurs: String? = null,
     val beskrivelse: String? = null,
-    val tema: Tema? = null,
     val behandlingstema: String? = null,
-    val oppgavetype: String? = null,
     val behandlingstype: String? = null,
     val mappeId: Long? = null,
     val fristFerdigstillelse: String? = null,
-    val aktivDato: String? = null,
-    val prioritet: OppgavePrioritet? = null,
 )

@@ -60,7 +60,7 @@ class OppgaveController(
     ): OppdatertOppgaveResponse {
         require(oppgaveId == oppgave.id) { "OppgaveId i path($oppgaveId) er ikke lik body(${oppgave.id})" }
         val oppgave = oppgaveService.patchOppgave(oppgave)
-        return OppdatertOppgaveResponse(oppgaveId = oppgaveId, versjon = oppgave.versjonEllerFeil())
+        return OppdatertOppgaveResponse(oppgaveId = oppgaveId, versjon = oppgave.versjon)
     }
 
     @PostMapping("/opprett")

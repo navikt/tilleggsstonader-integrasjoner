@@ -34,6 +34,7 @@ class SettPåVentService(
                 mappeId = of(mappe.id),
                 endretAvEnhetsnr = request.endretAvEnhetsnr,
             )
+
         val oppdatertOppgave = oppgaveService.patchOppgave(oppdaterOppgave)
         return SettPåVentResponse(oppgave.id, oppdatertOppgave.versjon)
     }

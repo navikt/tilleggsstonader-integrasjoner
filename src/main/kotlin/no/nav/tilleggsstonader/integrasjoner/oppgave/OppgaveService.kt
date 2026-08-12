@@ -102,7 +102,7 @@ class OppgaveService(
     fun opprettOppgave(request: OpprettOppgaveRequest): Long {
         val oppgave =
             OpprettOppgaveRequestDto(
-                personident = identHvisGruppe(request, IdentGruppe.FOLKEREGISTERIDENT),
+                personident = request.personident?.ident ?: identHvisGruppe(request, IdentGruppe.FOLKEREGISTERIDENT),
                 aktoerId = identHvisGruppe(request, IdentGruppe.AKTOERID),
                 orgnr = identHvisGruppe(request, IdentGruppe.ORGNR),
                 samhandlernr = identHvisGruppe(request, IdentGruppe.SAMHANDLERNR),
@@ -112,7 +112,7 @@ class OppgaveService(
                 tildeltEnhetsnr = request.enhetsnummer,
                 behandlingstema = request.behandlingstema,
                 fristFerdigstillelse = request.fristFerdigstillelse.format(DateTimeFormatter.ISO_DATE),
-                aktivDato = request.aktivFra.format(DateTimeFormatter.ISO_DATE),
+                aktivDato = request.aktivDato.format(DateTimeFormatter.ISO_DATE),
                 oppgavetype = request.oppgavetype.value,
                 beskrivelse = request.beskrivelse,
                 behandlingstype = request.behandlingstype,

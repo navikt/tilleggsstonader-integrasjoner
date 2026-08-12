@@ -18,7 +18,6 @@ import no.nav.tilleggsstonader.integrasjoner.IntegrationTest
 import no.nav.tilleggsstonader.integrasjoner.infrastruktur.exception.ApiExceptionHandler
 import no.nav.tilleggsstonader.integrasjoner.util.FileUtil.readFile
 import no.nav.tilleggsstonader.kontrakter.felles.JsonMapperProvider.jsonMapper
-import no.nav.tilleggsstonader.kontrakter.felles.Tema
 import no.nav.tilleggsstonader.kontrakter.oppgave.FinnMappeResponseDto
 import no.nav.tilleggsstonader.kontrakter.oppgave.IdentGruppe
 import no.nav.tilleggsstonader.kontrakter.oppgave.MappeDto
@@ -26,7 +25,6 @@ import no.nav.tilleggsstonader.kontrakter.oppgave.OppdatertOppgaveResponse
 import no.nav.tilleggsstonader.kontrakter.oppgave.Oppgave
 import no.nav.tilleggsstonader.kontrakter.oppgave.OppgaveIdentV2
 import no.nav.tilleggsstonader.kontrakter.oppgave.OppgaveResponse
-import no.nav.tilleggsstonader.kontrakter.oppgave.Oppgavetype
 import no.nav.tilleggsstonader.kontrakter.oppgave.OpprettOppgaveRequest
 import no.nav.tilleggsstonader.kontrakter.oppgave.StatusEnum
 import no.nav.tilleggsstonader.libs.log.SecureLogger.secureLogger
@@ -42,12 +40,11 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.test.context.TestPropertySource
 import org.springframework.web.client.exchange
-import java.time.LocalDate
 import java.util.Optional
 
 @TestPropertySource(properties = ["clients.oppgave.uri=http://localhost:28085"])
 class OppgaveControllerTest : IntegrationTest() {
-    val oppgave = Oppgave(id = OPPGAVE_ID, versjon = 0)
+    val oppgave = testOppgave(id = OPPGAVE_ID, versjon = 0)
 
     private val responseOk =
         aResponse()
@@ -100,13 +97,12 @@ class OppgaveControllerTest : IntegrationTest() {
         stubFor(patch(urlEqualTo("/api/v1/oppgaver/$OPPGAVE_ID")).willReturn(responseFerdigstilt))
 
         val oppgave =
-            Oppgave(
+            testOppgave(
                 id = OPPGAVE_ID,
                 versjon = 0,
                 aktoerId = "1234567891011",
                 journalpostId = "1",
                 beskrivelse = EKSTRA_BESKRIVELSE,
-                tema = null,
             )
 
         val response = patchOppgave(oppgave)
@@ -122,15 +118,9 @@ class OppgaveControllerTest : IntegrationTest() {
         )
 
         val opprettOppgave =
-            OpprettOppgaveRequest(
+            testOpprettOppgaveRequest(
                 ident = OppgaveIdentV2(ident = "123456789012", gruppe = IdentGruppe.AKTOERID),
-                fristFerdigstillelse = LocalDate.now().plusDays(3),
-                behandlingstema = "behandlingstema",
-                enhetsnummer = "enhetsnummer",
-                tema = Tema.TSO,
-                oppgavetype = Oppgavetype.BehandleSak,
                 mappeId = 1234L,
-                beskrivelse = "Oppgavetekst",
             )
         val response: ResponseEntity<OppgaveResponse> = opprettOppgave(opprettOppgave)
 
@@ -142,16 +132,7 @@ class OppgaveControllerTest : IntegrationTest() {
     fun `skal opprette oppgave uten ident, returnere oppgaveid og 201 Created`() {
         stubFor(post("/api/v1/oppgaver").willReturn(okJson(jsonMapper.writeValueAsString(oppgave))))
 
-        val opprettOppgave =
-            OpprettOppgaveRequest(
-                ident = null,
-                fristFerdigstillelse = LocalDate.now().plusDays(3),
-                behandlingstema = "behandlingstema",
-                enhetsnummer = "enhetsnummer",
-                tema = Tema.TSO,
-                oppgavetype = Oppgavetype.BehandleSak,
-                beskrivelse = "Oppgavetekst",
-            )
+        val opprettOppgave = testOpprettOppgaveRequest(ident = null)
         val response: ResponseEntity<OppgaveResponse> = opprettOppgave(opprettOppgave)
 
         assertThat(response.body?.oppgaveId).isEqualTo(OPPGAVE_ID)
@@ -166,14 +147,8 @@ class OppgaveControllerTest : IntegrationTest() {
             ),
         )
         val opprettOppgave =
-            OpprettOppgaveRequest(
+            testOpprettOppgaveRequest(
                 ident = OppgaveIdentV2(ident = "123456789012", gruppe = IdentGruppe.AKTOERID),
-                fristFerdigstillelse = LocalDate.now().plusDays(3),
-                behandlingstema = "behandlingstema",
-                enhetsnummer = "enhetsnummer",
-                tema = Tema.TSO,
-                oppgavetype = Oppgavetype.BehandleSak,
-                beskrivelse = "Oppgavetekst",
             )
         val exception =
             catchProblemDetailException {
@@ -245,7 +220,7 @@ class OppgaveControllerTest : IntegrationTest() {
                 .willReturn(
                     aResponse().withStatus(200).withHeader("Content-Type", "application/json").withBody(
                         jsonMapper.writeValueAsBytes(
-                            Oppgave(
+                            testOppgave(
                                 id = OPPGAVE_ID,
                                 versjon = 0,
                                 status = StatusEnum.FERDIGSTILT,
@@ -282,7 +257,7 @@ class OppgaveControllerTest : IntegrationTest() {
             assertThat(response.body?.versjon).isEqualTo(1)
             assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
 
-            val expectedJson = """{"id" : 315488374, "versjon": 0, "mappeId" : 100}"""
+            val expectedJson = jsonMapper.writeValueAsString(oppgave)
             verify(patchRequestedFor(anyUrl()).withRequestBody(equalToJson(expectedJson)))
         }
 
@@ -295,7 +270,7 @@ class OppgaveControllerTest : IntegrationTest() {
             assertThat(response.body?.versjon).isEqualTo(1)
             assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
 
-            val expectedJson = """{"id" : 315488374, "versjon": 0}"""
+            val expectedJson = jsonMapper.writeValueAsString(oppgave)
             verify(patchRequestedFor(anyUrl()).withRequestBody(equalToJson(expectedJson)))
         }
 
@@ -308,7 +283,7 @@ class OppgaveControllerTest : IntegrationTest() {
             assertThat(response.body?.versjon).isEqualTo(1)
             assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
 
-            val expectedJson = """{"id" : 315488374, "versjon": 0, "mappeId" : null}"""
+            val expectedJson = jsonMapper.writeValueAsString(oppgave)
             verify(patchRequestedFor(anyUrl()).withRequestBody(equalToJson(expectedJson)))
         }
     }
@@ -401,13 +376,12 @@ class OppgaveControllerTest : IntegrationTest() {
         )
 
         val oppgave =
-            Oppgave(
+            testOppgave(
                 id = OPPGAVE_ID,
                 versjon = 0,
                 aktoerId = "1234567891011",
                 journalpostId = "1",
                 beskrivelse = EKSTRA_BESKRIVELSE,
-                tema = null,
             )
 
         val exception =
@@ -433,13 +407,12 @@ class OppgaveControllerTest : IntegrationTest() {
         )
 
         val oppgave =
-            Oppgave(
+            testOppgave(
                 id = OPPGAVE_ID,
                 versjon = 0,
                 aktoerId = "1234567891011",
                 journalpostId = "1",
                 beskrivelse = EKSTRA_BESKRIVELSE,
-                tema = null,
             )
 
         val response: ResponseEntity<OppgaveResponse> =
@@ -469,13 +442,12 @@ class OppgaveControllerTest : IntegrationTest() {
         )
 
         val oppgave =
-            Oppgave(
+            testOppgave(
                 id = OPPGAVE_ID,
                 versjon = 0,
                 aktoerId = "1234567891011",
                 journalpostId = "1",
                 beskrivelse = EKSTRA_BESKRIVELSE,
-                tema = null,
             )
 
         val exception =
