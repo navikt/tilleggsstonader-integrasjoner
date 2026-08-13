@@ -102,7 +102,7 @@ class OppgaveService(
     fun opprettOppgave(request: OpprettOppgaveRequest): Long {
         val oppgave =
             OpprettOppgaveRequestDto(
-                personident = request.personident?.ident ?: identHvisGruppe(request, IdentGruppe.FOLKEREGISTERIDENT),
+                personident = request.personident?.ident,
                 aktoerId = identHvisGruppe(request, IdentGruppe.AKTOERID),
                 orgnr = identHvisGruppe(request, IdentGruppe.ORGNR),
                 samhandlernr = identHvisGruppe(request, IdentGruppe.SAMHANDLERNR),

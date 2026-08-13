@@ -5,10 +5,8 @@ import no.nav.tilleggsstonader.integrasjoner.oppgave.OppgaveUtil.MAPPE_ID_KLAR
 import no.nav.tilleggsstonader.integrasjoner.oppgave.OppgaveUtil.MAPPE_ID_PÅ_VENT
 import no.nav.tilleggsstonader.kontrakter.oppgave.FinnMappeRequest
 import no.nav.tilleggsstonader.kontrakter.oppgave.FinnMappeResponseDto
-import no.nav.tilleggsstonader.kontrakter.oppgave.IdentGruppe
 import no.nav.tilleggsstonader.kontrakter.oppgave.MappeDto
 import no.nav.tilleggsstonader.kontrakter.oppgave.Oppgave
-import no.nav.tilleggsstonader.kontrakter.oppgave.OppgaveIdentV2
 import no.nav.tilleggsstonader.kontrakter.oppgave.OppgaveMappe
 import no.nav.tilleggsstonader.kontrakter.oppgave.StatusEnum
 import java.net.URI
@@ -49,7 +47,6 @@ class OppgaveClientFake : OppgaveClient(URI.create("http://localhost"), mockk())
                 id = ++maxOppgaveId,
                 versjon = 1,
                 status = StatusEnum.OPPRETTET,
-                identer = listOf(OppgaveIdentV2(dto.personident!!, IdentGruppe.FOLKEREGISTERIDENT)),
                 personident = dto.personident,
                 tildeltEnhetsnr = dto.tildeltEnhetsnr ?: "4812",
                 saksreferanse = null,
