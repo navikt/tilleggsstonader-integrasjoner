@@ -84,4 +84,20 @@ fun Dokumenttype.tilMetadata(): Dokumentmetadata =
         Dokumenttype.REISE_TIL_SAMLING_TSO_INTERNT_VEDTAK -> ReiseTilSamlingTsoInterntVedtakMetadata
         Dokumenttype.REISE_TIL_SAMLING_TSO_KLAGE_VEDTAKSBREV -> ReiseTilSamlingTsoKlageVedtak
         Dokumenttype.REISE_TIL_SAMLING_TSO_KLAGE_INTERNT_VEDTAK -> ReiseTilSamlingTsoKlageInterntVedtak
+
+        Dokumenttype.FLYTTING_TSO_SØKNAD -> FlyttingTsoSøknadMetadata
+        Dokumenttype.FLYTTING_TSO_SØKNAD_VEDLEGG -> FlyttingTsoSøknadVedleggMetadata
+        Dokumenttype.FLYTTING_TSO_VEDTAKSBREV -> FlyttingTsoVedtaksbrevMetadata
+        Dokumenttype.FLYTTING_TSO_FRITTSTÅENDE_BREV -> FlyttingTsoFrittståendeBrevMetadata
+        Dokumenttype.FLYTTING_TSO_INTERNT_VEDTAK -> FlyttingTsoInterntVedtakMetadata
+        Dokumenttype.FLYTTING_TSO_KLAGE_VEDTAKSBREV -> FlyttingTsoKlageVedtak
+        Dokumenttype.FLYTTING_TSO_KLAGE_INTERNT_VEDTAK -> FlyttingTsoKlageInterntVedtak
+
+        Dokumenttype.FLYTTING_TSR_SØKNAD -> FlyttingTsrSøknadMetadata
+        Dokumenttype.FLYTTING_TSR_SØKNAD_VEDLEGG -> FlyttingTsrSøknadVedleggMetadata
+        Dokumenttype.FLYTTING_TSR_VEDTAKSBREV -> FlyttingTsrVedtaksbrevMetadata
+        Dokumenttype.FLYTTING_TSR_FRITTSTÅENDE_BREV -> FlyttingTsrFrittståendeBrevMetadata
+        Dokumenttype.FLYTTING_TSR_INTERNT_VEDTAK -> FlyttingTsrInterntVedtakMetadata
+        Dokumenttype.FLYTTING_TSR_KLAGE_VEDTAKSBREV -> FlyttingTsrKlageVedtak
+        Dokumenttype.FLYTTING_TSR_KLAGE_INTERNT_VEDTAK -> FlyttingTsrKlageInterntVedtak
     }
