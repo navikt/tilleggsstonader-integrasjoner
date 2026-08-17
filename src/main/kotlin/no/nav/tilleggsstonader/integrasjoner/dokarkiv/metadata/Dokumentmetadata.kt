@@ -77,13 +77,21 @@ fun Dokumenttype.tilMetadata(): Dokumentmetadata =
         Dokumenttype.DAGLIG_REISE_TSR_KJØRELISTE_VEDLEGG -> DagligReiseTsrKjørelisteVedlegg
 
         // Setter tema TSO som default, så er det opp til Sak å eventuelt endre dette før journalposten ferdigstilles.
-        Dokumenttype.REISE_TIL_SAMLING_SØKNAD -> ReiseTilSamlingTsoSøknadMetadata
-        Dokumenttype.REISE_TIL_SAMLING_SØKNAD_VEDLEGG -> ReiseTilSamlingTsoSøknadVedleggMetadata
+        Dokumenttype.REISE_TIL_SAMLING_TSO_SØKNAD -> ReiseTilSamlingTsoSøknadMetadata
+        Dokumenttype.REISE_TIL_SAMLING_TSO_SØKNAD_VEDLEGG -> ReiseTilSamlingTsoSøknadVedleggMetadata
         Dokumenttype.REISE_TIL_SAMLING_TSO_VEDTAKSBREV -> ReiseTilSamlingTsoVedtaksbrevMetadata
         Dokumenttype.REISE_TIL_SAMLING_TSO_FRITTSTÅENDE_BREV -> ReiseTilSamlingTsoFrittståendeBrevMetadata
         Dokumenttype.REISE_TIL_SAMLING_TSO_INTERNT_VEDTAK -> ReiseTilSamlingTsoInterntVedtakMetadata
         Dokumenttype.REISE_TIL_SAMLING_TSO_KLAGE_VEDTAKSBREV -> ReiseTilSamlingTsoKlageVedtak
         Dokumenttype.REISE_TIL_SAMLING_TSO_KLAGE_INTERNT_VEDTAK -> ReiseTilSamlingTsoKlageInterntVedtak
+
+        Dokumenttype.REISE_TIL_SAMLING_TSR_SØKNAD -> ReiseTilSamlingTsrSøknadMetadata
+        Dokumenttype.REISE_TIL_SAMLING_TSR_SØKNAD_VEDLEGG -> ReiseTilSamlingTsrSøknadVedleggMetadata
+        Dokumenttype.REISE_TIL_SAMLING_TSR_VEDTAKSBREV -> ReiseTilSamlingTsrVedtaksbrevMetadata
+        Dokumenttype.REISE_TIL_SAMLING_TSR_FRITTSTÅENDE_BREV -> ReiseTilSamlingTsrFrittståendeBrevMetadata
+        Dokumenttype.REISE_TIL_SAMLING_TSR_INTERNT_VEDTAK -> ReiseTilSamlingTsrInterntVedtakMetadata
+        Dokumenttype.REISE_TIL_SAMLING_TSR_KLAGE_VEDTAKSBREV -> ReiseTilSamlingTsrKlageVedtak
+        Dokumenttype.REISE_TIL_SAMLING_TSR_KLAGE_INTERNT_VEDTAK -> ReiseTilSamlingTsrKlageInterntVedtak
 
         Dokumenttype.FLYTTING_TSO_SØKNAD -> FlyttingTsoSøknadMetadata
         Dokumenttype.FLYTTING_TSO_SØKNAD_VEDLEGG -> FlyttingTsoSøknadVedleggMetadata
