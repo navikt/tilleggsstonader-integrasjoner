@@ -96,7 +96,7 @@ class SettPåVentServiceTest {
             testWithBrukerContext {
                 assertThatThrownBy {
                     settPåVentService.settPåVent(settPåVent(oppgaveId!!))
-                }.hasMessageContaining("Kan ikke sette behandling på vent når man ikke er eier av oppgaven.")
+                }.hasMessageContaining("Kan ikke sette behandling på vent når noen andre eier oppgaven")
             }
         }
     }
@@ -137,12 +137,12 @@ class SettPåVentServiceTest {
         @Test
         fun `skal feile hvis man ikke er eier av oppgaven`() {
             testWithBrukerContext(dummySaksbehandler) {
-                settPåVentService.settPåVent(settPåVent(oppgaveId!!))
+                settPåVentService.settPåVent(settPåVent(oppgaveId!!).copy(beholdOppgave = true))
             }
             testWithBrukerContext {
                 assertThatThrownBy {
-                    settPåVentService.oppdaterSettPåVent(oppdaterSettPåVentDto(oppgaveId!!, versjon = 3))
-                }.hasMessageContaining("Kan ikke oppdatere behandling på vent når man ikke er eier av oppgaven.")
+                    settPåVentService.oppdaterSettPåVent(oppdaterSettPåVentDto(oppgaveId!!, versjon = 2))
+                }.hasMessageContaining("Kan ikke oppdatere behandling på vent når noen andre eier oppgaven")
             }
         }
     }

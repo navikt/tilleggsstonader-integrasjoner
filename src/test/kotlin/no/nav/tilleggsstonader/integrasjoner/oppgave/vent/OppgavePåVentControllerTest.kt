@@ -84,7 +84,7 @@ class OppgavePåVentControllerTest : IntegrationTest() {
                 }
 
             assertThat(exception.httpStatus).isEqualTo(HttpStatus.BAD_REQUEST)
-            assertThat(exception.detail.detail).contains("Kan ikke sette behandling på vent når man ikke er eier av oppgaven.")
+            assertThat(exception.detail.detail).contains("Kan ikke sette behandling på vent når noen andre eier oppgaven")
         }
     }
 
@@ -136,7 +136,7 @@ class OppgavePåVentControllerTest : IntegrationTest() {
                 }
 
             assertThat(exception.httpStatus).isEqualTo(HttpStatus.BAD_REQUEST)
-            assertThat(exception.detail.detail).contains("Kan ikke oppdatere behandling på vent når man ikke er eier av oppgaven.")
+            assertThat(exception.detail.detail).contains("Kan ikke oppdatere behandling på vent når noen andre eier oppgaven")
         }
     }
 
