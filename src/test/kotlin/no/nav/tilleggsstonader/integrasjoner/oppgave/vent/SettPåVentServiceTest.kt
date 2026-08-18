@@ -218,7 +218,7 @@ class SettPåVentServiceTest {
             testWithBrukerContext {
                 assertThatThrownBy {
                     settPåVentService.taAvVent(taAvVent(oppgaveId!!))
-                }.hasMessageContaining("Kan ikke ta behandling av vent når man ikke er eier av oppgaven.")
+                }.hasMessageContaining("Kan ikke ta behandling av vent når noen andre eier oppgaven")
             }
         }
 

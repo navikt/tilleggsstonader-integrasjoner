@@ -59,7 +59,10 @@ class SettPåVentService(
 
     fun taAvVent(request: TaAvVentRequest): SettPåVentResponse {
         val oppgave = oppgaveService.hentOppgave(request.oppgaveId)
-        feilHvisIkkeEierAvOppgaven(oppgave, "Kan ikke ta behandling av vent når man ikke er eier av oppgaven.")
+        if (oppgave.tilordnetRessurs != null) {
+            feilHvisIkkeEierAvOppgaven(oppgave, "Kan ikke ta behandling av vent når noen andre eier oppgaven")
+        }
+
         val tilordnetRessurs =
             if (SikkerhetsContext.erSaksbehandler() && request.beholdOppgave) {
                 SikkerhetsContext.hentSaksbehandler()
