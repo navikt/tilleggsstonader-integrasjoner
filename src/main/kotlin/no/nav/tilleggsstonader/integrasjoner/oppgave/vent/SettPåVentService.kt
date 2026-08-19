@@ -20,7 +20,9 @@ class SettPåVentService(
 ) {
     fun settPåVent(request: SettPåVentRequest): SettPåVentResponse {
         val oppgave = hentOppgave(request.oppgaveId)
-        feilHvisIkkeEierAvOppgaven(oppgave, "Kan ikke sette behandling på vent når man ikke er eier av oppgaven.")
+        if (oppgave.tilordnetRessurs != null) {
+            feilHvisIkkeEierAvOppgaven(oppgave, "Kan ikke sette behandling på vent når noen andre eier oppgaven")
+        }
 
         val enhet = oppgave.tildeltEnhetsnr ?: error("Oppgave=${oppgave.id} mangler enhetsnummer")
         val mappe = oppgaveService.finnMappe(enhet, OppgaveMappe.PÅ_VENT)
@@ -41,7 +43,12 @@ class SettPåVentService(
 
     fun oppdaterSettPåVent(request: OppdaterPåVentRequest): SettPåVentResponse {
         val oppgave = oppgaveService.hentOppgave(request.oppgaveId)
-        feilHvisIkkeEierAvOppgaven(oppgave, "Kan ikke oppdatere behandling på vent når man ikke er eier av oppgaven.")
+        if (oppgave.tilordnetRessurs != null) {
+            feilHvisIkkeEierAvOppgaven(
+                oppgave,
+                "Kan ikke oppdatere behandling på vent når noen andre eier oppgaven",
+            )
+        }
         val oppdaterOppgave =
             Oppgave(
                 id = request.oppgaveId,
@@ -59,7 +66,10 @@ class SettPåVentService(
 
     fun taAvVent(request: TaAvVentRequest): SettPåVentResponse {
         val oppgave = oppgaveService.hentOppgave(request.oppgaveId)
-        feilHvisIkkeEierAvOppgaven(oppgave, "Kan ikke ta behandling av vent når man ikke er eier av oppgaven.")
+        if (oppgave.tilordnetRessurs != null) {
+            feilHvisIkkeEierAvOppgaven(oppgave, "Kan ikke ta behandling av vent når noen andre eier oppgaven")
+        }
+
         val tilordnetRessurs =
             if (SikkerhetsContext.erSaksbehandler() && request.beholdOppgave) {
                 SikkerhetsContext.hentSaksbehandler()
