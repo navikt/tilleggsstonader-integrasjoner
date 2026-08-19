@@ -6,7 +6,7 @@ val tomcatVersion = "11.0.22"
 val springdocVersion = "3.1.0"
 val tilleggsstønaderLibsVersion = "2026.05.06-12.26.7cb4f43fb62a"
 val tilleggsstønaderKontrakterVersion = "2026.08.18-10.22.815df0ee133f"
-val tokenSupportVersion = "6.0.11"
+val tokenSupportVersion = "6.0.12"
 val wiremockSpringVersion = "4.2.2"
 
 val mockkVersion = "1.14.11"
@@ -17,14 +17,14 @@ version = "1.0.0"
 plugins {
     application
 
-    kotlin("jvm") version "2.3.21"
+    kotlin("jvm") version "2.4.10"
     id("com.diffplug.spotless") version "8.9.0"
-    id("io.github.ben-manes.versions") version "0.59.0"
+    id("io.github.ben-manes.versions") version "0.61.0"
     id("se.patrikerdes.use-latest-versions") version "0.2.19"
 
     id("org.springframework.boot") version "4.1.0"
     id("io.spring.dependency-management") version "1.1.7"
-    kotlin("plugin.spring") version "2.3.21"
+    kotlin("plugin.spring") version "2.4.10"
 }
 
 repositories {
@@ -51,9 +51,9 @@ configurations.all {
     resolutionStrategy {
         failOnNonReproducibleResolution()
         force(
-            "org.bouncycastle:bcutil-jdk18on:1.85",
-            "org.bouncycastle:bcprov-jdk18on:1.85",
-            "org.bouncycastle:bcpkix-jdk18on:1.85",
+            "org.bouncycastle:bcutil-jdk18on:1.85.2",
+            "org.bouncycastle:bcprov-jdk18on:1.85.2",
+            "org.bouncycastle:bcpkix-jdk18on:1.85.2",
         )
     }
 }
