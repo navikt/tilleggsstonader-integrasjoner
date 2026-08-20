@@ -17,12 +17,6 @@ data class OpprettOppgaveRequestDto(
     val behandlesAvApplikasjon: String? = null,
     val saksreferanse: String? = null,
     val personident: String? = null,
-    @Deprecated("Skal ikke brukes, foretrekk personident")
-    val aktoerId: String? = null,
-    @Deprecated("Skal ikke brukes, foretrekk personident")
-    val orgnr: String? = null,
-    @Deprecated("Skal ikke brukes, foretrekk personident")
-    val samhandlernr: String? = null,
     val tilordnetRessurs: String? = null,
     val beskrivelse: String? = null,
     val behandlingstema: String? = null,

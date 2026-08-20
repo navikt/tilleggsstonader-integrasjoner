@@ -189,7 +189,7 @@ class OppgaveClient(
             .runCatching { restTemplate.postForEntity<Oppgave>(uri, dto, httpHeaders()) }
             .map { it.id }
             .onFailure {
-                var feilmelding = "Feil ved oppretting av oppgave for ${dto.aktoerId}."
+                var feilmelding = "Feil ved oppretting av oppgave for ${dto.personident}."
                 if (it is HttpStatusCodeException) {
                     feilmelding += " Response fra oppgave = ${it.responseBodyAsString}"
                 }

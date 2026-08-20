@@ -1,9 +1,7 @@
 package no.nav.tilleggsstonader.integrasjoner.oppgave
 
 import no.nav.tilleggsstonader.kontrakter.felles.Tema
-import no.nav.tilleggsstonader.kontrakter.oppgave.IdentGruppe
 import no.nav.tilleggsstonader.kontrakter.oppgave.Oppgave
-import no.nav.tilleggsstonader.kontrakter.oppgave.OppgaveIdentV2
 import no.nav.tilleggsstonader.kontrakter.oppgave.OppgavePrioritet
 import no.nav.tilleggsstonader.kontrakter.oppgave.Oppgavetype
 import no.nav.tilleggsstonader.kontrakter.oppgave.OpprettOppgaveRequest
@@ -52,8 +50,7 @@ fun testOppgave(
     )
 
 fun testOpprettOppgaveRequest(
-    personident: PersonIdent = PersonIdent(DEFAULT_PERSONIDENT),
-    ident: OppgaveIdentV2? = OppgaveIdentV2(ident = DEFAULT_AKTOERID, gruppe = IdentGruppe.AKTOERID),
+    personident: PersonIdent? = PersonIdent(DEFAULT_PERSONIDENT),
     tema: Tema = Tema.TSO,
     oppgavetype: Oppgavetype = Oppgavetype.BehandleSak,
     prioritet: OppgavePrioritet = OppgavePrioritet.NORM,
@@ -71,7 +68,6 @@ fun testOpprettOppgaveRequest(
 ): OpprettOppgaveRequest =
     OpprettOppgaveRequest(
         personident = personident,
-        ident = ident,
         tema = tema,
         oppgavetype = oppgavetype,
         prioritet = prioritet,
