@@ -19,13 +19,12 @@ import no.nav.tilleggsstonader.integrasjoner.infrastruktur.exception.ApiExceptio
 import no.nav.tilleggsstonader.integrasjoner.util.FileUtil.readFile
 import no.nav.tilleggsstonader.kontrakter.felles.JsonMapperProvider.jsonMapper
 import no.nav.tilleggsstonader.kontrakter.oppgave.FinnMappeResponseDto
-import no.nav.tilleggsstonader.kontrakter.oppgave.IdentGruppe
 import no.nav.tilleggsstonader.kontrakter.oppgave.MappeDto
 import no.nav.tilleggsstonader.kontrakter.oppgave.OppdatertOppgaveResponse
 import no.nav.tilleggsstonader.kontrakter.oppgave.Oppgave
-import no.nav.tilleggsstonader.kontrakter.oppgave.OppgaveIdentV2
 import no.nav.tilleggsstonader.kontrakter.oppgave.OppgaveResponse
 import no.nav.tilleggsstonader.kontrakter.oppgave.OpprettOppgaveRequest
+import no.nav.tilleggsstonader.kontrakter.oppgave.PersonIdent
 import no.nav.tilleggsstonader.kontrakter.oppgave.StatusEnum
 import no.nav.tilleggsstonader.libs.log.SecureLogger.secureLogger
 import no.nav.tilleggsstonader.libs.test.httpclient.ProblemDetailUtil.catchProblemDetailException
@@ -119,7 +118,7 @@ class OppgaveControllerTest : IntegrationTest() {
 
         val opprettOppgave =
             testOpprettOppgaveRequest(
-                ident = OppgaveIdentV2(ident = "123456789012", gruppe = IdentGruppe.AKTOERID),
+                personident = PersonIdent(ident = "123456789012"),
                 mappeId = 1234L,
             )
         val response: ResponseEntity<OppgaveResponse> = opprettOppgave(opprettOppgave)
@@ -132,7 +131,7 @@ class OppgaveControllerTest : IntegrationTest() {
     fun `skal opprette oppgave uten ident, returnere oppgaveid og 201 Created`() {
         stubFor(post("/api/v1/oppgaver").willReturn(okJson(jsonMapper.writeValueAsString(oppgave))))
 
-        val opprettOppgave = testOpprettOppgaveRequest(ident = null)
+        val opprettOppgave = testOpprettOppgaveRequest(personident = null)
         val response: ResponseEntity<OppgaveResponse> = opprettOppgave(opprettOppgave)
 
         assertThat(response.body?.oppgaveId).isEqualTo(OPPGAVE_ID)
@@ -148,7 +147,7 @@ class OppgaveControllerTest : IntegrationTest() {
         )
         val opprettOppgave =
             testOpprettOppgaveRequest(
-                ident = OppgaveIdentV2(ident = "123456789012", gruppe = IdentGruppe.AKTOERID),
+                personident = PersonIdent(ident = "123456789012"),
             )
         val exception =
             catchProblemDetailException {
