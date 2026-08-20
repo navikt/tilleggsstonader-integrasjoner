@@ -74,7 +74,7 @@ class SafClient(
                     SafFagsakVariabler(
                         SafFagsakInput(
                             fagsakId = fagsakId,
-                            fagsaksystem = Fagsystem.TILLEGGSSTONADER.navn,
+                            fagsaksystem = Fagsystem.TILLEGGSSTONADER.toString(),
                         ),
                     ),
                 query = graphqlQuery("/saf/journalposterForFagsak.graphql"),
