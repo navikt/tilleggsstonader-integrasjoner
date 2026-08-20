@@ -61,6 +61,25 @@ class HentJournalpostControllerTest : IntegrationTest() {
     }
 
     @Test
+    fun `hent journalposterForFagsak skal returnere journalposter og status ok`() {
+        stubGraphqlEndpoint("saf/gyldigJournalposterForFagsakResponse.json")
+        val fagsakId = "12345"
+
+        val response =
+            restTemplate.exchange<List<Journalpost>>(
+                localhost(JOURNALPOST_BASE_URL) + "/fagsak",
+                HttpMethod.POST,
+                HttpEntity(fagsakId, headers),
+            )
+
+        assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+        assertThat(response.body).hasSize(1)
+        assertThat(response.body?.first()?.journalpostId).isEqualTo("453492634")
+        assertThat(response.body?.first()?.journalposttype).isEqualTo(Journalposttype.I)
+        assertThat(response.body?.first()?.journalstatus).isEqualTo(Journalstatus.JOURNALFOERT)
+    }
+
+    @Test
     fun `hent saksnummer skal returnere saksnummer og status ok`() {
         stubGraphqlEndpoint("saf/gyldigsakresponse.json", expectedRequestBody = gyldigJournalPostIdRequest())
 

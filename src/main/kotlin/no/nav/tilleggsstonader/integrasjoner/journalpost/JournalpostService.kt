@@ -28,6 +28,8 @@ class JournalpostService
         fun finnJournalposter(journalposterForBrukerRequest: JournalposterForBrukerRequest): List<Journalpost> =
             safClient.finnJournalposter(journalposterForBrukerRequest)
 
+        fun finnJournalposterForFagsak(fagsakId: String): List<Journalpost> = safClient.finnJournalposterForFagsak(fagsakId)
+
         fun hentDokument(
             journalpostId: String,
             dokumentInfoId: String,
