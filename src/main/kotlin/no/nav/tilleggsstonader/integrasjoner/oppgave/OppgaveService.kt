@@ -9,7 +9,6 @@ import no.nav.tilleggsstonader.kontrakter.oppgave.FinnMappeRequest
 import no.nav.tilleggsstonader.kontrakter.oppgave.FinnMappeResponseDto
 import no.nav.tilleggsstonader.kontrakter.oppgave.FinnOppgaveRequest
 import no.nav.tilleggsstonader.kontrakter.oppgave.FinnOppgaveResponseDto
-import no.nav.tilleggsstonader.kontrakter.oppgave.IdentGruppe
 import no.nav.tilleggsstonader.kontrakter.oppgave.MappeDto
 import no.nav.tilleggsstonader.kontrakter.oppgave.Oppgave
 import no.nav.tilleggsstonader.kontrakter.oppgave.OppgaveMappe
@@ -103,9 +102,6 @@ class OppgaveService(
         val oppgave =
             OpprettOppgaveRequestDto(
                 personident = request.personident?.ident,
-                aktoerId = identHvisGruppe(request, IdentGruppe.AKTOERID),
-                orgnr = identHvisGruppe(request, IdentGruppe.ORGNR),
-                samhandlernr = identHvisGruppe(request, IdentGruppe.SAMHANDLERNR),
                 journalpostId = request.journalpostId,
                 prioritet = request.prioritet,
                 tema = request.tema,
@@ -133,11 +129,6 @@ class OppgaveService(
 
         error("Ident=$id er ugyldig")
     }
-
-    private fun identHvisGruppe(
-        request: OpprettOppgaveRequest,
-        identGruppe: IdentGruppe,
-    ) = if (request.ident?.gruppe == identGruppe) request.ident!!.ident else null
 
     fun ferdigstill(
         oppgaveId: Long,
