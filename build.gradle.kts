@@ -5,7 +5,7 @@ val javaVersion = JavaLanguageVersion.of(21)
 val tomcatVersion = "11.0.22"
 val springdocVersion = "3.1.0"
 val tilleggsstønaderLibsVersion = "2026.05.06-12.26.7cb4f43fb62a"
-val tilleggsstønaderKontrakterVersion = "2026.08.18-10.22.815df0ee133f"
+val tilleggsstønaderKontrakterVersion = "2026.08.24-15.57.1d77ef8050e5"
 val tokenSupportVersion = "6.0.12"
 val wiremockSpringVersion = "4.2.2"
 
@@ -82,10 +82,10 @@ dependencies {
     implementation("no.nav.tilleggsstonader.kontrakter:kontrakter-felles:$tilleggsstønaderKontrakterVersion")
 
     // Token-support
-    implementation("no.nav.security:token-validation-spring:${tokenSupportVersion}")
-    implementation("no.nav.security:token-validation-core:${tokenSupportVersion}")
-    implementation("no.nav.security:token-client-core:${tokenSupportVersion}")
-    implementation("no.nav.security:token-client-spring:${tokenSupportVersion}")
+    implementation("no.nav.security:token-validation-spring:$tokenSupportVersion")
+    implementation("no.nav.security:token-validation-core:$tokenSupportVersion")
+    implementation("no.nav.security:token-client-core:$tokenSupportVersion")
+    implementation("no.nav.security:token-client-spring:$tokenSupportVersion")
 
     // Test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
