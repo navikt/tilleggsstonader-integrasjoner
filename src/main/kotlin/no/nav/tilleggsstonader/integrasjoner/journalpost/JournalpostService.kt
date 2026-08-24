@@ -25,8 +25,8 @@ class JournalpostService
 
         fun hentJournalpost(journalpostId: String): Journalpost = safClient.hentJournalpost(journalpostId)
 
-        fun finnJournalposter(journalposterForBrukerRequest: JournalposterForBrukerRequest): List<Journalpost> =
-            safClient.finnJournalposter(journalposterForBrukerRequest)
+        fun finnJournalposterForBruker(journalposterForBrukerRequest: JournalposterForBrukerRequest): List<Journalpost> =
+            safClient.finnJournalposterForBruker(journalposterForBrukerRequest)
 
         fun finnJournalposterForFagsak(fagsakId: String): List<Journalpost> = safClient.finnJournalposterForFagsak(fagsakId)
 

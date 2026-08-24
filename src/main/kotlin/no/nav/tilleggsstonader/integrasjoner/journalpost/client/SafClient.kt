@@ -85,68 +85,54 @@ class SafClient(
                 payload = safJournalpostRequest,
                 httpHeaders = httpHeaders(),
             )
-
-        if (!response.harFeil()) {
-            return response.data?.dokumentoversiktFagsak?.journalposter
-                ?: throw JournalpostRequestException(
-                    message = "Kan ikke hente journalposter for fagsak",
-                    cause = null,
-                    safJournalpostRequest = safJournalpostRequest,
-                )
-        } else {
-            val tilgangFeil =
-                response.errors?.firstOrNull { it.message.contains("Tilgang til ressurs ble avvist") }
-
-            if (tilgangFeil != null) {
-                throw JournalpostForbiddenException(tilgangFeil.message)
-            } else {
-                throw JournalpostRequestException(
-                    message = "Kan ikke hente journalposter for fagsak " + response.errors?.toString(),
-                    cause = null,
-                    safJournalpostRequest = safJournalpostRequest,
-                )
-            }
-        }
+        return håndterJournalpostResponse(
+            response = response,
+            hentJournalposter = { it?.dokumentoversiktFagsak?.journalposter },
+            request = safJournalpostRequest,
+        )
     }
 
-    fun finnJournalposter(journalposterForBrukerRequest: JournalposterForBrukerRequest): List<Journalpost> {
+    fun finnJournalposterForBruker(journalposterForBrukerRequest: JournalposterForBrukerRequest): List<Journalpost> {
         val safJournalpostRequest =
             SafJournalpostRequest(
                 journalposterForBrukerRequest,
                 graphqlQuery("/saf/journalposterForBruker.graphql"),
             )
-        return finnJournalposter(safJournalpostRequest)
-    }
-
-    fun finnJournalposter(safJournalpostRequest: SafJournalpostRequest): List<Journalpost> {
         val response =
             restTemplate.postForEntity<SafJournalpostResponse<SafJournalpostBrukerData>>(
                 uri = safUri,
                 payload = safJournalpostRequest,
                 httpHeaders = httpHeaders(),
             )
+        return håndterJournalpostResponse(
+            response = response,
+            hentJournalposter = { it?.dokumentoversiktBruker?.journalposter },
+            request = safJournalpostRequest,
+        )
+    }
 
+    private fun <T> håndterJournalpostResponse(
+        response: SafJournalpostResponse<T>,
+        hentJournalposter: (T?) -> List<Journalpost>?,
+        request: SafJournalpostRequest,
+    ): List<Journalpost> {
         if (!response.harFeil()) {
-            return response.data?.dokumentoversiktBruker?.journalposter
+            return hentJournalposter(response.data)
                 ?: throw JournalpostRequestException(
                     message = "Kan ikke hente journalposter",
                     cause = null,
-                    safJournalpostRequest = safJournalpostRequest,
+                    safJournalpostRequest = request,
                 )
-        } else {
-            val tilgangFeil =
-                response.errors?.firstOrNull { it.message.contains("Tilgang til ressurs ble avvist") }
-
-            if (tilgangFeil != null) {
-                throw JournalpostForbiddenException(tilgangFeil.message)
-            } else {
-                throw JournalpostRequestException(
-                    message = "Kan ikke hente journalposter " + response.errors?.toString(),
-                    cause = null,
-                    safJournalpostRequest = safJournalpostRequest,
-                )
-            }
         }
+        val tilgangFeil = response.errors?.firstOrNull { it.message.contains("Tilgang til ressurs ble avvist") }
+        if (tilgangFeil != null) {
+            throw JournalpostForbiddenException(tilgangFeil.message)
+        }
+        throw JournalpostRequestException(
+            message = "Kan ikke hente journalposter " + response.errors?.toString(),
+            cause = null,
+            safJournalpostRequest = request,
+        )
     }
 
     private fun httpHeaders(): HttpHeaders =

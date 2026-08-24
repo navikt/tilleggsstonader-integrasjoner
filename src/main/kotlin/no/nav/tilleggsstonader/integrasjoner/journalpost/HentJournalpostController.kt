@@ -89,9 +89,9 @@ class HentJournalpostController(
     @PostMapping
     fun hentJournalpostForBruker(
         @RequestBody journalposterForBrukerRequest: JournalposterForBrukerRequest,
-    ): List<Journalpost> = journalpostService.finnJournalposter(journalposterForBrukerRequest)
+    ): List<Journalpost> = journalpostService.finnJournalposterForBruker(journalposterForBrukerRequest)
 
-    @PostMapping("fagsak/{fagsakId}")
+    @GetMapping("fagsak/{fagsakId}")
     fun hentJournalposterForFagsak(
         @PathVariable fagsakId: String,
     ): List<Journalpost> = journalpostService.finnJournalposterForFagsak(fagsakId)

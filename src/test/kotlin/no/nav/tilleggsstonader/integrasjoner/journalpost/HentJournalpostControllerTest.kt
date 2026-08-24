@@ -67,9 +67,9 @@ class HentJournalpostControllerTest : IntegrationTest() {
 
         val response =
             restTemplate.exchange<List<Journalpost>>(
-                localhost(JOURNALPOST_BASE_URL) + "/fagsak",
-                HttpMethod.POST,
-                HttpEntity(fagsakId, headers),
+                localhost(JOURNALPOST_BASE_URL) + "/fagsak/$fagsakId",
+                HttpMethod.GET,
+                HttpEntity<String>(headers),
             )
 
         assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
