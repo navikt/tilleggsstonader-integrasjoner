@@ -1,5 +1,5 @@
-query journalposterForFagsak($fagsak: FagsakInput!) {
-    dokumentoversiktFagsak(fagsak: $fagsak) {
+query journalposterForFagsak($fagsak: FagsakInput!, $antall: Int!) {
+    dokumentoversiktFagsak(fagsak: $fagsak, foerste: $antall) {
         journalposter {
             journalpostId
             journalposttype
