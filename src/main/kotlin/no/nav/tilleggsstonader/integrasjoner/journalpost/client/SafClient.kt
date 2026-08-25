@@ -17,6 +17,7 @@ import no.nav.tilleggsstonader.integrasjoner.util.graphqlQuery
 import no.nav.tilleggsstonader.kontrakter.felles.Fagsystem
 import no.nav.tilleggsstonader.kontrakter.journalpost.Journalpost
 import no.nav.tilleggsstonader.kontrakter.journalpost.JournalposterForBrukerRequest
+import no.nav.tilleggsstonader.kontrakter.journalpost.Journalposttype
 import no.nav.tilleggsstonader.libs.http.client.postForEntity
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
@@ -67,15 +68,20 @@ class SafClient(
         }
     }
 
-    fun finnJournalposterForFagsak(fagsakId: String): List<Journalpost> {
+    fun finnJournalposterForFagsak(
+        fagsakId: String,
+        journalposttyper: List<Journalposttype> = emptyList(),
+    ): List<Journalpost> {
         val safJournalpostRequest =
             SafJournalpostRequest(
                 variables =
                     SafFagsakVariabler(
-                        SafFagsakInput(
-                            fagsakId = fagsakId,
-                            fagsaksystem = Fagsystem.TILLEGGSSTONADER.toString(),
-                        ),
+                        fagsak =
+                            SafFagsakInput(
+                                fagsakId = fagsakId,
+                                fagsaksystem = Fagsystem.TILLEGGSSTONADER.toString(),
+                            ),
+                        journalposttype = journalposttyper,
                     ),
                 query = graphqlQuery("/saf/journalposterForFagsak.graphql"),
             )

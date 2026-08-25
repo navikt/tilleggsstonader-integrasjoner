@@ -4,6 +4,7 @@ import no.nav.tilleggsstonader.integrasjoner.journalpost.client.SafClient
 import no.nav.tilleggsstonader.integrasjoner.journalpost.client.SafHentDokumentClient
 import no.nav.tilleggsstonader.kontrakter.journalpost.Journalpost
 import no.nav.tilleggsstonader.kontrakter.journalpost.JournalposterForBrukerRequest
+import no.nav.tilleggsstonader.kontrakter.journalpost.Journalposttype
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
@@ -28,7 +29,10 @@ class JournalpostService
         fun finnJournalposterForBruker(journalposterForBrukerRequest: JournalposterForBrukerRequest): List<Journalpost> =
             safClient.finnJournalposterForBruker(journalposterForBrukerRequest)
 
-        fun finnJournalposterForFagsak(fagsakId: String): List<Journalpost> = safClient.finnJournalposterForFagsak(fagsakId)
+        fun finnJournalposterForFagsak(
+            fagsakId: String,
+            journalposttyper: List<Journalposttype> = emptyList(),
+        ): List<Journalpost> = safClient.finnJournalposterForFagsak(fagsakId, journalposttyper)
 
         fun hentDokument(
             journalpostId: String,

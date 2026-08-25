@@ -1,5 +1,7 @@
 package no.nav.tilleggsstonader.integrasjoner.journalpost.internal
 
+import no.nav.tilleggsstonader.kontrakter.journalpost.Journalposttype
+
 data class SafRequestVariabler(
     val journalpostId: String,
 )
@@ -12,6 +14,7 @@ data class SafJournalpostRequest(
 data class SafFagsakVariabler(
     val fagsak: SafFagsakInput,
     val antall: Int = 200,
+    val journalposttype: List<Journalposttype> = emptyList(),
 )
 
 data class SafFagsakInput(

@@ -80,6 +80,28 @@ class HentJournalpostControllerTest : IntegrationTest() {
     }
 
     @Test
+    fun `hent journalposterForFagsak med journalposttype-filter skal returnere journalposter og status ok`() {
+        stubGraphqlEndpoint("saf/gyldigJournalposterForFagsakResponse.json")
+        val fagsakId = "12345"
+
+        val uri =
+            UriComponentsBuilder
+                .fromUriString(localhost(JOURNALPOST_BASE_URL) + "/fagsak/$fagsakId")
+                .queryParam("journalposttype", Journalposttype.I, Journalposttype.U)
+                .toUriString()
+
+        val response =
+            restTemplate.exchange<List<Journalpost>>(
+                uri,
+                HttpMethod.GET,
+                HttpEntity<String>(headers),
+            )
+
+        assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+        assertThat(response.body).hasSize(1)
+    }
+
+    @Test
     fun `hent saksnummer skal returnere saksnummer og status ok`() {
         stubGraphqlEndpoint("saf/gyldigsakresponse.json", expectedRequestBody = gyldigJournalPostIdRequest())
 

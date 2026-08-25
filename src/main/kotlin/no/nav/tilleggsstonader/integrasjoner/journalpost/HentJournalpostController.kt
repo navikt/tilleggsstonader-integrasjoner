@@ -3,6 +3,7 @@ package no.nav.tilleggsstonader.integrasjoner.journalpost
 import no.nav.security.token.support.core.api.ProtectedWithClaims
 import no.nav.tilleggsstonader.kontrakter.journalpost.Journalpost
 import no.nav.tilleggsstonader.kontrakter.journalpost.JournalposterForBrukerRequest
+import no.nav.tilleggsstonader.kontrakter.journalpost.Journalposttype
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ProblemDetail
@@ -94,7 +95,8 @@ class HentJournalpostController(
     @GetMapping("fagsak/{fagsakId}")
     fun hentJournalposterForFagsak(
         @PathVariable fagsakId: String,
-    ): List<Journalpost> = journalpostService.finnJournalposterForFagsak(fagsakId)
+        @RequestParam(name = "journalposttype", required = false) journalposttyper: List<Journalposttype>?,
+    ): List<Journalpost> = journalpostService.finnJournalposterForFagsak(fagsakId, journalposttyper ?: emptyList())
 
     @GetMapping("hentdokument/{journalpostId}/{dokumentInfoId}")
     fun hentDokument(
