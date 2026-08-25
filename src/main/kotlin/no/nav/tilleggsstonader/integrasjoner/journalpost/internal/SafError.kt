@@ -8,7 +8,7 @@ data class SafError(
 )
 
 data class SafExtension(
-    val code: SafErrorCode,
+    val code: SafErrorCode?,
     val classification: String,
 )
 

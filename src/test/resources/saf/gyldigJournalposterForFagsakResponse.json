@@ -1,0 +1,55 @@
+{
+  "data": {
+    "dokumentoversiktFagsak": {
+      "journalposter": [
+        {
+          "journalpostId": "453492634",
+          "journalposttype": "I",
+          "journalstatus": "JOURNALFOERT",
+          "tema": "TSO",
+          "tittel": "Søknad om tilleggsstønad",
+          "behandlingstema": null,
+          "sak": {
+            "arkivsaksystem": "GSAK",
+            "arkivsaksnummer": "140259389",
+            "datoOpprettet": "2024-01-15T10:00:00",
+            "fagsakId": "12345",
+            "fagsaksystem": "TILLEGGSSTONADER"
+          },
+          "bruker": {
+            "id": "2557381234833",
+            "type": "AKTOERID"
+          },
+          "journalforendeEnhet": "4462",
+          "kanal": "NAV_NO",
+          "utsendingsinfo": null,
+          "dokumenter": [
+            {
+              "dokumentInfoId": "453871494",
+              "tittel": "Søknad om tilleggsstønad",
+              "brevkode": "NAV 15-00.01",
+              "dokumentstatus": null,
+              "dokumentvarianter": [
+                {
+                  "variantformat": "ARKIV",
+                  "saksbehandlerHarTilgang": true
+                }
+              ],
+              "logiskeVedlegg": []
+            }
+          ],
+          "relevanteDatoer": [
+            {
+              "dato": "2024-01-15T10:00:00",
+              "datotype": "DATO_DOKUMENT"
+            },
+            {
+              "dato": "2024-01-15T10:05:00",
+              "datotype": "DATO_JOURNALFOERT"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

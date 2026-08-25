@@ -1,0 +1,21 @@
+query journalposterForFagsak($fagsak: FagsakInput!, $antall: Int!) {
+    dokumentoversiktFagsak(fagsak: $fagsak, foerste: $antall) {
+        journalposter {
+            journalpostId
+            journalposttype
+            journalstatus
+            tema
+            tittel
+            behandlingstema
+            sak { arkivsaksystem arkivsaksnummer datoOpprettet fagsakId fagsaksystem }
+            bruker { id type }
+            avsenderMottaker { id type navn land erLikBruker }
+            journalforendeEnhet
+            kanal
+            utsendingsinfo { varselSendt { type, varslingstidspunkt }, fysiskpostSendt { adressetekstKonvolutt }, digitalpostSendt { adresse } }
+            dokumenter { dokumentInfoId tittel brevkode dokumentstatus dokumentvarianter { variantformat, saksbehandlerHarTilgang } logiskeVedlegg { logiskVedleggId tittel } }
+            relevanteDatoer { dato datotype }
+            eksternReferanseId
+        }
+    }
+}
