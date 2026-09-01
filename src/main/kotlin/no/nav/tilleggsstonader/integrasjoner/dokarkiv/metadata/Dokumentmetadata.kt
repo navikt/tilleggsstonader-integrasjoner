@@ -109,33 +109,33 @@ fun Dokumenttype.tilMetadata(): Dokumentmetadata =
         Dokumenttype.FLYTTING_TSR_KLAGE_VEDTAKSBREV -> FlyttingTsrKlageVedtak
         Dokumenttype.FLYTTING_TSR_KLAGE_INTERNT_VEDTAK -> FlyttingTsrKlageInterntVedtak
 
-        Dokumenttype.STØTTE_TIL_REISE_OPPSTART_AVSLUTNING_HJEMREISE_TSO_SØKNAD ->
-            StøtteTilReiseOppstartAvslutningHjemreiseTsoSøknadMetadata
-        Dokumenttype.STØTTE_TIL_REISE_OPPSTART_AVSLUTNING_HJEMREISE_TSO_SØKNAD_VEDLEGG ->
-            StøtteTilReiseOppstartAvslutningHjemreiseTsoSøknadVedleggMetadata
-        Dokumenttype.STØTTE_TIL_REISE_OPPSTART_AVSLUTNING_HJEMREISE_TSO_VEDTAKSBREV ->
-            StøtteTilReiseOppstartAvslutningHjemreiseTsoVedtaksbrevMetadata
-        Dokumenttype.STØTTE_TIL_REISE_OPPSTART_AVSLUTNING_HJEMREISE_TSO_FRITTSTÅENDE_BREV ->
-            StøtteTilReiseOppstartAvslutningHjemreiseTsoFrittståendeBrevMetadata
-        Dokumenttype.STØTTE_TIL_REISE_OPPSTART_AVSLUTNING_HJEMREISE_TSO_INTERNT_VEDTAK ->
-            StøtteTilReiseOppstartAvslutningHjemreiseTsoInterntVedtakMetadata
-        Dokumenttype.STØTTE_TIL_REISE_OPPSTART_AVSLUTNING_HJEMREISE_TSO_KLAGE_VEDTAKSBREV ->
-            StøtteTilReiseOppstartAvslutningHjemreiseTsoKlageVedtak
-        Dokumenttype.STØTTE_TIL_REISE_OPPSTART_AVSLUTNING_HJEMREISE_TSO_KLAGE_INTERNT_VEDTAK ->
-            StøtteTilReiseOppstartAvslutningHjemreiseTsoKlageInterntVedtak
+        Dokumenttype.REISE_OPPSTART_AVSLUTNING_HJEMREISE_TSO_SØKNAD ->
+            ReiseOppstartAvslutningHjemreiseTsoSøknadMetadata
+        Dokumenttype.REISE_OPPSTART_AVSLUTNING_HJEMREISE_TSO_SØKNAD_VEDLEGG ->
+            ReiseOppstartAvslutningHjemreiseTsoSøknadVedleggMetadata
+        Dokumenttype.REISE_OPPSTART_AVSLUTNING_HJEMREISE_TSO_VEDTAKSBREV ->
+            ReiseOppstartAvslutningHjemreiseTsoVedtaksbrevMetadata
+        Dokumenttype.REISE_OPPSTART_AVSLUTNING_HJEMREISE_TSO_FRITTSTÅENDE_BREV ->
+            ReiseOppstartAvslutningHjemreiseTsoFrittståendeBrevMetadata
+        Dokumenttype.REISE_OPPSTART_AVSLUTNING_HJEMREISE_TSO_INTERNT_VEDTAK ->
+            ReiseOppstartAvslutningHjemreiseTsoInterntVedtakMetadata
+        Dokumenttype.REISE_OPPSTART_AVSLUTNING_HJEMREISE_TSO_KLAGE_VEDTAKSBREV ->
+            ReiseOppstartAvslutningHjemreiseTsoKlageVedtak
+        Dokumenttype.REISE_OPPSTART_AVSLUTNING_HJEMREISE_TSO_KLAGE_INTERNT_VEDTAK ->
+            ReiseOppstartAvslutningHjemreiseTsoKlageInterntVedtak
 
-        Dokumenttype.STØTTE_TIL_REISE_OPPSTART_AVSLUTNING_HJEMREISE_TSR_SØKNAD ->
-            StøtteTilReiseOppstartAvslutningHjemreiseTsrSøknadMetadata
-        Dokumenttype.STØTTE_TIL_REISE_OPPSTART_AVSLUTNING_HJEMREISE_TSR_SØKNAD_VEDLEGG ->
-            StøtteTilReiseOppstartAvslutningHjemreiseTsrSøknadVedleggMetadata
-        Dokumenttype.STØTTE_TIL_REISE_OPPSTART_AVSLUTNING_HJEMREISE_TSR_VEDTAKSBREV ->
-            StøtteTilReiseOppstartAvslutningHjemreiseTsrVedtaksbrevMetadata
-        Dokumenttype.STØTTE_TIL_REISE_OPPSTART_AVSLUTNING_HJEMREISE_TSR_FRITTSTÅENDE_BREV ->
-            StøtteTilReiseOppstartAvslutningHjemreiseTsrFrittståendeBrevMetadata
-        Dokumenttype.STØTTE_TIL_REISE_OPPSTART_AVSLUTNING_HJEMREISE_TSR_INTERNT_VEDTAK ->
-            StøtteTilReiseOppstartAvslutningHjemreiseTsrInterntVedtakMetadata
-        Dokumenttype.STØTTE_TIL_REISE_OPPSTART_AVSLUTNING_HJEMREISE_TSR_KLAGE_VEDTAKSBREV ->
-            StøtteTilReiseOppstartAvslutningHjemreiseTsrKlageVedtak
-        Dokumenttype.STØTTE_TIL_REISE_OPPSTART_AVSLUTNING_HJEMREISE_TSR_KLAGE_INTERNT_VEDTAK ->
-            StøtteTilReiseOppstartAvslutningHjemreiseTsrKlageInterntVedtak
+        Dokumenttype.REISE_OPPSTART_AVSLUTNING_HJEMREISE_TSR_SØKNAD ->
+            ReiseOppstartAvslutningHjemreiseTsrSøknadMetadata
+        Dokumenttype.REISE_OPPSTART_AVSLUTNING_HJEMREISE_TSR_SØKNAD_VEDLEGG ->
+            ReiseOppstartAvslutningHjemreiseTsrSøknadVedleggMetadata
+        Dokumenttype.REISE_OPPSTART_AVSLUTNING_HJEMREISE_TSR_VEDTAKSBREV ->
+            ReiseOppstartAvslutningHjemreiseTsrVedtaksbrevMetadata
+        Dokumenttype.REISE_OPPSTART_AVSLUTNING_HJEMREISE_TSR_FRITTSTÅENDE_BREV ->
+            ReiseOppstartAvslutningHjemreiseTsrFrittståendeBrevMetadata
+        Dokumenttype.REISE_OPPSTART_AVSLUTNING_HJEMREISE_TSR_INTERNT_VEDTAK ->
+            ReiseOppstartAvslutningHjemreiseTsrInterntVedtakMetadata
+        Dokumenttype.REISE_OPPSTART_AVSLUTNING_HJEMREISE_TSR_KLAGE_VEDTAKSBREV ->
+            ReiseOppstartAvslutningHjemreiseTsrKlageVedtak
+        Dokumenttype.REISE_OPPSTART_AVSLUTNING_HJEMREISE_TSR_KLAGE_INTERNT_VEDTAK ->
+            ReiseOppstartAvslutningHjemreiseTsrKlageInterntVedtak
     }
