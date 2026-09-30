@@ -1,8 +1,8 @@
 {
   "collection": "kotlin-backend",
-  "version": "2026.06.17-180055-992b76c",
+  "version": "2026.06.19-084945-c414e07",
   "scope": "repo",
-  "source_sha": "992b76c",
+  "source_sha": "6caf42b",
   "installed_at": "2026-05-11T13:29:13Z",
   "files": [
     {
@@ -11,7 +11,7 @@
     },
     {
       "path": ".github/agents/kafka.agent.md",
-      "hash": "a0f5501d6e8843c7"
+      "hash": "743153095326cb24"
     },
     {
       "path": ".github/agents/nais.agent.md",
@@ -23,11 +23,11 @@
     },
     {
       "path": ".github/agents/security-champion.agent.md",
-      "hash": "5ccba48b66938fd0"
+      "hash": "09850437ed89c7bb"
     },
     {
       "path": ".github/agents/nav-pilot.agent.md",
-      "hash": "f490eb3f9ca1e9a3"
+      "hash": "c2ec92805bae041b"
     },
     {
       "path": ".github/skills/api-design/",
@@ -39,7 +39,7 @@
     },
     {
       "path": ".github/skills/java-to-kotlin/",
-      "hash": "c312e45ae07d1e85"
+      "hash": "52cd8180b93a846b"
     },
     {
       "path": ".github/skills/kotlin-app-config/",
@@ -51,15 +51,15 @@
     },
     {
       "path": ".github/skills/observability-setup/",
-      "hash": "78181a920d929a23"
+      "hash": "b16ee0c748b966bf"
     },
     {
       "path": ".github/skills/security-review/",
-      "hash": "c74a83a4e61fbf58"
+      "hash": "ad8fffb201f42a39"
     },
     {
       "path": ".github/skills/threat-model/",
-      "hash": "305fe669dec42981"
+      "hash": "8fd0fa04afd9b093"
     },
     {
       "path": ".github/skills/tokenx-auth/",
@@ -67,7 +67,7 @@
     },
     {
       "path": ".github/skills/nav-plan/",
-      "hash": "0a160744cf2b4e82"
+      "hash": "db7618d269cd2f07"
     },
     {
       "path": ".github/skills/nav-deep-interview/",
@@ -75,7 +75,7 @@
     },
     {
       "path": ".github/skills/nav-architecture-review/",
-      "hash": "4618dec566442509"
+      "hash": "0aa50579f690c3a1"
     },
     {
       "path": ".github/skills/nav-troubleshoot/",
@@ -91,47 +91,47 @@
     },
     {
       "path": ".github/instructions/security-owasp.instructions.md",
-      "hash": "3388700634dd315d"
+      "hash": "3829d8b32cac8b70"
     },
     {
       "path": ".github/instructions/testing.instructions.md",
-      "hash": "4a6a7547a3701ce1"
+      "hash": "ca2a23744bef3a2c"
     },
     {
       "path": ".github/instructions/testing-kotlin.instructions.md",
-      "hash": "13a5a10d86577f84"
+      "hash": "183e7a28acecdbb5"
     },
     {
       "path": ".github/instructions/github-actions.instructions.md",
-      "hash": "bbef6f3e56b8b3b3"
+      "hash": "553b61e739b1430d"
     },
     {
       "path": ".github/instructions/docker.instructions.md",
-      "hash": "32db7a2f8aaab2ac"
+      "hash": "d29c19982baad0d4"
     },
     {
       "path": ".github/instructions/database.instructions.md",
-      "hash": "5b4639fd54c7b4f3"
+      "hash": "9fc5267c1dc9dd01"
     },
     {
       "path": ".github/prompts/ktor-endpoint.prompt.md",
-      "hash": "e5a24e1b9e9bc398"
+      "hash": "19f9709a094b034e"
     },
     {
       "path": ".github/prompts/spring-boot-endpoint.prompt.md",
-      "hash": "3e68aab2f5cbe402"
+      "hash": "e2e2a7c6af3729b3"
     },
     {
       "path": ".github/prompts/kafka-topic.prompt.md",
-      "hash": "d485c12c7b6d44d6"
+      "hash": "4dedc8bfb89c321c"
     },
     {
       "path": ".github/prompts/nais-manifest.prompt.md",
-      "hash": "8576571223ffef8a"
+      "hash": "df650deedb8cf0f0"
     },
     {
       "path": ".github/skills/observability-debugging/",
-      "hash": "b01ef3cd48eca1aa"
+      "hash": "d09dd467d7ce45a7"
     }
   ]
 }
