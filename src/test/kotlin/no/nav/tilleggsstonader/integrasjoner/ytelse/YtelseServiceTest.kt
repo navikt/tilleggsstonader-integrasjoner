@@ -6,6 +6,8 @@ import io.mockk.verify
 import no.nav.tilleggsstonader.integrasjoner.IntegrationTest
 import no.nav.tilleggsstonader.integrasjoner.aap.AAPClient
 import no.nav.tilleggsstonader.integrasjoner.aap.AAPPerioderResponse
+import no.nav.tilleggsstonader.integrasjoner.aktivitetspenger.AktivitetspengerClient
+import no.nav.tilleggsstonader.integrasjoner.aktivitetspenger.AktivitetspengerPerioderResponse
 import no.nav.tilleggsstonader.integrasjoner.dagpenger.DagpengerClient
 import no.nav.tilleggsstonader.integrasjoner.dagpenger.DagpengerPerioderResponse
 import no.nav.tilleggsstonader.integrasjoner.ensligforsørger.EnsligForsørgerClient
@@ -13,6 +15,7 @@ import no.nav.tilleggsstonader.integrasjoner.ensligforsørger.EnsligForsørgerPe
 import no.nav.tilleggsstonader.integrasjoner.etterlatte.EtterlatteClient
 import no.nav.tilleggsstonader.integrasjoner.etterlatte.Samordningsvedtak
 import no.nav.tilleggsstonader.integrasjoner.mocks.AAPClientTestConfig.Companion.resetMock
+import no.nav.tilleggsstonader.integrasjoner.mocks.AktivitetspengerClientTestConfig.Companion.resetMock
 import no.nav.tilleggsstonader.integrasjoner.mocks.DagpengerClientTestConfig.Companion.resetMock
 import no.nav.tilleggsstonader.integrasjoner.mocks.EnsligForsørgerClientTestConfig.Companion.resetMock
 import no.nav.tilleggsstonader.integrasjoner.mocks.EtterlatteClientTestConfig.Companion.resetMock
@@ -22,6 +25,7 @@ import no.nav.tilleggsstonader.integrasjoner.tiltakspenger.TiltakspengerDetaljer
 import no.nav.tilleggsstonader.integrasjoner.tiltakspenger.TiltakspengerPerioderResponse
 import no.nav.tilleggsstonader.kontrakter.ytelse.ResultatKilde
 import no.nav.tilleggsstonader.kontrakter.ytelse.TypeYtelsePeriode
+import no.nav.tilleggsstonader.kontrakter.ytelse.YtelsePeriode
 import no.nav.tilleggsstonader.kontrakter.ytelse.YtelsePerioderRequest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
@@ -49,12 +53,16 @@ class YtelseServiceTest : IntegrationTest() {
     @Autowired
     lateinit var tiltakspengerClient: TiltakspengerClient
 
+    @Autowired
+    lateinit var aktivitetspengerClient: AktivitetspengerClient
+
     @AfterEach
     override fun tearDown() {
         super.tearDown()
         resetMock(aapClient)
         resetMock(dagpengerClient)
         resetMock(tiltakspengerClient)
+        resetMock(aktivitetspengerClient)
         resetMock(ensligForsørgerClient)
         resetMock(etterlatteClient)
     }
@@ -70,6 +78,35 @@ class YtelseServiceTest : IntegrationTest() {
         verify(exactly = 1) { etterlatteClient.hentPerioder(any(), any()) }
         verify(exactly = 1) { tiltakspengerClient.hentPerioder(any(), any(), any()) }
         verify(exactly = 1) { tiltakspengerClient.hentDetaljer(any(), any(), any()) }
+    }
+
+    @Test
+    fun `skal hente aktivitetspenger hvis den etterspørres og cache svar fra klienten`() {
+        val request =
+            ytelsePerioderRequest(
+                ident = "ident",
+                fom = LocalDate.now(),
+                tom = LocalDate.now().plusDays(1),
+                typer = listOf(TypeYtelsePeriode.AKTIVITETSPENGER),
+            )
+
+        val firstResult = ytelseService.hentYtelser(request)
+        val secondResult = ytelseService.hentYtelser(request)
+
+        assertThat(firstResult).isEqualTo(secondResult)
+        assertThat(firstResult.perioder).containsExactly(
+            YtelsePeriode.Aktivitetspenger(
+                fom = LocalDate.now(),
+                tom = LocalDate.now().plusDays(1),
+            ),
+        )
+        assertThat(firstResult.kildeResultat.single().resultat).isEqualTo(ResultatKilde.OK)
+        verify(exactly = 1) { aktivitetspengerClient.hentPerioder("ident", request.fom, request.tom) }
+        verify { aapClient wasNot called }
+        verify { dagpengerClient wasNot called }
+        verify { ensligForsørgerClient wasNot called }
+        verify { etterlatteClient wasNot called }
+        verify { tiltakspengerClient wasNot called }
     }
 
     @Test
@@ -98,6 +135,7 @@ class YtelseServiceTest : IntegrationTest() {
         verify { ensligForsørgerClient wasNot called }
         verify { etterlatteClient wasNot called }
         verify { tiltakspengerClient wasNot called }
+        verify { aktivitetspengerClient wasNot called }
     }
 
     @Test
@@ -159,6 +197,26 @@ class YtelseServiceTest : IntegrationTest() {
         verify { ensligForsørgerClient wasNot called }
         verify { etterlatteClient wasNot called }
         verify { dagpengerClient wasNot called }
+        verify { aktivitetspengerClient wasNot called }
+    }
+
+    @Test
+    fun `skal returnere delresultat når henting av aktivitetspenger feiler`() {
+        every { aktivitetspengerClient.hentPerioder(any(), any(), any()) } throws IllegalStateException("Feil")
+
+        val dto =
+            ytelseService.hentYtelser(
+                ytelsePerioderRequest(
+                    typer = listOf(TypeYtelsePeriode.AAP, TypeYtelsePeriode.AKTIVITETSPENGER),
+                ),
+            )
+
+        assertThat(dto.perioder).hasSize(1)
+        assertThat(dto.kildeResultat.map { it.type to it.resultat })
+            .containsExactlyInAnyOrder(
+                TypeYtelsePeriode.AAP to ResultatKilde.OK,
+                TypeYtelsePeriode.AKTIVITETSPENGER to ResultatKilde.FEILET,
+            )
     }
 
     @Test
@@ -192,11 +250,14 @@ class YtelseServiceTest : IntegrationTest() {
         every { tiltakspengerClient.hentDetaljer(any(), any(), any()) } answers {
             restTemplate.postForEntity<List<TiltakspengerDetaljerResponse>>("http://localhost:1234", null).body!!
         }
+        every { aktivitetspengerClient.hentPerioder(any(), any(), any()) } answers {
+            restTemplate.postForEntity<AktivitetspengerPerioderResponse>("http://localhost:1234", null).body!!
+        }
 
         val dto = ytelseService.hentYtelser(ytelsePerioderRequest())
 
         assertThat(dto.perioder.isEmpty())
-        assertThat(dto.kildeResultat).hasSize(6)
+        assertThat(dto.kildeResultat).hasSize(TypeYtelsePeriode.entries.size)
 
         val typeYtelsePeriode = dto.kildeResultat.map { it.type }
         assertThat(typeYtelsePeriode).containsExactlyInAnyOrderElementsOf(TypeYtelsePeriode.entries)
