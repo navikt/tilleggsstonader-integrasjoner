@@ -202,6 +202,15 @@ no.nav.security.jwt:
         client-id: ${AZURE_APP_CLIENT_ID}
         client-secret: ${AZURE_APP_CLIENT_SECRET}
         client-auth-method: client_secret_basic
+    ung-sak-client_credentials:
+      resource-url: ${clients.ung-sak.uri}
+      token-endpoint-url: ${AZURE_OPENID_CONFIG_TOKEN_ENDPOINT}
+      grant-type: client_credentials
+      scope: ${clients.ung-sak.scope}
+      authentication:
+        client-id: ${AZURE_APP_CLIENT_ID}
+        client-secret: ${AZURE_APP_CLIENT_SECRET}
+        client-auth-method: client_secret_basic
 
 clients:
   arena:
@@ -240,3 +249,6 @@ clients:
   tiltakspenger:
     uri: http://tiltakspenger-datadeling.tpts
     scope: api://${CLIENT_ENV}-gcp.tpts.tiltakspenger-datadeling/.default
+  ung-sak:
+    uri: http://ung-sak.k9saksbehandling
+    scope: api://${CLIENT_ENV}-gcp.k9saksbehandling.ung-sak/.default

@@ -29,6 +29,7 @@ import org.wiremock.spring.EnableWireMock
     "mock-enslig",
     "mock-etterlatte",
     "mock-tiltakspenger",
+    "mock-aktivitetspenger",
     "mock-az-ad",
 )
 @EnableMockOAuth2Server

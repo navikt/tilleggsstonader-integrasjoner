@@ -81,6 +81,8 @@ spec:
           namespace: nais-system
         - application: tiltakspenger-datadeling
           namespace: tpts
+        - application: ung-sak
+          namespace: k9saksbehandling
       external:
         - host: oppgave.prod-fss-pub.nais.io
         - host: arena-api.prod-fss-pub.nais.io

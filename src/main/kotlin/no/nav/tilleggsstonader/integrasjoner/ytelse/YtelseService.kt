@@ -1,6 +1,7 @@
 package no.nav.tilleggsstonader.integrasjoner.ytelse
 
 import no.nav.tilleggsstonader.integrasjoner.aap.AAPClient
+import no.nav.tilleggsstonader.integrasjoner.aktivitetspenger.AktivitetspengerClient
 import no.nav.tilleggsstonader.integrasjoner.dagpenger.DagpengerClient
 import no.nav.tilleggsstonader.integrasjoner.ensligforsørger.EnsligForsørgerClient
 import no.nav.tilleggsstonader.integrasjoner.etterlatte.EtterlatteClient
@@ -12,6 +13,7 @@ import no.nav.tilleggsstonader.kontrakter.ytelse.EnsligForsørgerStønadstype
 import no.nav.tilleggsstonader.kontrakter.ytelse.ResultatKilde
 import no.nav.tilleggsstonader.kontrakter.ytelse.TypeYtelsePeriode
 import no.nav.tilleggsstonader.kontrakter.ytelse.YtelsePeriode
+import no.nav.tilleggsstonader.kontrakter.ytelse.YtelsePeriode.Aktivitetspenger
 import no.nav.tilleggsstonader.kontrakter.ytelse.YtelsePerioderDto
 import no.nav.tilleggsstonader.kontrakter.ytelse.YtelsePerioderRequest
 import no.nav.tilleggsstonader.libs.log.SecureLogger.secureLogger
@@ -28,6 +30,7 @@ class YtelseService(
     private val ensligForsørgerClient: EnsligForsørgerClient,
     private val etterlatteClient: EtterlatteClient,
     private val tiltakspengerClient: TiltakspengerClient,
+    private val aktivitetspengerClient: AktivitetspengerClient,
     @Qualifier("shortCache")
     private val cacheManager: CacheManager,
 ) {
@@ -85,6 +88,15 @@ class YtelseService(
             TypeYtelsePeriode.OMSTILLINGSSTØNAD -> hentOmstillingsstønad(data)
             TypeYtelsePeriode.TILTAKSPENGER_TPSAK -> hentTiltakspengerFraTpsak(data)
             TypeYtelsePeriode.TILTAKSPENGER_ARENA -> hentTiltakspengerFraArena(data)
+            TypeYtelsePeriode.AKTIVITETSPENGER -> hentAktivitetspenger(data)
+        }
+
+    private fun hentAktivitetspenger(data: HentYtelserCacheData): List<YtelsePeriode> =
+        cacheManager.getValue("ytelser-aktivitetspenger", data) {
+            aktivitetspengerClient
+                .hentPerioder(ident = data.ident, fom = data.fom, tom = data.tom)
+                .perioder
+                .map { Aktivitetspenger(fom = it.fom, tom = it.tom) }
         }
 
     private fun hentAap(data: HentYtelserCacheData): List<YtelsePeriode> {
