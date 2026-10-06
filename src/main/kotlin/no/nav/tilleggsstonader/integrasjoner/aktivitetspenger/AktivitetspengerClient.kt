@@ -17,7 +17,7 @@ class AktivitetspengerClient(
     val perioderUri =
         UriComponentsBuilder
             .fromUri(baseUrl)
-            .pathSegment("api", "ekstern", "tilleggsstonader", "aktivitetspenger", "perioder")
+            .pathSegment("ung", "sak", "api", "ekstern", "tilleggsstonader", "aktivitetspenger", "perioder")
             .encode()
             .toUriString()
 
