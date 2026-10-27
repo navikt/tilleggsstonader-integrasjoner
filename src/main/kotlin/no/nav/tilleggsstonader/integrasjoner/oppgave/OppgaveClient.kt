@@ -183,6 +183,42 @@ class OppgaveClient(
                 },
             )
 
+    fun oppdaterBehandlingstype(oppdaterBehandlingstype: OppgaveOppdaterBehandlingstype): Oppgave =
+        Result
+            .runCatching {
+                restTemplate.patchForEntity<Oppgave>(
+                    oppgaveIdUrl,
+                    oppdaterBehandlingstype,
+                    httpHeaders(),
+                    oppgaveIdUriVariables(oppdaterBehandlingstype.id),
+                )
+            }.fold(
+                onSuccess = { it },
+                onFailure = {
+                    var feilmelding = "Feil ved oppdatering av behandlingstype for ${oppdaterBehandlingstype.id}."
+                    val statusCode =
+                        if (it is HttpStatusCodeException) {
+                            feilmelding += " Response fra oppgave = ${it.responseBodyAsString}"
+
+                            if (it.statusCode == HttpStatus.CONFLICT) {
+                                HttpStatus.CONFLICT
+                            } else {
+                                HttpStatus.INTERNAL_SERVER_ERROR
+                            }
+                        } else {
+                            HttpStatus.INTERNAL_SERVER_ERROR
+                        }
+
+                    throw OppslagException(
+                        feilmelding,
+                        "Oppgave.oppdaterBehandlingstype",
+                        OppslagException.Level.LAV,
+                        statusCode,
+                        it,
+                    )
+                },
+            )
+
     fun opprettOppgave(dto: OpprettOppgaveRequestDto): Long {
         val uri = UriComponentsBuilder.fromUri(oppgaveBaseUrl).path(PATH_OPPGAVE).toUriString()
         return Result

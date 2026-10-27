@@ -63,6 +63,14 @@ class OppgaveController(
         return OppdatertOppgaveResponse(oppgaveId = oppgaveId, versjon = oppgave.versjon)
     }
 
+    @PatchMapping("/{oppgaveId}/behandlingstype")
+    fun oppdaterBehandlingstype(
+        @PathVariable(name = "oppgaveId") oppgaveId: Long,
+        @RequestParam("versjon") versjon: Int,
+        @RequestParam("behandlingstype") behandlingstype: String?,
+        @RequestParam("endretAvEnhetsnr") endretAvEnhetsnr: String?,
+    ): Oppgave = oppgaveService.oppdaterBehandlingstype(oppgaveId, versjon, behandlingstype, endretAvEnhetsnr)
+
     @PostMapping("/opprett")
     fun opprettOppgaveV2(
         @RequestBody oppgave: OpprettOppgaveRequest,
