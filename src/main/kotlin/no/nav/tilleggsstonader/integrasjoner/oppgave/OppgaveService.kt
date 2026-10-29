@@ -222,6 +222,21 @@ class OppgaveService(
         return finnMapper(finnMappeRequest).mapper
     }
 
+    fun oppdaterBehandlingstype(
+        oppgaveId: Long,
+        versjon: Int,
+        behandlingstype: String?,
+        endretAvEnhetsnr: String?,
+    ): Oppgave =
+        oppgaveClient.oppdaterOppgave(
+            OppgaveOppdaterBehandlingstype(
+                id = oppgaveId,
+                versjon = versjon,
+                endretAvEnhetsnr = endretAvEnhetsnr,
+                behandlingstype = behandlingstype,
+            ),
+        )
+
     fun fjernBehandlesAvApplikasjon(
         oppgaveId: Long,
         versjon: Int,
@@ -234,6 +249,16 @@ data class OppgaveFjernBehandlesAvApplikasjon(
     val id: Long,
     val versjon: Int,
     @JsonInclude(JsonInclude.Include.ALWAYS) val behandlesAvApplikasjon: Long? = null,
+)
+
+/**
+ * Sender kun feltene som skal endres. behandlingstype = null fjerner verdien i Gosys.
+ */
+data class OppgaveOppdaterBehandlingstype(
+    val id: Long,
+    val versjon: Int,
+    val endretAvEnhetsnr: String?,
+    @JsonInclude(JsonInclude.Include.ALWAYS) val behandlingstype: String?,
 )
 
 /**

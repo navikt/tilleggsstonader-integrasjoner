@@ -96,8 +96,16 @@ class OppgaveClient(
         return restTemplate.getForEntity(buildMappeRequestUri(queryParams), httpHeaders(), queryParams.tilUriVariables())
     }
 
-    fun oppdaterOppgave(patchDto: Oppgave): Oppgave {
-        if (SikkerhetsContext.erSaksbehandler() && patchDto.endretAvEnhetsnr == null) {
+    fun oppdaterOppgave(oppgave: Oppgave): Oppgave = patchOppgave(oppgave.id, oppgave.endretAvEnhetsnr, oppgave)
+
+    fun oppdaterOppgave(patch: OppgaveOppdaterBehandlingstype): Oppgave = patchOppgave(patch.id, patch.endretAvEnhetsnr, patch)
+
+    private fun patchOppgave(
+        oppgaveId: Long,
+        endretAvEnhetsnr: String?,
+        requestBody: Any,
+    ): Oppgave {
+        if (SikkerhetsContext.erSaksbehandler() && endretAvEnhetsnr == null) {
             logger.warn("Kaller patch-endepunkt til oppgave uten endretAvEnhetsnr")
         }
 
@@ -105,14 +113,14 @@ class OppgaveClient(
             .runCatching {
                 restTemplate.patchForEntity<Oppgave>(
                     oppgaveIdUrl,
-                    patchDto,
+                    requestBody,
                     httpHeaders(),
-                    oppgaveIdUriVariables(patchDto.id),
+                    oppgaveIdUriVariables(oppgaveId),
                 )
             }.fold(
                 onSuccess = { it },
                 onFailure = {
-                    var feilmelding = "Feil ved oppdatering av oppgave for ${patchDto.id}."
+                    var feilmelding = "Feil ved oppdatering av oppgave for $oppgaveId."
                     if (it is HttpStatusCodeException) {
                         feilmelding += " Response fra oppgave = ${it.responseBodyAsString}"
 

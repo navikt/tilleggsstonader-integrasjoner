@@ -460,6 +460,71 @@ class OppgaveControllerTest : IntegrationTest() {
         assertThat(exception.httpStatus).isEqualTo(HttpStatus.CONFLICT)
     }
 
+    @Test
+    fun `skal sende behandlingstype eksplisitt som null når markering fjernes`() {
+        stubFor(
+            patch(urlEqualTo("/api/v1/oppgaver/$OPPGAVE_ID"))
+                .withRequestBody(
+                    equalToJson("""{"id":315488374,"versjon":1,"endretAvEnhetsnr":"4462","behandlingstype":null}"""),
+                ).willReturn(responseFerdigstilt),
+        )
+
+        val response: ResponseEntity<Oppgave> =
+            restTemplate.exchange(
+                localhost("$OPPGAVE_URL/$OPPGAVE_ID/behandlingstype"),
+                HttpMethod.PUT,
+                HttpEntity(OppdaterBehandlingstypeRequest(versjon = 1, behandlingstype = null, endretAvEnhetsnr = "4462"), headers),
+            )
+
+        assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+        verify(
+            exactly(1),
+            patchRequestedFor(urlEqualTo("/api/v1/oppgaver/$OPPGAVE_ID"))
+                .withRequestBody(matchingJsonPath("$[?(@.behandlingstype == null)]")),
+        )
+    }
+
+    @Test
+    fun `skal sende behandlingstype når markering legges til`() {
+        stubFor(
+            patch(urlEqualTo("/api/v1/oppgaver/$OPPGAVE_ID"))
+                .withRequestBody(
+                    equalToJson("""{"id":315488374,"versjon":1,"endretAvEnhetsnr":"4462","behandlingstype":"ae0298"}"""),
+                ).willReturn(responseFerdigstilt),
+        )
+
+        val response: ResponseEntity<Oppgave> =
+            restTemplate.exchange(
+                localhost("$OPPGAVE_URL/$OPPGAVE_ID/behandlingstype"),
+                HttpMethod.PUT,
+                HttpEntity(OppdaterBehandlingstypeRequest(versjon = 1, behandlingstype = "ae0298", endretAvEnhetsnr = "4462"), headers),
+            )
+
+        assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+    }
+
+    @Test
+    fun `skal returnere 409 når oppdatering av behandlingstype har feil versjon`() {
+        stubFor(
+            patch(urlEqualTo("/api/v1/oppgaver/$OPPGAVE_ID")).willReturn(
+                aResponse()
+                    .withStatus(409)
+                    .withHeader("Content-Type", "application/json")
+                    .withBody("Feil versjonsnummer"),
+            ),
+        )
+
+        val exception =
+            catchProblemDetailException {
+                restTemplate.exchange<Oppgave>(
+                    localhost("$OPPGAVE_URL/$OPPGAVE_ID/behandlingstype"),
+                    HttpMethod.PUT,
+                    HttpEntity(OppdaterBehandlingstypeRequest(1, null, null), headers),
+                )
+            }
+        assertThat(exception.httpStatus).isEqualTo(HttpStatus.CONFLICT)
+    }
+
     private fun opprettOppgave(opprettOppgave: OpprettOppgaveRequest): ResponseEntity<OppgaveResponse> =
         restTemplate.exchange<OppgaveResponse>(
             localhost(OPPRETT_OPPGAVE_URL_V2),
