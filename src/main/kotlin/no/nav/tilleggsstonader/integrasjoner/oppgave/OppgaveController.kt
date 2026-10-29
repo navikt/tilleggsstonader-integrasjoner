@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
@@ -63,13 +64,17 @@ class OppgaveController(
         return OppdatertOppgaveResponse(oppgaveId = oppgaveId, versjon = oppgave.versjon)
     }
 
-    @PatchMapping("/{oppgaveId}/behandlingstype")
+    @PutMapping("/{oppgaveId}/behandlingstype")
     fun oppdaterBehandlingstype(
         @PathVariable(name = "oppgaveId") oppgaveId: Long,
-        @RequestParam("versjon") versjon: Int,
-        @RequestParam("behandlingstype") behandlingstype: String?,
-        @RequestParam("endretAvEnhetsnr") endretAvEnhetsnr: String?,
-    ): Oppgave = oppgaveService.oppdaterBehandlingstype(oppgaveId, versjon, behandlingstype, endretAvEnhetsnr)
+        @RequestBody request: OppdaterBehandlingstypeRequest,
+    ): Oppgave =
+        oppgaveService.oppdaterBehandlingstype(
+            oppgaveId,
+            request.versjon,
+            request.behandlingstype,
+            request.endretAvEnhetsnr,
+        )
 
     @PostMapping("/opprett")
     fun opprettOppgaveV2(

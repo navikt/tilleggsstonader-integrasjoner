@@ -471,9 +471,9 @@ class OppgaveControllerTest : IntegrationTest() {
 
         val response: ResponseEntity<Oppgave> =
             restTemplate.exchange(
-                localhost("$OPPGAVE_URL/$OPPGAVE_ID/behandlingstype?versjon=1&endretAvEnhetsnr=4462"),
-                HttpMethod.PATCH,
-                HttpEntity(null, headers),
+                localhost("$OPPGAVE_URL/$OPPGAVE_ID/behandlingstype"),
+                HttpMethod.PUT,
+                HttpEntity(OppdaterBehandlingstypeRequest(versjon = 1, behandlingstype = null, endretAvEnhetsnr = "4462"), headers),
             )
 
         assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
@@ -495,9 +495,9 @@ class OppgaveControllerTest : IntegrationTest() {
 
         val response: ResponseEntity<Oppgave> =
             restTemplate.exchange(
-                localhost("$OPPGAVE_URL/$OPPGAVE_ID/behandlingstype?versjon=1&behandlingstype=ae0298&endretAvEnhetsnr=4462"),
-                HttpMethod.PATCH,
-                HttpEntity(null, headers),
+                localhost("$OPPGAVE_URL/$OPPGAVE_ID/behandlingstype"),
+                HttpMethod.PUT,
+                HttpEntity(OppdaterBehandlingstypeRequest(versjon = 1, behandlingstype = "ae0298", endretAvEnhetsnr = "4462"), headers),
             )
 
         assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
@@ -517,9 +517,9 @@ class OppgaveControllerTest : IntegrationTest() {
         val exception =
             catchProblemDetailException {
                 restTemplate.exchange<Oppgave>(
-                    localhost("$OPPGAVE_URL/$OPPGAVE_ID/behandlingstype?versjon=1"),
-                    HttpMethod.PATCH,
-                    HttpEntity(null, headers),
+                    localhost("$OPPGAVE_URL/$OPPGAVE_ID/behandlingstype"),
+                    HttpMethod.PUT,
+                    HttpEntity(OppdaterBehandlingstypeRequest(1, null, null), headers),
                 )
             }
         assertThat(exception.httpStatus).isEqualTo(HttpStatus.CONFLICT)
