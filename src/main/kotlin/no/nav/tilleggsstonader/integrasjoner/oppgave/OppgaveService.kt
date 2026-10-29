@@ -228,7 +228,7 @@ class OppgaveService(
         behandlingstype: String?,
         endretAvEnhetsnr: String?,
     ): Oppgave =
-        oppgaveClient.oppdaterBehandlingstype(
+        oppgaveClient.oppdaterOppgave(
             OppgaveOppdaterBehandlingstype(
                 id = oppgaveId,
                 versjon = versjon,
@@ -251,6 +251,9 @@ data class OppgaveFjernBehandlesAvApplikasjon(
     @JsonInclude(JsonInclude.Include.ALWAYS) val behandlesAvApplikasjon: Long? = null,
 )
 
+/**
+ * Sender kun feltene som skal endres. behandlingstype = null fjerner verdien i Gosys.
+ */
 data class OppgaveOppdaterBehandlingstype(
     val id: Long,
     val versjon: Int,
