@@ -228,9 +228,6 @@ class YtelseService(
     ) {
         val logMsg = "Feilet henting av perioder fra $type"
         logger.error("$logMsg, se secure logs for mer info")
-        secureLogger.error(
-            "$logMsg fom=${data.fom} tom=${data.tom} feiltype=${e.javaClass.simpleName} httpStatus={}",
-            (e as? RestClientResponseException)?.statusCode?.value(),
-        )
+        secureLogger.error("$logMsg ident=${data.ident} fom=${data.fom} tom=${data.tom}", e)
     }
 }
