@@ -64,8 +64,8 @@ class ArbeidssokerperioderTest
                 ),
             )
 
-            val dto = hentPerioder()
-            assertThat(hentPerioder()).isEqualTo(dto)
+            val dto = hentPerioder(tom = LocalDate.of(2026, 7, 1))
+            assertThat(hentPerioder(tom = LocalDate.of(2026, 7, 1))).isEqualTo(dto)
 
             assertThat(dto.perioder).containsExactlyInAnyOrder(
                 YtelsePeriode.Arbeidssøker(LocalDate.of(2026, 1, 2), LocalDate.of(2026, 3, 30)),
@@ -77,6 +77,52 @@ class ArbeidssokerperioderTest
                     .withHeader("Authorization", equalTo("Bearer Mock-token-response"))
                     .withRequestBody(equalToJson("""{"type":"IDENTITETSNUMMER","identitetsnummer":"$IDENT"}""")),
             )
+        }
+
+        @Test
+        fun `returnerer overlappende periode uten å klippe datoene`() {
+            stubFor(
+                post(UPSTREAM_PATH).willReturn(
+                    okJson(
+                        """[{"startet":"2026-01-01T12:00:00+01:00","avsluttet":"2026-03-31T12:00:00+01:00"}]""",
+                    ),
+                ),
+            )
+
+            val dto = hentPerioder(fom = LocalDate.of(2026, 2, 1), tom = LocalDate.of(2026, 2, 28))
+
+            assertThat(dto.perioder).containsExactly(
+                YtelsePeriode.Arbeidssøker(LocalDate.of(2026, 1, 1), LocalDate.of(2026, 3, 31)),
+            )
+            assertThat(dto.kildeResultat.single().resultat).isEqualTo(ResultatKilde.OK)
+        }
+
+        @Test
+        fun `filtrerer bort periode som ikke overlapper`() {
+            stubFor(
+                post(UPSTREAM_PATH).willReturn(
+                    okJson(
+                        """[{"startet":"2026-01-01T12:00:00+01:00","avsluttet":"2026-01-31T12:00:00+01:00"}]""",
+                    ),
+                ),
+            )
+
+            val dto = hentPerioder(fom = LocalDate.of(2026, 2, 1), tom = LocalDate.of(2026, 2, 28))
+
+            assertThat(dto.perioder).isEmpty()
+            assertThat(dto.kildeResultat.single().resultat).isEqualTo(ResultatKilde.OK)
+        }
+
+        @Test
+        fun `returnerer overlappende periode med åpen tom`() {
+            stubFor(post(UPSTREAM_PATH).willReturn(okJson("""[{"startet":"2026-01-01T12:00:00+01:00"}]""")))
+
+            val dto = hentPerioder(fom = LocalDate.of(2026, 2, 1), tom = LocalDate.of(2026, 2, 28))
+
+            assertThat(dto.perioder).containsExactly(
+                YtelsePeriode.Arbeidssøker(LocalDate.of(2026, 1, 1), null),
+            )
+            assertThat(dto.kildeResultat.single().resultat).isEqualTo(ResultatKilde.OK)
         }
 
         @Test

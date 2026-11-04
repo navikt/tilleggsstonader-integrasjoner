@@ -1,5 +1,6 @@
 package no.nav.tilleggsstonader.integrasjoner.ytelse
 
+import no.nav.tilleggsstonader.kontrakter.felles.Periode
 import java.time.LocalDate
 
 /**
@@ -7,9 +8,9 @@ import java.time.LocalDate
  */
 data class HentYtelserCacheData(
     val ident: String,
-    val fom: LocalDate,
-    val tom: LocalDate,
-) {
+    override val fom: LocalDate,
+    override val tom: LocalDate,
+) : Periode<LocalDate> {
     /**
      * Overrider for å unngå at hele identen logges i vanlig logg
      */
