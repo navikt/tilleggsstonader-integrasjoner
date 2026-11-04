@@ -83,6 +83,8 @@ spec:
           namespace: tpts
         - application: ung-sak
           namespace: k9saksbehandling
+        - application: paw-arbeidssoekerregisteret-api-oppslag-v2
+          namespace: paw
       external:
         - host: oppgave.prod-fss-pub.nais.io
         - host: arena-api.prod-fss-pub.nais.io

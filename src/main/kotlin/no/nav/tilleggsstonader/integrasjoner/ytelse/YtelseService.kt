@@ -2,6 +2,7 @@ package no.nav.tilleggsstonader.integrasjoner.ytelse
 
 import no.nav.tilleggsstonader.integrasjoner.aap.AAPClient
 import no.nav.tilleggsstonader.integrasjoner.aktivitetspenger.AktivitetspengerClient
+import no.nav.tilleggsstonader.integrasjoner.arbeidssokerregister.ArbeidssokerregisterClient
 import no.nav.tilleggsstonader.integrasjoner.dagpenger.DagpengerClient
 import no.nav.tilleggsstonader.integrasjoner.ensligforsørger.EnsligForsørgerClient
 import no.nav.tilleggsstonader.integrasjoner.etterlatte.EtterlatteClient
@@ -22,6 +23,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.cache.CacheManager
 import org.springframework.stereotype.Service
+import java.time.ZoneId
 
 @Service
 class YtelseService(
@@ -31,10 +33,12 @@ class YtelseService(
     private val etterlatteClient: EtterlatteClient,
     private val tiltakspengerClient: TiltakspengerClient,
     private val aktivitetspengerClient: AktivitetspengerClient,
+    private val arbeidssokerregisterClient: ArbeidssokerregisterClient,
     @Qualifier("shortCache")
     private val cacheManager: CacheManager,
 ) {
     private val logger = LoggerFactory.getLogger(javaClass)
+    private val tidssone = ZoneId.of("Europe/Oslo")
 
     fun hentYtelser(request: YtelsePerioderRequest): YtelsePerioderDto {
         val perioder = mutableListOf<YtelsePeriode>()
@@ -89,7 +93,21 @@ class YtelseService(
             TypeYtelsePeriode.TILTAKSPENGER_TPSAK -> hentTiltakspengerFraTpsak(data)
             TypeYtelsePeriode.TILTAKSPENGER_ARENA -> hentTiltakspengerFraArena(data)
             TypeYtelsePeriode.AKTIVITETSPENGER -> hentAktivitetspenger(data)
+            TypeYtelsePeriode.ARBEIDSSØKER -> hentArbeidssokerperioder(data)
         }
+
+    private fun hentArbeidssokerperioder(data: HentYtelserCacheData): List<YtelsePeriode> {
+        val perioder =
+            cacheManager.getValue("ytelser-arbeidssoker", data) {
+                arbeidssokerregisterClient.hentPerioder(data.ident)
+            }
+        return perioder.map { periode ->
+            YtelsePeriode.Arbeidssøker(
+                fom = periode.startet.atZoneSameInstant(tidssone).toLocalDate(),
+                tom = periode.avsluttet?.atZoneSameInstant(tidssone)?.toLocalDate(),
+            )
+        }
+    }
 
     private fun hentAktivitetspenger(data: HentYtelserCacheData): List<YtelsePeriode> =
         cacheManager.getValue("ytelser-aktivitetspenger", data) {
