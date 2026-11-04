@@ -23,7 +23,6 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.cache.CacheManager
 import org.springframework.stereotype.Service
-import org.springframework.web.client.RestClientResponseException
 import java.time.ZoneId
 
 @Service
