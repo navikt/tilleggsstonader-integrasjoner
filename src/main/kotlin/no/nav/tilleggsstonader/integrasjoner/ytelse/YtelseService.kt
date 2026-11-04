@@ -10,6 +10,7 @@ import no.nav.tilleggsstonader.integrasjoner.tiltakspenger.TiltakspengerClient
 import no.nav.tilleggsstonader.integrasjoner.tiltakspenger.TiltakspengerDetaljerResponse
 import no.nav.tilleggsstonader.integrasjoner.tiltakspenger.TiltakspengerPerioderResponse
 import no.nav.tilleggsstonader.integrasjoner.util.VirtualThreadUtil.parallelt
+import no.nav.tilleggsstonader.kontrakter.felles.Datoperiode
 import no.nav.tilleggsstonader.kontrakter.ytelse.EnsligForsørgerStønadstype
 import no.nav.tilleggsstonader.kontrakter.ytelse.ResultatKilde
 import no.nav.tilleggsstonader.kontrakter.ytelse.TypeYtelsePeriode
@@ -23,6 +24,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.cache.CacheManager
 import org.springframework.stereotype.Service
+import java.time.LocalDate
 import java.time.ZoneId
 
 @Service
@@ -101,12 +103,13 @@ class YtelseService(
             cacheManager.getValue("ytelser-arbeidssoker", data) {
                 arbeidssokerregisterClient.hentPerioder(data.ident)
             }
-        return perioder.map { periode ->
-            YtelsePeriode.Arbeidssøker(
-                fom = periode.startet.atZoneSameInstant(tidssone).toLocalDate(),
-                tom = periode.avsluttet?.atZoneSameInstant(tidssone)?.toLocalDate(),
-            )
-        }
+        return perioder
+            .map { periode ->
+                YtelsePeriode.Arbeidssøker(
+                    fom = periode.startet.atZoneSameInstant(tidssone).toLocalDate(),
+                    tom = periode.avsluttet?.atZoneSameInstant(tidssone)?.toLocalDate(),
+                )
+            }.filter { Datoperiode(it.fom, it.tom ?: LocalDate.MAX).overlapper(data) }
     }
 
     private fun hentAktivitetspenger(data: HentYtelserCacheData): List<YtelsePeriode> =
