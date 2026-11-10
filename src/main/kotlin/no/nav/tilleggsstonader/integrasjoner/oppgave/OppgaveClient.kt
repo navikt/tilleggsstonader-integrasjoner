@@ -124,20 +124,20 @@ class OppgaveClient(
                     if (it is HttpStatusCodeException) {
                         feilmelding += " Response fra oppgave med status ${it.statusCode}: ${it.responseBodyAsString}"
 
-                        val statusCodeMap =
+                        val statusKodeMap =
                             mapOf(
                                 HttpStatus.CONFLICT to OppslagException.Level.LAV,
                                 HttpStatus.BAD_REQUEST to OppslagException.Level.MEDIUM,
                                 HttpStatus.FORBIDDEN to OppslagException.Level.MEDIUM,
                             )
 
-                        val relevantStatusCodeLevel = statusCodeMap[it.statusCode]
+                        val relevantStatusKodeNivå = statusKodeMap[it.statusCode]
 
-                        if (relevantStatusCodeLevel != null) {
+                        if (relevantStatusKodeNivå != null) {
                             throw OppslagException(
                                 feilmelding,
                                 "Oppgave.oppdaterOppgave",
-                                relevantStatusCodeLevel,
+                                relevantStatusKodeNivå,
                                 it.statusCode,
                                 it,
                             )
