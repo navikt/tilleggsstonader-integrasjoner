@@ -122,22 +122,23 @@ class OppgaveClient(
                 onFailure = {
                     var feilmelding = "Feil ved oppdatering av oppgave for $oppgaveId."
                     if (it is HttpStatusCodeException) {
-                        feilmelding += " Response fra oppgave = ${it.responseBodyAsString}"
+                        feilmelding += " Response fra oppgave med status ${it.statusCode}: ${it.responseBodyAsString}"
 
-                        if (it.statusCode == HttpStatus.CONFLICT) {
-                            throw OppslagException(
-                                feilmelding,
-                                "Oppgave.oppdaterOppgave",
-                                OppslagException.Level.LAV,
-                                it.statusCode,
-                                it,
+                        val statusKodeMap =
+                            mapOf(
+                                HttpStatus.CONFLICT to OppslagException.Level.LAV,
+                                HttpStatus.BAD_REQUEST to OppslagException.Level.MEDIUM,
+                                HttpStatus.FORBIDDEN to OppslagException.Level.MEDIUM,
                             )
-                        } else if (it.statusCode == HttpStatus.BAD_REQUEST) {
+
+                        val relevantStatusKodeNivå = statusKodeMap[it.statusCode]
+
+                        if (relevantStatusKodeNivå != null) {
                             throw OppslagException(
                                 feilmelding,
                                 "Oppgave.oppdaterOppgave",
-                                OppslagException.Level.MEDIUM,
-                                HttpStatus.BAD_REQUEST,
+                                relevantStatusKodeNivå,
+                                it.statusCode,
                                 it,
                             )
                         }
