@@ -19,7 +19,7 @@ Appen kjøres med `./gradlew bootRun`. Port `8080` i prod, `9193` i integrasjons
 
 ## Arkitektur
 
-Appen er en Spring Boot-integrasjonstjeneste i Kotlin (Java 21). Den fungerer som en proxy/aggregator mellom tilleggsstønader-appene og eksterne NAV-tjenester.
+Appen er en Spring Boot-integrasjonstjeneste i Kotlin (Java 25). Den fungerer som en proxy/aggregator mellom tilleggsstønader-appene og eksterne NAV-tjenester.
 
 **Pakkestruktur per domene** – hvert domene har:
 - `*Client` – kaller ekstern tjeneste via `RestTemplate`
